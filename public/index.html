@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Vizo – Watch. Share. Shine.</title>
 <meta name="description" content="Vizo – short videos. Watch, share and shine.">
-<script>try{var t=localStorage.getItem('inv_theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+<script>var t='light';try{t=localStorage.getItem('inv_theme')||'light'}catch(e){}if(t!=='auto')document.documentElement.dataset.theme=t</script>
 <link rel="icon" href="/icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<meta name="theme-color" content="#0E0E13">
+<meta name="theme-color" content="#F7F6FC">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap">
 <style>
@@ -35,24 +35,49 @@
  --ease:cubic-bezier(.2,.8,.2,1);
  --safe-t:env(safe-area-inset-top,0px);--safe-b:env(safe-area-inset-bottom,0px);
  --avatar-bg:#2C2158;--avatar-ink:#FFD27A;
+ /* Vizo palette (reference): violet, magenta, orange, blue, teal */
+ --violet:#7B2FF7;--magenta:#F0338F;--orange:#FF9F1C;--blue:#2F6BFF;--teal:#14967F;
+ --grad-text:linear-gradient(90deg,#A57BFF 0%,#F05BB0 55%,#FF8A3D 100%);
+ --grad-chip:linear-gradient(90deg,#FF8A2A 0%,#F0338F 55%,#C23BF0 100%);
+ --grad-chip-strong:linear-gradient(90deg,#C81E6A 0%,#A62BD0 55%,#6A1BFF 100%);
+ /* soft tints for tiles and highlights (label colours on them pass AA) */
+ --tint-1:rgba(123,47,247,.16);--tint-2:rgba(240,51,143,.15);--tint-3:rgba(255,159,28,.14);--tint-4:rgba(20,150,127,.16);
+ --tint-1-ink:#C4A2FF;--tint-2-ink:#FF8CC6;--tint-3-ink:#FFC27A;--tint-4-ink:#6FDCC5;
+ --shadow-card:0 12px 32px rgba(0,0,0,.35);
+ --stage-bg:#0E0E13;
+ --s-1:4px;--s-2:8px;--s-3:12px;--s-4:16px;--s-5:24px;--s-6:32px;
+ --r-card:26px;
 }
+/* Light is Vizo's main look: pearl background, white cards, deep navy text, blue-grey secondary text */
 @media (prefers-color-scheme:light){:root:not([data-theme="dark"]){
  color-scheme:light;
- --bg:#FFFFFF;--surface:#F6F6F9;--surface-2:#FFFFFF;--surface-3:#EDEDF2;
- --line:rgba(20,20,32,.08);--line-2:rgba(20,20,32,.15);
- --text:#15151C;--text-2:#575768;--text-3:#666676;
- --accent-soft:rgba(240,51,143,.08);--focus:#8B2BE2;--danger:#C8243D;--danger-soft:rgba(200,36,61,.08);--ok:#0B7041;--ok-soft:rgba(11,112,65,.1);
- --accent-text:#B0127F;--danger-solid:#C8243D;--field-line:rgba(20,20,32,.5);
- --shadow-1:0 1px 2px rgba(20,20,40,.06);--shadow-2:0 18px 44px rgba(20,20,40,.14);
+ --bg:#F7F6FC;--surface:#FFFFFF;--surface-2:#FFFFFF;--surface-3:#EEECF6;
+ --line:rgba(28,24,72,.08);--line-2:rgba(28,24,72,.14);
+ --text:#16133D;--text-2:#55577A;--text-3:#64667F;
+ --accent-soft:rgba(240,51,143,.08);--focus:#7B2FF7;--danger:#C8243D;--danger-soft:rgba(200,36,61,.08);--ok:#0B7041;--ok-soft:rgba(11,112,65,.1);
+ --accent-text:#B0127F;--danger-solid:#C8243D;--field-line:rgba(28,24,72,.5);
+ --shadow-1:0 1px 2px rgba(28,24,72,.06),0 2px 10px rgba(28,24,72,.04);--shadow-2:0 18px 44px rgba(28,24,72,.14);
+ --shadow-card:0 14px 36px rgba(76,46,170,.14);
+ --avatar-bg:#ECE5FF;--avatar-ink:#5A1BD6;--glow:0 8px 22px rgba(240,51,143,.28);
+ --tint-1:#F1ECFF;--tint-2:#FFEAF4;--tint-3:#FFF1E3;--tint-4:#E7F7F2;
+ --tint-1-ink:#6A1BFF;--tint-2-ink:#B0127F;--tint-3-ink:#A63A0A;--tint-4-ink:#0F766E;
+ --stage-bg:#EEECF6;
+ --grad-text:linear-gradient(90deg,#6A1BFF 0%,#C8247F 55%,#C2410C 100%);
 }}
 :root[data-theme="light"]{
  color-scheme:light;
- --bg:#FFFFFF;--surface:#F6F6F9;--surface-2:#FFFFFF;--surface-3:#EDEDF2;
- --line:rgba(20,20,32,.08);--line-2:rgba(20,20,32,.15);
- --text:#15151C;--text-2:#575768;--text-3:#666676;
- --accent-soft:rgba(240,51,143,.08);--focus:#8B2BE2;--danger:#C8243D;--danger-soft:rgba(200,36,61,.08);--ok:#0B7041;--ok-soft:rgba(11,112,65,.1);
- --accent-text:#B0127F;--danger-solid:#C8243D;--field-line:rgba(20,20,32,.5);
- --shadow-1:0 1px 2px rgba(20,20,40,.06);--shadow-2:0 18px 44px rgba(20,20,40,.14);
+ --bg:#F7F6FC;--surface:#FFFFFF;--surface-2:#FFFFFF;--surface-3:#EEECF6;
+ --line:rgba(28,24,72,.08);--line-2:rgba(28,24,72,.14);
+ --text:#16133D;--text-2:#55577A;--text-3:#64667F;
+ --accent-soft:rgba(240,51,143,.08);--focus:#7B2FF7;--danger:#C8243D;--danger-soft:rgba(200,36,61,.08);--ok:#0B7041;--ok-soft:rgba(11,112,65,.1);
+ --accent-text:#B0127F;--danger-solid:#C8243D;--field-line:rgba(28,24,72,.5);
+ --shadow-1:0 1px 2px rgba(28,24,72,.06),0 2px 10px rgba(28,24,72,.04);--shadow-2:0 18px 44px rgba(28,24,72,.14);
+ --shadow-card:0 14px 36px rgba(76,46,170,.14);
+ --avatar-bg:#ECE5FF;--avatar-ink:#5A1BD6;--glow:0 8px 22px rgba(240,51,143,.28);
+ --tint-1:#F1ECFF;--tint-2:#FFEAF4;--tint-3:#FFF1E3;--tint-4:#E7F7F2;
+ --tint-1-ink:#6A1BFF;--tint-2-ink:#B0127F;--tint-3-ink:#A63A0A;--tint-4-ink:#0F766E;
+ --stage-bg:#EEECF6;
+ --grad-text:linear-gradient(90deg,#6A1BFF 0%,#C8247F 55%,#C2410C 100%);
 }
 
 /* =========================================================
@@ -155,18 +180,35 @@ legend{padding:0}
  #app .clip{max-width:none}
  #app .clip .media{border-radius:0}
 }
-/* The Settings gear sits on the Profile cover, top-right (phones and computers) */
+/* Your profile: top row with ← back and the Settings gear; no cover. Photo left, name and @username beside it,
+   then bio, stats without dividers and the gradient Edit profile button */
 #v-me .prof{position:relative}
-#v-me .hmenu{position:absolute;top:calc(12px + var(--safe-t));right:12px;z-index:20}
-#v-me .gearbtn{background:rgba(10,10,16,.38);color:#fff;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
-#v-me .gearbtn:hover,#v-me .gearbtn[aria-expanded="true"]{background:rgba(10,10,16,.6)}
+#v-me .ptop{display:flex;align-items:center;justify-content:space-between;min-height:48px;margin:0 -6px 6px;padding-top:var(--safe-t)}
+#v-me .hmenu{position:relative;z-index:20}
+#v-me .pcard{margin:0;border:0;border-radius:0;background:none;box-shadow:none;overflow:visible}
+#v-me .cover{display:none}
+#v-me .pbody{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:16px;align-items:center;padding:0}
+#v-me .prow{display:contents}
+#v-me .pbtns{display:none}
+#v-me .av{grid-row:1/span 2;width:92px;height:92px;border:3px solid var(--surface);box-shadow:var(--shadow-card)}
+#v-me .pname{grid-column:2;align-self:end;margin:0;font:700 22px/1.2 var(--font-d);letter-spacing:-.01em}
+#v-me .puser{grid-column:2;align-self:start;margin:2px 0 0;font-size:var(--fs-sm);color:var(--text-3)}
+#v-me .pbody:has(#puser[hidden]) .pname{grid-row:1/span 2;align-self:center}
+#v-me .pbio,#v-me #plinks,#v-me .pform,#v-me .stats,#v-me .pedit{grid-column:1/-1}
+#v-me .pbio{margin-top:16px;color:var(--text)}
+#v-me .stats{margin-top:18px;padding-top:0;border-top:0}
+#v-me .stats>*+*{border-left:0}
+#v-me .stats b{font:700 var(--fs-xl)/1.1 var(--font-d)}
+#v-me .stats span{color:var(--text-2)}
+#v-me .pedit{margin-top:20px;height:var(--h-lg)}
 
 /* Notifications: one Mute / Unmute button */
 #nmute[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent-text)}
 #nmute-s:empty{display:none}
 #nmute-s{margin:-6px 0 14px}
 /* Edit profile, History and Log out now live in the Settings menu */
-#pedit,#phist,#plogout,#pset{display:none!important}
+#phist,#plogout,#pset{display:none!important}
+.pedit{margin-top:16px}
 .link{border:0;background:none;padding:0;color:var(--accent-text);font:inherit;font-weight:600;text-decoration:underline;text-underline-offset:2px}
 
 /* Form fields */
@@ -298,6 +340,32 @@ nav{flex:none;display:flex;justify-content:space-around;align-items:flex-end;pad
 .nb.plus:active .pl{transform:scale(.94)}
 .nb.plus[aria-current="page"] .ico{stroke:currentColor}
 .pl .plt{display:none}
+.phsub{margin-left:8px;font:500 var(--fs-sm) var(--font);color:var(--text-3);letter-spacing:0}
+/* Phones: the navigation floats as a rounded white bar; Create is a raised gradient circle in the middle */
+@media (max-width:899px){
+ nav{margin:0 10px calc(8px + var(--safe-b));padding:6px 4px;border:1px solid var(--line);border-radius:26px;background:var(--surface);box-shadow:0 10px 30px rgba(28,24,72,.12)}
+ .nb{min-height:52px}
+ .nb[aria-current="page"]::after{top:auto;bottom:2px;width:5px;height:5px;border-radius:50%}
+ .nb.plus{margin-top:-28px}
+ .pl{width:58px;height:58px;border-radius:50%;border:4px solid var(--bg);box-shadow:var(--glow)}
+ .pl .ico{width:26px;height:26px}
+ .nb.plus .nbl{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+ /* Home with a video: the bar is see-through and floats over the video, which runs down behind it */
+ #app{position:relative}
+ body.feedv nav{position:absolute;left:0;right:0;bottom:0;z-index:7;background:rgba(10,10,16,.16);border-color:rgba(255,255,255,.22);box-shadow:none;-webkit-backdrop-filter:blur(14px) saturate(1.3);backdrop-filter:blur(14px) saturate(1.3)}
+ body.feedv .nb{color:rgba(255,255,255,.9);text-shadow:0 1px 6px rgba(0,0,0,.5)}
+ body.feedv .nb:hover,body.feedv .nb[aria-current="page"]{color:#fff}
+ body.feedv .nb[aria-current="page"] .ico{stroke:#fff}
+ body.feedv .nb[aria-current="page"]::after{background:#fff}
+ body.feedv .pl{border-color:transparent}
+ body.feedv .nbadge{border-color:transparent}
+ /* keep the caption, buttons and progress line clear of the bar */
+ body.feedv #ribbon .meta{padding-bottom:calc(24px + var(--navh))}
+ body.feedv #ribbon .side{bottom:calc(26px + var(--navh))}
+ body.feedv #ribbon .bar{bottom:calc(10px + var(--navh))}
+ body.feedv #ribbon .skel-lines{bottom:calc(28px + var(--navh))}
+ body{--navh:calc(74px + var(--safe-b))}
+}
 
 /* =========================================================
    5. Feed
@@ -340,6 +408,23 @@ video.land{object-fit:contain}
 #v-feed.noclips .ftabs button[aria-pressed="true"]{color:var(--text)}
 #v-feed.noclips .ftabs button[aria-pressed="true"]::after{background:var(--grad)}
 #v-feed.noclips #ribbon{padding-top:56px}
+/* Vibe: a button in the action rail (✨, or the chosen vibe's emoji) and its sheet */
+.rb[data-a="vibe"] .vem{font-size:22px;line-height:1}
+.rb.von .rc{background:var(--grad-chip-strong)}
+.vibes{display:grid;gap:14px}
+.vreset{display:flex;align-items:center;gap:14px;width:100%;padding:14px 16px;border:0;border-radius:18px;background:var(--grad-chip-strong);color:#fff;text-align:left}
+.vreset>.ico{width:24px;height:24px;flex:none}
+.vreset span{display:grid}.vreset b{font:700 var(--fs-md) var(--font)}.vreset small{opacity:.9;font-size:var(--fs-xs)}
+.vibes .lbl{margin:0}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px}
+.vchip{display:grid;justify-items:center;gap:2px;padding:12px 6px;border:1px solid var(--line-2);border-radius:16px;background:var(--surface);color:var(--text);text-align:center;transition:background-color .2s,border-color .2s}
+.vchip:hover{background:var(--surface-3)}
+.vchip .vem{font-size:26px;line-height:1.1}
+.vchip b{font:600 var(--fs-sm) var(--font)}
+.vchip small{color:var(--text-3);font-size:11px}
+.vchip[aria-pressed="true"]{border-color:transparent;background:var(--grad-chip-strong);color:#fff}
+.vchip[aria-pressed="true"] small{color:rgba(255,255,255,.9)}
+.vpill{gap:4px}
 /* Caption */
 .meta{position:absolute;left:0;right:0;bottom:0;z-index:3;display:grid;gap:6px;padding:72px 76px 24px 16px;color:#fff;background:linear-gradient(180deg,transparent 0,rgba(0,0,0,.28) 35%,rgba(0,0,0,.8) 100%);transition:background .25s}
 .who{display:flex;align-items:center;gap:10px;min-width:0}
@@ -465,8 +550,11 @@ video.land{object-fit:contain}
    7. Profile
    ========================================================= */
 .prof{max-width:880px;margin:0 auto}
-.pcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);overflow:hidden}
-.cover{height:104px;background:var(--grad);position:relative}
+.pcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);overflow:hidden;box-shadow:var(--shadow-1)}
+.cover{height:104px;background:var(--cover);position:relative}
+:root{--cover:linear-gradient(120deg,#3B1C86 0%,#7A1E66 55%,#8A3A14 100%)}
+:root[data-theme="light"]{--cover:radial-gradient(60% 120% at 15% 0%,#D9C6FF 0,transparent 70%),radial-gradient(60% 120% at 90% 100%,#FFD1B0 0,transparent 70%),linear-gradient(120deg,#EADFFF,#FFE2F0 55%,#FFEBDB)}
+@media (prefers-color-scheme:light){:root:not([data-theme]){--cover:radial-gradient(60% 120% at 15% 0%,#D9C6FF 0,transparent 70%),radial-gradient(60% 120% at 90% 100%,#FFD1B0 0,transparent 70%),linear-gradient(120deg,#EADFFF,#FFE2F0 55%,#FFEBDB)}}
 .cover::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(0,0,0,.15))}
 .pbody{padding:0 20px 20px}
 .prow{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin-top:-46px}
@@ -539,15 +627,34 @@ button.fwho:hover{background:var(--surface-3)}
 .ptabs{margin:22px 0 14px}
 .fbtn{min-width:120px}
 .fbtn[aria-pressed="true"]{background:var(--surface-3);color:var(--text);box-shadow:none}
-.acard{display:grid;gap:10px;width:100%;max-width:420px;margin:16px auto 0;padding:16px 18px;border-radius:var(--r-lg);background:var(--surface);border:1px solid var(--line)}
-.acard h2{font-size:var(--fs-lg)}
-.acard .sub{font-size:var(--fs-xs)}
-.acard .field{gap:4px}
-.acard .lbl{font-size:var(--fs-xs)}
-.acard .input{height:40px;font-size:var(--fs-sm)}
-.acard .pw .icon-btn{width:36px;height:36px}
-.acard .btn{height:40px;font-size:var(--fs-sm)}
-.acard .aback{justify-self:start;height:32px;padding:0 10px;margin:-6px 0 -4px -8px}
+/* Welcome (guest Profile): a tilted collage of real thumbnails, a bold three-word promise, two clear choices */
+.welcome{display:grid;gap:14px;width:100%;max-width:420px;margin:8px auto 0;padding:0 2px 24px}
+.wcollage{position:relative;height:300px;margin-bottom:4px}
+.wc{position:absolute;display:grid;place-items:center;aspect-ratio:3/4;border:4px solid var(--surface);border-radius:22px;overflow:hidden;background-size:220% 220%;box-shadow:var(--shadow-card);font-size:40px;animation:wfloat 6s ease-in-out infinite alternate}
+.wc img{width:100%;height:100%;object-fit:cover}
+.wc0{left:0;top:6%;width:36%;transform:rotate(-8deg)}
+.wc1{left:31%;top:0;width:38%;transform:rotate(4deg);z-index:2;animation-delay:-2s}
+.wc2{right:0;top:10%;width:33%;transform:rotate(10deg);animation-delay:-4s}
+.wc3{left:9%;top:38%;width:33%;transform:rotate(7deg);z-index:3;animation-delay:-1s}
+.wc4{left:47%;top:40%;width:35%;transform:rotate(-6deg);z-index:1;animation-delay:-3s}
+@keyframes wfloat{to{translate:0 -6px}}
+.whead{display:grid;font:800 44px/1.02 var(--font-d);letter-spacing:-.035em;background:var(--grad-text);-webkit-background-clip:text;background-clip:text;color:transparent;width:max-content}
+.whead span{display:block}
+.wsub{max-width:300px;color:var(--text-2);font-size:var(--fs-md)}
+.welcome .lpb{margin-top:6px}
+/* Sign up / Log in / Reset: one focused card */
+.acard{display:grid;gap:14px;width:100%;max-width:440px;margin:8px auto 0;padding:18px 22px 22px;border-radius:var(--r-card);background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow-card)}
+.atop{display:flex;align-items:center;gap:4px;margin:-4px 0 0 -8px}
+.atop .wm{height:28px}
+.acard h2{font:700 24px/1.15 var(--font-d);letter-spacing:-.02em}
+#asub{margin-top:4px}
+.acard .input{height:48px;background:var(--bg)}
+.acard .pw .icon-btn{top:4px}
+.alink{font-size:var(--fs-xs);text-decoration:none}
+.alink:hover{text-decoration:underline}
+.aswitch{text-align:center;font-size:var(--fs-sm);color:var(--text-2)}
+.alert.ok{background:var(--ok-soft);color:var(--ok)}
+.npw{display:grid;gap:14px}
 .back{margin:4px 0 12px;color:var(--text-2)}
 .skel-av{width:96px;height:96px;border-radius:50%;border:4px solid var(--surface)}
 
@@ -686,7 +793,7 @@ button.fwho:hover{background:var(--surface-3)}
 .nrow.new .ntype{border-color:color-mix(in srgb,var(--bg) 90%,var(--accent))}
 .ntype .ico{width:12px;height:12px;stroke-width:2.6}
 .t-like{background:var(--like)}.t-like .ico{fill:currentColor}
-.t-comment{background:#3B82F6}.t-follow{background:#A92BF0}.t-upload{background:var(--ok)}
+.t-comment{background:#3B82F6}.t-follow{background:#A92BF0}.t-upload,.t-storylive{background:var(--ok)}.t-uploaded{background:#6A1BFF}.t-story{background:#C81E6A}.t-mention{background:#2F6BFF}
 .nmain{display:grid;gap:3px;min-width:0;border:0;background:none;padding:0;text-align:left;color:var(--text)}
 .nmain p{line-height:1.38;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
 .nmain p q{color:var(--text-2)}
@@ -741,6 +848,10 @@ button.fwho:hover{background:var(--surface-3)}
 .mmenu button.danger:hover{background:var(--danger-soft)}
 .mmenu button .ico{width:18px;height:18px;flex:none}
 .mtact{display:flex;align-items:center;gap:2px;min-height:36px}
+.mtwhen{display:grid;gap:6px;padding:2px 2px 4px}
+.mtwhen>span{display:flex;align-items:center;gap:6px;color:var(--text-2);font:600 var(--fs-xs) var(--font)}
+.mtwhen .ico{width:15px;height:15px;flex:none;color:var(--tint-1-ink)}
+.mtwhen .btn{width:100%}
 .mtact .mtst{flex:1;min-width:0;font-size:var(--fs-xs);color:var(--text-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .mtact .icon-btn{width:36px;height:36px;color:var(--text-2)}
 .mtact .icon-btn .ico{width:18px;height:18px}
@@ -778,9 +889,17 @@ th[aria-sort="descending"] .thb{color:var(--text)}
 /* =========================================================
    10. Splash
    ========================================================= */
-#splash{position:fixed;inset:0;z-index:80;display:grid;place-items:center;background:radial-gradient(70% 45% at 0% 0%,rgba(226,59,245,.55),transparent 70%),radial-gradient(70% 45% at 100% 100%,rgba(255,138,42,.5),transparent 70%),radial-gradient(circle at 50% 45%,#1E0B4A 0,#07031A 75%);transition:opacity .45s ease,visibility .45s;animation:spgone .4s 6s forwards}
+#splash{position:fixed;inset:0;z-index:80;display:grid;place-items:center;background:radial-gradient(70% 45% at 0% 0%,rgba(226,59,245,.55),transparent 70%),radial-gradient(70% 45% at 100% 100%,rgba(255,138,42,.5),transparent 70%),radial-gradient(circle at 50% 45%,#1E0B4A 0,#07031A 75%);color:#fff;transition:opacity .45s ease,visibility .45s;animation:spgone .4s 6s forwards}
+/* light splash: pearl with soft lavender and peach glows */
+:root[data-theme="light"] #splash{background:var(--splash-light);color:var(--text)}
+@media (prefers-color-scheme:light){:root:not([data-theme]) #splash{background:var(--splash-light);color:var(--text)}}
+:root{--splash-light:radial-gradient(60% 40% at 0% 0%,rgba(196,162,255,.45),transparent 70%),radial-gradient(60% 40% at 100% 100%,rgba(255,177,120,.42),transparent 70%),radial-gradient(50% 30% at 100% 0%,rgba(255,140,198,.22),transparent 70%),#F7F6FC}
 #splash.out{opacity:0;visibility:hidden}
-.sp-wm{display:block;width:min(240px,62vw);height:auto;color:#fff;overflow:visible;animation:logoin .7s cubic-bezier(.3,1.5,.5,1) both;filter:drop-shadow(0 12px 30px rgba(226,59,245,.45))}
+.sp-in{display:grid;justify-items:center;gap:14px}
+.sp-wm{display:block;width:min(240px,62vw);height:auto;color:inherit;overflow:visible;animation:logoin .7s cubic-bezier(.3,1.5,.5,1) both;filter:drop-shadow(0 12px 30px rgba(226,59,245,.35))}
+.sp-tag{font:500 var(--fs-md) var(--font);opacity:.8;animation:rise .5s .35s both}
+.sp-line{position:absolute;left:50%;bottom:calc(56px + var(--safe-b));width:72px;height:4px;border-radius:2px;background:var(--grad);transform:translateX(-50%);animation:sploading 1.4s ease-in-out infinite alternate}
+@keyframes sploading{from{width:28px;opacity:.6}to{width:96px;opacity:1}}
 @keyframes spgone{to{opacity:0;visibility:hidden}}
 
 /* =========================================================
@@ -802,7 +921,7 @@ th[aria-sort="descending"] .thb{color:var(--text)}
  nav{grid-area:nav;flex-direction:column;justify-content:flex-start;align-items:stretch;gap:2px;padding:4px 14px 24px;border-top:0;background:transparent}
  .nb{flex:none;max-width:none;min-height:46px;display:flex;align-items:center;gap:14px;padding:0 14px;font-size:var(--fs-md);font-weight:500}
  .nb:hover{background:var(--surface-3)}
- .nb[aria-current="page"]{background:var(--surface-3)}
+ .nb[aria-current="page"]{background:var(--tint-1)}
  .nb[aria-current="page"]::after{top:50%;left:-14px;width:3px;height:22px;border-radius:0 3px 3px 0;transform:translateY(-50%)}
  .nb.plus{order:-1;margin:0 0 14px;padding:0;min-height:0}
  .nb.plus:hover{background:none}
@@ -873,18 +992,49 @@ span.hthumb{cursor:default}
 .hprog{height:4px;margin-top:8px;border-radius:2px;background:var(--surface-3);overflow:hidden}
 .hprog i{display:block;height:100%;background:var(--accent)}
 .hmore{display:flex;justify-content:center;margin-top:14px}
-.scard{padding:18px;border-radius:var(--r-xl);background:var(--surface);border:1px solid var(--line)}
+.scard{padding:18px;border-radius:var(--r-card);background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow-1)}
+/* Settings: grouped white lists (Account / App preferences / About) of rows: icon, label, value, chevron */
+.sgh{margin:22px 4px 8px;font:700 var(--fs-md)/1.2 var(--font-d);color:var(--text)}
+#smain>div:first-child>.sgh{margin-top:4px}
+.slist{display:grid;padding:4px;border-radius:20px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow-1)}
+.srow .sl{flex:1;min-width:0;display:grid;gap:1px}
+.srow .sl small{font:400 var(--fs-xs)/1.3 var(--font);color:var(--text-3)}
+.srow .sv{display:inline-flex;align-items:center;gap:6px;color:var(--text-2);font-size:var(--fs-sm);font-variant-numeric:tabular-nums}
+.srow .sv .ico{width:16px;height:16px}
+.srow .chev{margin-left:0;display:inline-flex;color:var(--text-3)}
+label.srow{cursor:pointer}
+.srow.static{cursor:default}.srow.static:hover{background:none}
+.sfacts{display:grid;gap:6px;margin:10px 0 0;padding-left:18px;color:var(--text-2);font-size:var(--fs-sm)}
+.spanel{display:grid;gap:16px}
+.spanel[hidden]{display:none}
+.srow{position:relative;display:flex;align-items:center;gap:14px;min-height:52px;padding:0 10px;border:0;border-radius:var(--r-md);background:none;color:var(--text);font:500 var(--fs-md) var(--font);text-align:left}
+.srow+.srow::before{content:"";position:absolute;left:46px;right:10px;top:0;height:1px;background:var(--line)}
+.srow:hover{background:var(--surface-3)}
+.srow>span[data-ic]{display:inline-flex;color:var(--text-2)}
+.srow .chev .ico{width:18px;height:18px}
+.srow.danger,.srow.danger>span[data-ic]{color:var(--danger)}
+.stheme{margin-top:12px}
+.stheme button{display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.stheme .ico{width:18px;height:18px}
+/* dashboard: tinted tiles (label colours pass AA on their tint) and a gradient range pill */
+.kpis .kpi{border-color:transparent}
+.kpis .kpi:nth-child(4n+1){background:var(--tint-1)}.kpis .kpi:nth-child(4n+1) span{color:var(--tint-1-ink)}
+.kpis .kpi:nth-child(4n+2){background:var(--tint-2)}.kpis .kpi:nth-child(4n+2) span{color:var(--tint-2-ink)}
+.kpis .kpi:nth-child(4n+3){background:var(--tint-3)}.kpis .kpi:nth-child(4n+3) span{color:var(--tint-3-ink)}
+.kpis .kpi:nth-child(4n){background:var(--tint-4)}.kpis .kpi:nth-child(4n) span{color:var(--tint-4-ink)}
+.kpi span{font-weight:600}
+.drange button[aria-pressed="true"],.stheme button[aria-pressed="true"]{background:var(--grad-chip-strong);color:#fff;box-shadow:0 4px 12px rgba(181,47,216,.25)}
 .scard h2{font-size:var(--fs-lg)}
 .scard>.sub{margin:4px 0 8px}
 .tgl{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:56px;padding:8px 0;border-top:1px solid var(--line);cursor:pointer}
 .tgl b{display:block;font-weight:600}
 .tgl small{display:block}
-.tgl input{appearance:none;-webkit-appearance:none;position:relative;flex:none;width:48px;height:28px;margin:0;border-radius:999px;background:var(--surface-3);border:1px solid var(--field-line);cursor:pointer;transition:background-color .2s}
-.tgl input::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:var(--text-2);transition:transform .2s var(--ease),background-color .2s}
-.tgl input:checked{background:var(--accent-text);border-color:var(--accent-text)}
-.tgl input:checked::after{transform:translateX(20px);background:#fff}
-.tgl input:focus-visible{outline:2px solid var(--focus);outline-offset:3px}
-.tgl input:disabled{opacity:.5}
+.tgl input,.srow .sw{appearance:none;-webkit-appearance:none;position:relative;flex:none;width:48px;height:28px;margin:0;border-radius:999px;background:var(--surface-3);border:1px solid var(--field-line);cursor:pointer;transition:background-color .2s}
+.tgl input::after,.srow .sw::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:var(--text-2);transition:transform .2s var(--ease),background-color .2s}
+.tgl input:checked,.srow .sw:checked{background:var(--accent-text);border-color:var(--accent-text)}
+.tgl input:checked::after,.srow .sw:checked::after{transform:translateX(20px);background:#fff}
+.tgl input:focus-visible,.srow .sw:focus-visible{outline:2px solid var(--focus);outline-offset:3px}
+.tgl input:disabled,.srow .sw:disabled{opacity:.5}
 .brow{display:flex;align-items:center;gap:12px;padding:8px 0;border-top:1px solid var(--line)}
 .brow .fnm{flex:1}
 .coff,.cown{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:10px 14px;border-radius:var(--r-md);background:var(--surface-3);color:var(--text-2);font-size:var(--fs-sm)}
@@ -899,6 +1049,195 @@ span.hthumb{cursor:default}
 .pbtns .mmenu{top:46px;right:0;left:auto}
 .kbd{display:grid;grid-template-columns:auto 1fr;gap:10px 16px;align-items:center}
 .kbd kbd{display:inline-grid;place-items:center;min-width:34px;height:30px;padding:0 8px;border-radius:8px;border:1px solid var(--field-line);background:var(--surface-3);font:600 var(--fs-sm) var(--font)}
+/* ===== Vizo light design pass: shared surfaces ===== */
+.page-h h1{font-size:26px;font-weight:700;letter-spacing:-.02em}
+.sh h2{font-weight:700;letter-spacing:-.01em}
+.sb{background:var(--surface);box-shadow:var(--shadow-1)}
+.tile{border-radius:20px;box-shadow:var(--shadow-1)}
+.drop{background:var(--surface);border-color:color-mix(in srgb,var(--violet) 45%,transparent);box-shadow:var(--shadow-1)}
+.drop b{color:var(--text)}
+.finfo,.upstat,.hitem,.trow,.ddefs,.vtable{box-shadow:var(--shadow-1)}
+.nrow{background:var(--surface);margin-bottom:6px;border:1px solid var(--line)}
+.nrow.new{border-color:transparent}
+.chip:has(input:checked),.chip[aria-pressed="true"]{background:var(--grad-chip-strong);border-color:transparent;color:#fff}
+.trtags .chip{background:var(--surface);box-shadow:var(--shadow-1)}
+.empty .ei{background:var(--tint-1);color:var(--tint-1-ink)}
+/* KPI tiles fit the column they are in (2 on phones, 3–5 as room allows) instead of a fixed count */
+.kpis,.kpis.kp10{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+.kp10 .kpi span{min-height:0}
+/* ===== Home: top bar (logo, Messages, Notifications), creator row, video cards ===== */
+.homew{max-width:640px;margin:0 auto}
+.htop{display:flex;align-items:center;justify-content:space-between;min-height:52px;margin:0 -2px 8px}
+.htop .wm{height:30px}
+.hacts{display:flex;gap:10px}
+.hic{position:relative;display:grid;place-items:center;width:44px;height:44px;border:1px solid var(--line);border-radius:50%;background:var(--surface);color:var(--text);box-shadow:var(--shadow-1);transition:background-color .2s}
+.hic:hover{background:var(--surface-3)}
+.hic .ico{width:21px;height:21px}
+.hic .nbadge{top:-4px;right:-6px}
+.hstories{display:flex;gap:14px;overflow-x:auto;scrollbar-width:none;margin:0 -16px 14px;padding:4px 16px 8px}
+.hstories::-webkit-scrollbar{display:none}
+.hst{flex:none;display:grid;justify-items:center;gap:6px;width:68px;padding:0;border:0;border-radius:14px;background:none;color:var(--text);font:500 var(--fs-xs) var(--font)}
+.hst b{max-width:68px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500}
+.hsr{position:relative;display:block;width:64px;height:64px;padding:2.5px;border-radius:50%;background:var(--line-2)}
+.hsr.on{background:var(--grad)}
+.hsr .avatar{width:100%;height:100%;border:2.5px solid var(--bg);font-size:22px}
+.hsr i{position:absolute;right:-2px;bottom:-2px;display:grid;place-items:center;width:22px;height:22px;border:2px solid var(--bg);border-radius:50%;background:var(--grad-chip-strong);color:#fff}
+.hsr i .ico{width:12px;height:12px;stroke-width:3}
+.hsk{flex:none;width:64px;height:64px;border-radius:50%}
+.hcsk{display:block;height:440px;margin-bottom:14px;border-radius:var(--r-card)}
+.hcards{display:grid;gap:14px;padding-bottom:12px}
+.hcard{display:grid;gap:10px;padding:14px;border:1px solid var(--line);border-radius:var(--r-card);background:var(--surface);box-shadow:var(--shadow-1)}
+.hch{display:flex;align-items:center;gap:10px}
+.hcu{flex:1;min-width:0;display:flex;align-items:center;gap:10px;padding:0;border:0;border-radius:12px;background:none;color:var(--text);text-align:left}
+.hcu>span:last-child{display:grid;min-width:0}
+.hcu b,.hcu small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hcu b{font-weight:600}
+.hcu small{color:var(--text-3);font-size:var(--fs-xs)}
+.hcx{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.45;white-space:pre-line;overflow-wrap:anywhere}
+.hcard.open .hcx{display:block}
+.htags{color:var(--accent-text);font-weight:500}
+.hmore{justify-self:start;margin-top:-6px;font-size:var(--fs-sm);text-decoration:none}
+.hcm{position:relative;display:block;width:100%;aspect-ratio:4/5;padding:0;border:0;border-radius:20px;overflow:hidden;background:var(--surface-3);color:#fff;isolation:isolate}
+.hcm .th{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hcm .scene{animation:none;font-size:72px}
+.hpl{position:absolute;left:50%;top:50%;z-index:2;display:grid;place-items:center;width:64px;height:64px;margin:-32px 0 0 -32px;border-radius:50%;background:rgba(10,10,16,.45);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);transition:transform .2s var(--ease)}
+.hpl .ico{width:28px;height:28px;margin-left:3px}
+.hcm:hover .hpl{transform:scale(1.08)}
+.hcm:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.hvw{position:absolute;right:10px;bottom:10px;z-index:2;display:inline-flex;align-items:center;gap:4px;height:26px;padding:0 10px;border-radius:999px;background:rgba(10,10,16,.55);font:600 var(--fs-xs) var(--font)}
+.hvw .ico{width:14px;height:14px}
+.hca{display:flex;gap:8px}
+.hab{display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 14px;border:0;border-radius:999px;background:var(--surface-3);color:var(--text);font:600 var(--fs-sm) var(--font);font-variant-numeric:tabular-nums;transition:background-color .2s,color .2s}
+.hab:hover{background:color-mix(in srgb,var(--surface-3) 82%,var(--text) 18%)}
+.hab .ico{width:19px;height:19px}
+.hab[data-a="like"][aria-pressed="true"]{color:var(--like)}
+.hab[data-a="like"][aria-pressed="true"] .ico{fill:currentColor}
+.hab.pop .ico{animation:likepop .45s var(--ease)}
+.hsh{margin-left:auto}
+.ico-s{display:inline-flex}
+@media (min-width:900px){.htop .fbrand{visibility:hidden}.homew{padding-top:4px}.hcm{max-height:min(68vh,560px)}}
+/* story row: a ring shows stories — gradient = something new, grey = all seen; + adds your own */
+.hst{position:relative;width:68px}
+.hsb{display:block;padding:0;border:0;border-radius:50%;background:none}
+.hsr{background:transparent}
+.hsr.seen{background:var(--line-2)}
+.hadd{position:absolute;top:44px;left:46px;display:grid;place-items:center;width:24px;height:24px;padding:0;border:2px solid var(--bg);border-radius:50%;background:var(--grad-chip-strong);color:#fff}
+.hadd .ico{width:12px;height:12px;stroke-width:3}
+.hst>b{display:block;max-width:68px;margin-top:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center;font:500 var(--fs-xs) var(--font)}
+@media (pointer:coarse){.hadd::after{content:"";position:absolute;inset:-10px}}
+/* new story */
+.snew{display:grid;gap:12px}
+.snp{display:grid;place-items:center;max-height:50vh;border-radius:18px;overflow:hidden;background:#000}
+.snp img,.snp video{max-width:100%;max-height:50vh;object-fit:contain}
+.snew .scan{margin-top:0}
+/* story viewer */
+.sv{position:fixed;inset:0;z-index:85;display:grid;place-items:center;background:#000;animation:fadein .2s}
+.svcard{position:relative;width:100%;height:100%;overflow:hidden;background:#111;color:#fff}
+.svcard::before{content:"";position:absolute;inset:0 0 auto;z-index:2;height:130px;background:linear-gradient(rgba(0,0,0,.55),transparent);pointer-events:none}
+@media (min-width:600px){.sv{background:rgba(8,8,12,.94)}.svcard{width:auto;height:min(calc(100dvh - 32px),880px);aspect-ratio:9/16;border-radius:22px}}
+.svbars{position:absolute;top:calc(10px + var(--safe-t));left:10px;right:10px;z-index:3;display:flex;gap:4px}
+.svbars span{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.35);overflow:hidden}
+.svbars i{display:block;height:100%;background:#fff}
+.svhead{position:absolute;top:calc(20px + var(--safe-t));left:6px;right:6px;z-index:3;display:flex;align-items:center;gap:4px}
+.svwho{flex:1;min-width:0;display:flex;align-items:center;gap:10px;padding:4px;border:0;border-radius:12px;background:none;color:#fff;text-align:left;text-shadow:0 1px 6px rgba(0,0,0,.5)}
+.svwho>span:last-child{display:grid;min-width:0}
+.svwho b,.svwho small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.svwho small{opacity:.85;font-size:var(--fs-xs)}
+.svic{display:grid;place-items:center;flex:none;width:40px;height:40px;padding:0;border:0;border-radius:50%;background:rgba(10,10,16,.4);color:#fff}
+.svic .ico{width:20px;height:20px}
+.svmedia{position:absolute;inset:0;display:grid;place-items:center;user-select:none;-webkit-user-select:none}
+.svmedia img,.svmedia video{width:100%;height:100%;object-fit:contain;-webkit-user-drag:none}
+.svnav{position:absolute;top:90px;bottom:90px;z-index:2;width:38%;padding:0;border:0;background:none}
+.svp{left:0}.svn{right:0}
+.svfoot{position:absolute;left:0;right:0;bottom:0;z-index:3;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:18px 14px calc(16px + var(--safe-b));background:linear-gradient(transparent,rgba(0,0,0,.6))}
+.svfoot:empty{display:none}
+.svbtn{display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 14px;border:1px solid rgba(255,255,255,.45);border-radius:999px;background:rgba(10,10,16,.4);color:#fff;font:600 var(--fs-sm) var(--font)}
+.svbtn .ico{width:17px;height:17px}
+.svpend{display:inline-flex;align-items:center;gap:6px;font:600 var(--fs-sm) var(--font);text-shadow:0 1px 6px rgba(0,0,0,.6)}
+.svpend .ico{width:16px;height:16px}
+.sv :focus-visible{outline:2px solid #fff;outline-offset:2px;box-shadow:0 0 0 5px rgba(10,10,16,.7)}
+.svnav:focus-visible{outline-offset:-6px}
+/* story stage (editor and viewer): always 9:16, so texts and stickers sit in the same place on every screen */
+.sestage,.svstage{position:absolute;inset:0;margin:auto;width:min(100%,calc(100dvh * .5625));aspect-ratio:9/16;container-type:inline-size;overflow:hidden;background:#000}
+.semedia,.semedia>*,.svstage>img,.svstage>video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.seov,.svov{position:absolute;inset:0}
+.svov{z-index:3;pointer-events:none}
+.ov{position:absolute;z-index:3;width:max-content;max-width:88%;padding:.12em .38em;border:0;border-radius:.35em;background:none;font:800 calc(var(--s) * 5.4cqw)/1.15 var(--font-d);text-align:center;white-space:pre-wrap;overflow-wrap:break-word;text-shadow:0 1px 6px rgba(0,0,0,.5);transform:translate(-50%,-50%);touch-action:none;user-select:none;-webkit-user-select:none}
+.ov-box{background:var(--bg);text-shadow:none}
+.ov-location,.ov-mention{padding:.3em .75em;border-radius:999px;font-size:calc(var(--s) * 4.4cqw);font-weight:700}
+.seov .ov{cursor:grab}
+.seov .ov.drag{cursor:grabbing;outline:2px dashed rgba(255,255,255,.85);outline-offset:3px}
+.svov button.ov{pointer-events:auto;cursor:pointer}
+/* selected item: dashed frame, ✕ (remove) top-left, resize handle bottom-right */
+.sesel{position:absolute;z-index:4;border:2px dashed rgba(255,255,255,.9);border-radius:10px;box-shadow:0 0 0 1px rgba(0,0,0,.35);pointer-events:none}
+.seh{position:absolute;display:grid;place-items:center;width:30px;height:30px;padding:0;border:2px solid #fff;border-radius:50%;background:#16133D;color:#fff;pointer-events:auto;box-shadow:0 2px 8px rgba(0,0,0,.4)}
+.seh .ico{width:15px;height:15px;stroke-width:2.6}
+.sehx{left:-15px;top:-15px}
+.sehr{right:-15px;bottom:-15px;cursor:nwse-resize;touch-action:none;background:var(--grad-chip-strong)}
+.sehr::after{content:"";width:10px;height:10px;border-right:2.5px solid #fff;border-bottom:2.5px solid #fff;transform:translate(-1px,-1px)}
+@media (pointer:coarse){.seh{width:36px;height:36px}.sehx{left:-18px;top:-18px}.sehr{right:-18px;bottom:-18px}}
+.seov{touch-action:none}
+/* place suggestions */
+.sesug{display:grid;gap:2px;max-height:240px;overflow-y:auto;margin-top:-4px;padding:4px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.sesugo{display:flex;align-items:center;gap:10px;min-height:48px;padding:6px 10px;border:0;border-radius:10px;background:none;color:var(--text);text-align:left}
+.sesugo:hover,.sesugo:focus-visible{background:var(--surface-3)}
+.sesugo>span:last-child{display:grid;min-width:0}
+.sesugo b{font-weight:600}
+.sesugo small{color:var(--text-2);font-size:var(--fs-xs)}
+.sesi{display:grid;place-items:center;flex:none;width:32px;height:32px;border-radius:50%;background:var(--tint-2);color:var(--tint-2-ink)}
+.sesi .ico{width:17px;height:17px}
+/* story editor */
+.setop{position:absolute;top:calc(12px + var(--safe-t));left:10px;right:10px;z-index:4;display:flex;align-items:center;gap:8px}
+.secount{flex:1;color:#fff;font:600 var(--fs-sm) var(--font);text-shadow:0 1px 4px rgba(0,0,0,.6)}
+.setool{display:grid;place-items:center;width:44px;height:44px;padding:0;border:0;border-radius:50%;background:rgba(10,10,16,.5);color:#fff;font:800 17px var(--font-d)}
+.setool .ico{width:22px;height:22px}
+.sebot{position:absolute;left:0;right:0;bottom:0;z-index:4;display:grid;gap:10px;padding:18px 14px calc(14px + var(--safe-b));background:linear-gradient(transparent,rgba(0,0,0,.7))}
+.sebot .scan{margin:0;background:#fff;border-color:transparent;color:#16133D}
+.sebot .scan.ok{color:#0B7041}
+.sebot .scan .link{color:#B0127F}
+.sepanel{position:absolute;left:0;right:0;bottom:0;z-index:5;display:grid;gap:10px;padding:16px 16px calc(16px + var(--safe-b));border-radius:22px 22px 0 0;background:var(--surface-2);color:var(--text);box-shadow:var(--shadow-2);animation:sheetin .25s var(--ease)}
+.sepanel[hidden]{display:none}
+.secolors{display:flex;flex-wrap:wrap;gap:8px}
+.secolors button{width:34px;height:34px;padding:0;border:2px solid var(--line-2);border-radius:50%;background:var(--sw)}
+.secolors [aria-checked="true"]{outline:3px solid var(--focus);outline-offset:2px}
+.serow{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+#sestyle[aria-pressed="true"]{background:var(--grad-chip-strong);color:#fff}
+.sesz{flex:1;display:flex;align-items:center;gap:8px;min-width:150px;font-size:var(--fs-sm);color:var(--text-2)}
+.sesz input{flex:1;accent-color:var(--violet)}
+/* ===== Chat: conversation list and a conversation ===== */
+.clist{display:grid;gap:8px}
+.crow{display:grid;grid-template-columns:48px minmax(0,1fr) auto;gap:12px;align-items:center;width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:18px;background:var(--surface);color:var(--text);text-align:left;box-shadow:var(--shadow-1);transition:background-color .2s}
+.crow:hover{background:var(--surface-3)}
+.crow .avatar{width:48px;height:48px;font-size:19px}
+.crm{display:grid;min-width:0}
+.crm b,.crm small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.crm b{font-weight:600}
+.crm small{color:var(--text-2);font-size:var(--fs-sm)}
+.crow.new .crm b,.crow.new .crm small{font-weight:700;color:var(--text)}
+.crt{display:grid;justify-items:end;gap:4px}
+.crt small{color:var(--text-3);font-size:var(--fs-xs)}
+.cun{min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:var(--badge);color:#fff;font:700 11px/20px var(--font);text-align:center}
+.csk{display:block;height:70px;margin-bottom:8px;border-radius:18px}
+#v-dm.on{display:flex}
+.dmwrap{display:flex;flex-direction:column;width:100%;max-width:720px;height:100%;margin:0 auto}
+.dmh{flex:none;display:flex;align-items:center;gap:6px;padding:calc(8px + var(--safe-t)) 10px 8px;border-bottom:1px solid var(--line)}
+.dmwho{flex:1;min-width:0;display:flex;align-items:center;gap:10px;padding:4px 6px;border:0;border-radius:12px;background:none;color:var(--text);text-align:left}
+.dmwho:hover{background:var(--surface-3)}
+.dmwho>span:last-child{display:grid;min-width:0}
+.dmwho b,.dmwho small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dmwho b{font-weight:600}
+.dmwho small{color:var(--text-3);font-size:var(--fs-xs)}
+.dml{flex:1;min-height:0;display:flex;flex-direction:column;gap:6px;overflow-y:auto;padding:16px 14px;overscroll-behavior:contain}
+.dml:focus-visible{outline:2px solid var(--focus);outline-offset:-2px}
+.dmb{align-self:flex-start;display:grid;gap:2px;max-width:78%;padding:9px 13px;border:1px solid var(--line);border-radius:18px 18px 18px 6px;background:var(--surface);color:var(--text);animation:rise .2s var(--ease)}
+.dmb.mine{align-self:flex-end;border-color:transparent;border-radius:18px 18px 6px 18px;background:var(--grad-chip-strong);color:#fff}
+.dmb p{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.4}
+.dmb time{justify-self:end;font-size:11px;opacity:.85}
+.dmold{align-self:center;margin-bottom:6px}
+.dmempty{margin:auto;color:var(--text-2);text-align:center}
+.dml .empty{margin:auto}
+.dmf{flex:none;display:flex;align-items:center;gap:10px;padding:10px 12px;border-top:1px solid var(--line)}
+.dmf .input{height:46px;border-radius:999px}
 /* long titles, names and comments wrap instead of overflowing */
 .meta .title,.pname,.puser,.pbio,.cm p,.cdesc p,.st b{overflow-wrap:anywhere}
 /* touch screens: comfortable 44 px targets without changing the look */
@@ -925,7 +1264,7 @@ span.hthumb{cursor:default}
  <linearGradient id="vz-i" x1="0" y1="415" x2="0" y2="752" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FF4FE8"/><stop offset=".5" stop-color="#E23BF5"/><stop offset="1" stop-color="#5B1BFF"/></linearGradient>
  <linearGradient id="vz-p" x1="885" y1="575" x2="950" y2="700" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FFB31A"/><stop offset="1" stop-color="#FF2E8A"/></linearGradient>
  <symbol id="vizo-wm" viewBox="178 405 896 370"><path d="M231 528L318 716" stroke="url(#vz-v1)" stroke-width="64" stroke-linecap="round"/><path d="M436 528L333 716" stroke="url(#vz-v2)" stroke-width="64" stroke-linecap="round"/><circle cx="527" cy="455" r="42" fill="url(#vz-i)"/><rect x="486" y="515" width="74" height="237" rx="24" fill="url(#vz-i)"/><path d="M609 534H765L607 720H762" fill="none" stroke="currentColor" stroke-width="62" stroke-linecap="round" stroke-linejoin="round"/><circle cx="931" cy="632" r="110" fill="none" stroke="currentColor" stroke-width="54"/><path d="M894 585L992 632L894 683Z" fill="url(#vz-p)" stroke="url(#vz-p)" stroke-width="22" stroke-linejoin="round"/></symbol></defs></svg>
-<div id="splash" aria-hidden="true"><svg class="sp-wm" viewBox="0 0 896 370"><use href="#vizo-wm"/></svg></div>
+<div id="splash" aria-hidden="true"><div class="sp-in"><svg class="sp-wm" viewBox="0 0 896 370"><use href="#vizo-wm"/></svg><p class="sp-tag">Short videos. Big vibes.</p></div><i class="sp-line"></i></div>
 <div id="app">
 <header>
   <a class="brand" href="/" aria-label="Vizo home" style="color:inherit;text-decoration:none">
@@ -934,7 +1273,6 @@ span.hthumb{cursor:default}
   <div class="hmenu">
     <button class="icon-btn gearbtn" id="gear" type="button" aria-label="Settings" title="Settings" aria-haspopup="menu" aria-expanded="false" aria-controls="smenu" data-ic="gear"></button>
     <div class="smenu" id="smenu" role="menu" aria-label="Settings" hidden>
-      <button type="button" role="menuitem" data-sm="edit" class="sm-acct"><span data-ic="edit"></span>Edit profile</button>
       <button type="button" role="menuitem" data-sm="hist" class="sm-acct"><span data-ic="clock"></span>History</button>
       <button type="button" role="menuitem" data-sm="settings"><span data-ic="gear"></span>Settings</button>
       <button type="button" role="menuitem" data-sm="theme" id="smthemebtn" aria-haspopup="true" aria-expanded="false" aria-controls="smtheme"><span id="smthemeic"></span>Theme<span class="chev" data-ic="chev"></span></button>
@@ -950,7 +1288,25 @@ span.hthumb{cursor:default}
   </div>
 </header>
 <main id="main" tabindex="-1">
-  <section class="view on noclips" id="v-feed" aria-label="Video feed">
+  <section class="view on" id="v-home" aria-label="Home"><div class="pad"><div class="homew">
+    <div class="htop"><a class="fbrand" href="/" aria-label="Vizo home"><svg class="wm" viewBox="0 0 896 370" role="img" aria-label="vizo"><use href="#vizo-wm"/></svg></a>
+      <div class="hacts"><button class="hic" type="button" id="nbchat" data-go="chat" aria-label="Messages" title="Messages" hidden><span data-ic="dm"></span><b class="nbadge" id="cbadge" aria-hidden="true" hidden></b></button><button class="hic" type="button" id="nbnotif" data-go="notif" aria-label="Notifications" title="Notifications" hidden><span data-ic="bell"></span><b class="nbadge" id="nbadge" aria-hidden="true" hidden></b></button></div></div>
+    <div class="hstories" id="hstories" role="list" aria-label="Creators"></div>
+    <div class="hcards" id="hcards" aria-live="polite"></div>
+  </div></div></section>
+
+  <section class="view" id="v-chat" aria-label="Messages"><div class="pad"><div class="nwrap">
+    <div class="page-h"><button class="icon-btn" type="button" data-go="home" aria-label="Back to Home" data-ic="back"></button><h1 tabindex="-1">Messages</h1><button class="btn sm btn-primary" type="button" id="cnew" style="margin-left:auto"><span data-ic="edit"></span>New message</button></div>
+    <div id="clist" aria-live="polite"></div>
+  </div></div></section>
+
+  <section class="view" id="v-dm" aria-label="Conversation"><div class="dmwrap">
+    <div class="dmh"><button class="icon-btn" type="button" id="dmback" aria-label="Back to Messages" data-ic="back"></button><button class="dmwho" type="button" id="dmwho"></button></div>
+    <div class="dml" id="dml" role="log" aria-label="Messages" tabindex="0"></div>
+    <form class="dmf" id="dmf" novalidate><input class="input" id="dmin" maxlength="1000" placeholder="Message…" aria-label="Write a message" autocomplete="off" enterkeyhint="send"><button class="send" id="dmsend" type="submit" aria-label="Send" disabled data-ic="send"></button></form>
+  </div></section>
+
+  <section class="view noclips" id="v-feed" aria-label="Video feed">
     <div class="ftabs" id="ftabs" role="group" aria-label="Feed"><button type="button" data-f="foryou" aria-pressed="true">For you</button><button type="button" data-f="following" aria-pressed="false">Following</button></div>
     <button class="arr" id="prev" type="button" aria-label="Previous video" title="Previous (↑)" data-ic="up"></button>
     <div id="ribbon" class="rib" tabindex="-1">
@@ -980,6 +1336,7 @@ span.hthumb{cursor:default}
         <div class="field"><label class="lbl" for="title">Title <span class="cnt" id="tcount">0/70</span></label><input class="input" id="title" maxlength="70" placeholder="e.g. The fastest chai in Delhi" autocomplete="off" aria-describedby="title-e"><p class="err" id="title-e"></p></div>
         <div class="field"><label class="lbl" for="desc">Description <span class="cnt" id="dcount">0/500</span></label><textarea class="input ta" id="desc" maxlength="500" rows="3" placeholder="Tell viewers about your video" aria-describedby="desc-h"></textarea><p class="hint" id="desc-h">Shown at the top of the comments.</p></div>
         <fieldset class="field"><legend class="lbl">Filter</legend><div class="chips" id="filters"></div></fieldset>
+        <fieldset class="field"><legend class="lbl">Vibe <span class="cnt">optional</span></legend><div class="chips" id="vibes"></div><p class="hint">People find your video with the Vibe button on the Feed.</p></fieldset>
         <div class="field"><label class="lbl" for="tags">Hashtags <span class="cnt" id="gcount">0/5</span></label><input class="input" id="tags" placeholder="chai delhi food" autocomplete="off" aria-describedby="ghint"><div class="tagprev" id="tagprev"></div><p class="hint" id="ghint">Separate with spaces. Up to 5 tags.</p></div>
         <fieldset class="field"><legend class="lbl">When to post</legend><div class="chips" id="whenc"><label class="chip"><input type="radio" name="when" value="now" checked>Post now</label><label class="chip"><input type="radio" name="when" value="later"><span data-ic="clock"></span>Schedule</label></div>
           <div class="field schedf" id="schedf" hidden><input class="input" id="sched" type="datetime-local" aria-label="Publish date and time" aria-describedby="sched-e sched-h"><p class="hint" id="sched-h">Your video goes live at this time. Until then only you can see it, on your profile.</p><p class="err" id="sched-e"></p></div></fieldset>
@@ -992,10 +1349,11 @@ span.hthumb{cursor:default}
   </div></div></section>
 
   <section class="view" id="v-me" aria-label="Your profile"><div class="pad"><div class="prof">
+    <div class="ptop"><button class="icon-btn" type="button" id="pback" aria-label="Back" title="Back" data-ic="back"></button></div>
     <div class="pcard" id="pcard"><div class="cover"></div><div class="pbody">
       <div class="prow">
         <button class="av" id="avbtn" type="button" aria-label="Change profile photo" title="Change profile photo"><span id="av">Y</span><img id="avimg" alt="" hidden><span class="cam" aria-hidden="true" data-ic="camera"></span></button><input id="avfile" type="file" accept="image/*" class="sr-only" tabindex="-1">
-        <div class="pbtns"><button class="btn sm btn-secondary" id="pedit" type="button"><span data-ic="edit"></span>Edit profile</button><button class="btn sm btn-secondary" id="phist" type="button" data-go="hist" hidden><span data-ic="clock"></span>History</button><button class="btn sm btn-secondary" id="pset" type="button" data-go="set" hidden><span data-ic="gear"></span>Settings</button><button class="btn sm btn-ghost" id="plogout" type="button" hidden>Log out</button></div>
+        <div class="pbtns"><button class="btn sm btn-secondary" id="phist" type="button" data-go="hist" hidden><span data-ic="clock"></span>History</button><button class="btn sm btn-secondary" id="pset" type="button" data-go="set" hidden><span data-ic="gear"></span>Settings</button><button class="btn sm btn-ghost" id="plogout" type="button" hidden>Log out</button></div>
       </div>
       <h1 class="pname" id="pname">@you</h1><p class="puser" id="puser" hidden></p><p class="pbio" id="pbio">Vizo creator</p><div id="plinks"></div>
       <form class="pform" id="pform" novalidate hidden>
@@ -1012,22 +1370,28 @@ span.hthumb{cursor:default}
         <div class="prow2"><button class="btn sm btn-primary" type="submit" id="psave">Save</button><button class="btn sm btn-ghost" type="button" id="pcancel">Cancel</button><button class="btn sm btn-danger-ghost" type="button" id="prmav" hidden>Remove photo</button></div>
       </form>
       <div class="stats" id="pstats"></div>
+      <button class="btn btn-primary block pedit" id="pedit" type="button"><span data-ic="edit"></span>Edit profile</button>
     </div></div>
     <button class="btn btn-secondary block pdashbar" id="pdash" type="button" data-go="dash" hidden><span data-ic="chart"></span>Dashboard<span class="chev" data-ic="chev"></span></button>
-    <div class="acard" id="apick" hidden>
-      <div><h2>Welcome to Vizo</h2><p class="sub" style="margin-top:4px">Log in or create an account to like, comment, follow and upload.</p></div>
-      <div class="lpb"><button class="btn btn-primary block" type="button" data-auth="in">Log in</button><button class="btn btn-secondary block" type="button" data-auth="up">Create an account</button></div>
+    <div class="welcome" id="apick" hidden>
+      <div class="wcollage" id="wcollage" aria-hidden="true"></div>
+      <h2 class="whead"><span>Create</span> <span>Watch</span> <span>Share</span></h2>
+      <p class="wsub">Short videos for every mood, every moment, every you.</p>
+      <div class="lpb"><button class="btn btn-primary lg block" type="button" data-auth="up">Get started</button><button class="btn btn-ghost block" type="button" data-auth="in">I already have an account</button></div>
     </div>
     <form class="acard" id="auth" novalidate hidden>
-      <button class="btn sm btn-ghost aback" type="button" id="aback">← Back</button>
-      <div><h2 id="ahead">Create your account</h2><p class="sub" style="margin-top:4px">Keep your videos and profile safe, and use them on any device.</p></div>      <div class="field" id="aul"><label class="lbl" for="aname">Username <span class="cnt">optional</span></label><input class="input" id="aname" maxlength="25" placeholder="your_name" autocomplete="off" aria-describedby="aname-e"><p class="err" id="aname-e"></p></div>
+      <div class="atop"><button class="icon-btn" type="button" id="aback" aria-label="Back" title="Back" data-ic="back"></button><svg class="wm" viewBox="0 0 896 370" role="img" aria-label="vizo"><use href="#vizo-wm"/></svg></div>
+      <div><h2 id="ahead">Create your account</h2><p class="sub" id="asub">Join a community of creators and dreamers.</p></div>
+      <div class="field" id="aul"><label class="lbl" for="aname">Username <span class="cnt">optional</span></label><input class="input" id="aname" maxlength="25" placeholder="your_name" autocomplete="off" aria-describedby="aname-e"><p class="err" id="aname-e"></p></div>
       <div class="field" id="aful"><label class="lbl" for="afull">Full name <span class="cnt">optional</span></label><input class="input" id="afull" maxlength="50" placeholder="Your name" autocomplete="name"></div>
       <div class="field"><label class="lbl" for="aemail">Email</label><input class="input" id="aemail" type="email" autocomplete="email" placeholder="you@example.com" aria-describedby="aemail-e"><p class="err" id="aemail-e"></p></div>
-      <div class="field"><label class="lbl" for="apass">Password</label><div class="pw"><input class="input" id="apass" type="password" autocomplete="new-password" placeholder="At least 6 characters" aria-describedby="apass-e"><button class="icon-btn" type="button" id="apw" aria-label="Show password" data-ic="eye"></button></div><p class="err" id="apass-e"></p></div>
+      <div class="field" id="apf"><div class="lbl"><label for="apass">Password</label><button class="link alink" type="button" id="aforgot">Forgot password?</button></div><div class="pw"><input class="input" id="apass" type="password" autocomplete="new-password" placeholder="At least 6 characters" aria-describedby="apass-e"><button class="icon-btn" type="button" id="apw" aria-label="Show password" data-ic="eye"></button></div><p class="err" id="apass-e"></p></div>
       <div class="alert" id="amsg" role="alert" hidden></div>
-      <button class="btn btn-primary block" id="ago" type="submit">Sign up</button>
+      <div class="alert ok" id="aok" role="status" hidden></div>
+      <button class="btn btn-primary lg block" id="ago" type="submit">Sign up</button>
+      <p class="aswitch" id="aswitch"></p>
     </form>
-    <div class="tabs ptabs" id="ptabs" role="tablist" aria-label="Your videos"><button class="tab" role="tab" data-p="mine" aria-selected="true">My videos<small id="cmine"></small></button></div>
+    <div class="tabs ptabs" id="ptabs" role="tablist" aria-label="Your videos"><button class="tab" role="tab" data-p="mine" aria-selected="true" aria-controls="mine">My videos<small id="cmine"></small></button><button class="tab" role="tab" data-p="sched" aria-selected="false" aria-controls="mine">Scheduled<small id="csched"></small></button></div>
     <div class="sgrid" id="mine"></div><div id="mempty"></div>
   </div></div></section>
 
@@ -1037,7 +1401,7 @@ span.hthumb{cursor:default}
   </div></div></section>
 
   <section class="view" id="v-notif" aria-label="Notifications"><div class="pad"><div class="nwrap">
-    <div class="page-h"><h1>Notifications</h1><button class="btn sm btn-secondary" type="button" id="nmute" style="margin-left:auto" aria-pressed="false" hidden><span id="nmuteic"></span><span id="nmutet">Mute notifications</span></button></div>
+    <div class="page-h"><button class="icon-btn" type="button" data-go="home" aria-label="Back to Home" data-ic="back"></button><h1>Notifications</h1><button class="btn sm btn-secondary" type="button" id="nmute" style="margin-left:auto" aria-pressed="false" hidden><span id="nmuteic"></span><span id="nmutet">Mute</span></button></div>
     <p class="hint" id="nmute-s" role="status"></p>
     <div id="nlist" aria-live="polite"></div>
   </div></div></section>
@@ -1048,24 +1412,81 @@ span.hthumb{cursor:default}
     <div id="hlist" aria-live="polite"></div>
   </div></div></section>
   <section class="view" id="v-set" aria-label="Settings"><div class="pad"><div class="swrap">
-    <div class="page-h"><button class="icon-btn" type="button" data-go="me" aria-label="Back to profile" data-ic="back"></button><h1 tabindex="-1">Settings</h1></div>
-    <section class="scard" aria-labelledby="sn-h"><h2 id="sn-h">Notifications</h2><p class="sub">Choose what appears in Notifications. Turning a type off hides new activity of that type; notifications you already have stay.</p><div id="nprefs"></div><p class="hint" id="nprefs-s" role="status"></p></section>
+    <div class="page-h"><button class="icon-btn" type="button" id="sback" aria-label="Back to profile" data-ic="back"></button><h1 tabindex="-1" id="stitle">Settings</h1></div>
+    <div id="smain">
+      <div id="sacct"><h2 class="sgh">Account</h2><div class="slist">
+        <button class="srow" type="button" id="sedit"><span data-ic="user"></span><span class="sl">Edit profile</span><span class="chev" data-ic="chev"></span></button>
+        <button class="srow" type="button" data-sp="notif"><span data-ic="bell"></span><span class="sl">Notifications</span><span class="chev" data-ic="chev"></span></button>
+        <button class="srow" type="button" data-sp="priv"><span data-ic="lock"></span><span class="sl">Privacy &amp; security</span><span class="chev" data-ic="chev"></span></button>
+        <button class="srow" type="button" data-sp="blocked"><span data-ic="ban"></span><span class="sl">Blocked users</span><span class="sv" id="sbn"></span><span class="chev" data-ic="chev"></span></button>
+      </div></div>
+      <h2 class="sgh">App preferences</h2><div class="slist">
+        <button class="srow" type="button" data-sp="theme"><span data-ic="half"></span><span class="sl">Theme</span><span class="sv" id="sthv"></span><span class="chev" data-ic="chev"></span></button>
+        <label class="srow"><span data-ic="data"></span><span class="sl">Data saver<small>Only the video on screen loads; the next waits until you scroll</small></span><input type="checkbox" class="sw" id="dsave" role="switch"></label>
+        <div class="srow static"><span data-ic="globe"></span><span class="sl">Language</span><span class="sv">English</span></div>
+      </div>
+      <h2 class="sgh">About</h2><div class="slist">
+        <button class="srow" type="button" data-sp="help"><span data-ic="help"></span><span class="sl">Help &amp; shortcuts</span><span class="chev" data-ic="chev"></span></button>
+        <button class="srow danger" type="button" id="slogout"><span data-ic="logout"></span><span class="sl">Log out</span></button>
+      </div>
+    </div>
+    <div class="spanel" data-p="notif" data-t="Notifications" hidden>
+    <section class="scard" aria-labelledby="sn-h"><h2 id="sn-h">In the app</h2><p class="sub">Choose what appears in Notifications. Turning a type off hides new activity of that type; notifications you already have stay.</p><div id="nprefs"></div><p class="hint" id="nprefs-s" role="status"></p></section>
     <section class="scard" aria-labelledby="sp-h"><h2 id="sp-h">Push notifications</h2><p class="sub">Get notifications on this device even when Vizo isn’t open. They follow the switches above and Mute.</p><label class="tgl"><span><b>Push notifications on this device</b><small class="sub" id="pushst" role="status"></small></span><input type="checkbox" id="pushtgl" role="switch" aria-describedby="pushst"></label></section>
+    </div>
+    <div class="spanel" data-p="priv" data-t="Privacy &amp; security" hidden>
+    <section class="scard" aria-labelledby="spw-h"><h2 id="spw-h">Password</h2><p class="sub">Choose a new password for this account. You stay logged in on this device.</p><button class="btn btn-secondary" type="button" id="schpw" style="margin-top:12px"><span data-ic="key"></span>Change password</button></section>
+    <section class="scard" aria-labelledby="spr-h"><h2 id="spr-h">Your privacy</h2><ul class="sfacts"><li>Your email address is never shown to other people.</li><li>Blocked people can’t follow you, like or comment, and you don’t see each other’s videos.</li><li>Reports are reviewed by an admin; nothing is removed automatically.</li></ul><button class="btn btn-ghost" type="button" data-sp="blocked" style="margin-top:12px"><span data-ic="ban"></span>Manage blocked users</button></section>
+    </div>
+    <div class="spanel" data-p="blocked" data-t="Blocked users" hidden>
     <section class="scard" aria-labelledby="sb-h"><h2 id="sb-h">Blocked accounts</h2><p class="sub">People you block can't follow you or like or comment on your videos, and you won't see each other's videos or comments.</p><div id="blist"></div></section>
-    <section class="scard" aria-labelledby="sd-h"><h2 id="sd-h">Data saver</h2><label class="tgl"><span><b>Use less data</b><small class="sub">Only the video on screen loads; the next one waits until you scroll to it. Each video is stored in one quality, so there's no quality setting.</small></span><input type="checkbox" id="dsave"></label></section>
+    </div>
+    <div class="spanel" data-p="theme" data-t="Theme" hidden>
+    <section class="scard" aria-labelledby="sa-h"><h2 id="sa-h">Appearance</h2><p class="sub">Vizo is designed light-first. Auto follows your device’s setting.</p><div class="seg stheme" id="stheme" role="group" aria-label="Theme"><button type="button" data-th="light" aria-pressed="false"><span data-ic="sun"></span>Light</button><button type="button" data-th="dark" aria-pressed="false"><span data-ic="moon"></span>Dark</button><button type="button" data-th="auto" aria-pressed="false"><span data-ic="half"></span>Auto</button></div></section>
+    </div>
+    <div class="spanel" data-p="help" data-t="Help &amp; shortcuts" hidden>
+    <section class="scard" aria-labelledby="shk-h"><h2 id="shk-h">Keyboard shortcuts</h2><div class="kbd" style="margin-top:12px"><kbd>↑</kbd><span>Previous video</span><kbd>↓</kbd><span>Next video</span><kbd>Space</kbd><span>Play / pause</span><kbd>M</kbd><span>Sound on / off</span><kbd>L</kbd><span>Like</span><kbd>Esc</kbd><span>Close a panel, menu or the player</span><kbd>?</kbd><span>Show the shortcuts on the feed</span></div></section>
+    <section class="scard" aria-labelledby="sht-h"><h2 id="sht-h">Tips</h2><ul class="sfacts"><li>Double-tap a video to like it.</li><li>Use ⚑ on a video or comment to report it to the admin.</li><li>⋯ on the feed hides the buttons for a clean view.</li><li>Videos can be up to 60 seconds and 100 MB.</li></ul></section>
+    </div>
   </div></div></section>
   <div class="pp" id="pp" role="dialog" aria-label="Video player" hidden><div class="ppbar"><button class="ppx" id="ppx" type="button" aria-label="Back to profile" title="Back (Esc)" data-ic="back"></button><span class="ppt" id="ppt"></span></div><div class="rib pprib" id="pprib" tabindex="-1"></div></div>
 </main>
 <nav id="mainnav" aria-label="Main" tabindex="-1">
-  <button class="nb" type="button" data-v="feed" aria-current="page"><span data-ic="film"></span><span class="nbl">Feed</span></button>
-  <button class="nb" type="button" data-v="khoj"><span data-ic="search"></span><span class="nbl">Search</span></button>
+  <button class="nb" type="button" data-v="home" aria-current="page"><span data-ic="home"></span><span class="nbl">Home</span></button>
+  <button class="nb" type="button" data-v="feed"><span data-ic="film"></span><span class="nbl">Feed</span></button>
   <button class="nb plus" type="button" data-v="up" aria-label="Upload"><span class="pl"><span data-ic="plus"></span><span class="plt">Upload</span></span><span class="nbl">Upload</span></button>
-  <button class="nb" type="button" data-v="notif" id="nbnotif" aria-label="Notifications" hidden><span class="nbi"><span data-ic="bell"></span><b class="nbadge" id="nbadge" aria-hidden="true" hidden></b></span><span class="nbl">Notifications</span></button>
+  <button class="nb" type="button" data-v="khoj"><span data-ic="compass"></span><span class="nbl">Explore</span></button>
   <button class="nb dash" type="button" data-v="dash" hidden><span data-ic="chart"></span><span class="nbl">Dashboard</span></button>
   <button class="nb" type="button" data-v="me"><span data-ic="user"></span><span class="nbl">Profile</span></button>
 </nav>
 </div>
 <dialog id="dlg" aria-labelledby="dlgt"><div class="dh"><h2 id="dlgt"></h2><button class="icon-btn" id="dlgx" type="button" aria-label="Close" data-ic="x"></button></div><div id="dlgb"></div></dialog>
+<input id="sfile" type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/quicktime,video/webm" class="sr-only" tabindex="-1" aria-label="Choose a photo or video for your story">
+<div class="sv" id="sv" role="dialog" aria-modal="true" aria-label="Story" hidden>
+  <div class="svcard">
+    <div class="svbars" id="svbars" aria-hidden="true"></div>
+    <div class="svhead"><button class="svwho" type="button" id="svwho"></button><button class="svic" type="button" id="svrep" aria-label="Report story" title="Report" data-ic="flag"></button><button class="svic" type="button" id="svsound" aria-label="Unmute"></button><button class="svic" type="button" id="svpause" aria-label="Pause"></button><button class="svic" type="button" id="svx" aria-label="Close story" title="Close (Esc)" data-ic="x"></button></div>
+    <div class="svmedia" id="svmedia"></div>
+    <button class="svnav svp" type="button" id="svprev" aria-label="Previous story"></button><button class="svnav svn" type="button" id="svnext" aria-label="Next story"></button>
+    <div class="svfoot" id="svfoot"></div>
+  </div>
+</div>
+<div class="sv se" id="se" role="dialog" aria-modal="true" aria-label="New story" hidden>
+  <div class="svcard secard">
+    <div class="sestage" id="sestage"><div class="semedia" id="semedia"></div><div class="seov" id="seov" aria-label="Texts and stickers"></div><div class="sesel" id="sesel" hidden><button class="seh sehx" type="button" id="seselx" aria-label="Remove this item" title="Remove" data-ic="x"></button><span class="seh sehr" id="seresize" title="Drag to resize" aria-hidden="true"></span></div></div>
+    <div class="setop"><button class="svic" type="button" id="sex" aria-label="Discard story" title="Discard" data-ic="x"></button><span class="secount" id="secount" aria-hidden="true"></span>
+      <button class="setool" type="button" id="setext" aria-label="Add text" title="Text"><b>Aa</b></button><button class="setool" type="button" id="seloc" aria-label="Add location" title="Location" data-ic="pin2"></button><button class="setool" type="button" id="setag" aria-label="Tag someone" title="Tag someone"><b>@</b></button></div>
+    <div class="sebot"><div class="scan" id="sscan" role="status" aria-live="polite"></div><button class="btn btn-primary lg block" type="button" id="spost" disabled>Share story</button></div>
+    <form class="sepanel" id="sepanel" novalidate hidden>
+      <label class="lbl" for="setxt" id="selbl">Text</label>
+      <input class="input" id="setxt" maxlength="120" autocomplete="off" spellcheck="true" aria-describedby="setxt-e"><p class="err" id="setxt-e"></p><div class="sesug" id="sesug" role="group" aria-label="Suggested places" hidden></div>
+      <div class="secolors" id="secolors" role="radiogroup" aria-label="Colour"></div>
+      <div class="serow"><button class="btn sm btn-secondary" type="button" id="sestyle" aria-pressed="false">Background</button>
+        <label class="sesz"><span>Size</span><input type="range" id="sesize" min="0.6" max="2.5" step="0.1" value="1"></label></div>
+      <div class="serow"><button class="btn sm btn-danger-ghost" type="button" id="sedel">Remove</button><span style="flex:1"></span><button class="btn sm btn-ghost" type="button" id="secancel">Cancel</button><button class="btn sm btn-primary" type="submit" id="sedone">Done</button></div>
+    </form>
+  </div>
+</div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <div class="notice" id="notice" role="status" aria-live="polite" hidden></div>
 <button class="uppill" id="uppill" type="button" data-go="up" hidden><span class="spin-s" aria-hidden="true"></span><span id="uppillt">Uploading… 0%</span></button>
@@ -1077,8 +1498,9 @@ function hideSplash(){const s=document.getElementById('splash');if(!s||s.classLi
 setTimeout(hideSplash,5000);
 
 // ---------- constants + helpers ----------
-const MOODS=['Comedy','Energy','Learning','Food','Travel'];
-const MOOD_ICON={Comedy:'😂',Energy:'⚡',Learning:'💡',Food:'🍜',Travel:'✈️'};
+const MOODS=['Comedy','Sad','Motivation','Love','Dance','Music','Food','Travel','Learning','Sports','Fashion','Chill','Energy','Gaming'];
+const MOOD_ICON={Comedy:'😂',Sad:'😢',Motivation:'💪',Love:'❤️',Dance:'💃',Music:'🎵',Food:'🍜',Travel:'✈️',Learning:'💡',Sports:'🏏',Fashion:'👗',Chill:'😌',Energy:'⚡',Gaming:'🎮'};
+const VIBE_CHIPS=sel=>chipGroup(sel,{'':'None',...Object.fromEntries(MOODS.map(m=>[m,MOOD_ICON[m]+' '+m]))},'');
 const FILTERS={none:'No filter',warm:'Warm',cool:'Cool',bw:'Black & white',vintage:'Vintage',vivid:'Vivid'};
 const REASONS=['Spam','Nudity or sexual content','Violence or danger','Hate or harassment','Copyright','Other'];
 const G=['linear-gradient(135deg,#F6B800,#E8366D,#5B2BD0)','linear-gradient(135deg,#00B7A8,#2B3FD0,#E8366D)','linear-gradient(135deg,#FF7A18,#E8366D,#7A1FA2)','linear-gradient(135deg,#2BD07B,#0B7A8F,#1B1445)','linear-gradient(135deg,#FFD23F,#FF7A18,#C2185B)','linear-gradient(135deg,#6EC6FF,#5B2BD0,#E8366D)'];
@@ -1130,7 +1552,19 @@ const I={
  belloff:'<path d="M6 16.5V11a6 6 0 0 1 9.4-4.9M18 11v5.5l1.6 2H8.5M10 20.5a2 2 0 0 0 4 0M3.5 3.5l17 17"/>',
  half:'<circle cx="12" cy="12" r="8.5"/><path d="M12 3.5v17" /><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/>',
  pin:'<path d="M9 3.5h6l-1 6.5 3.5 3.5h-11L10 10zM12 13.5v7"/>',
- reply:'<path d="M10 7.5 4.5 12l5.5 4.5M5 12h9a5.5 5.5 0 0 1 5.5 5.5v1"/>'
+ reply:'<path d="M10 7.5 4.5 12l5.5 4.5M5 12h9a5.5 5.5 0 0 1 5.5 5.5v1"/>',
+ home:'<path d="M4 10.5 12 4l8 6.5V19a1.5 1.5 0 0 1-1.5 1.5H15v-5.5H9v5.5H5.5A1.5 1.5 0 0 1 4 19z"/>',
+ compass:'<circle cx="12" cy="12" r="8.5"/><path d="M15.5 8.5 13.6 13.6 8.5 15.5l1.9-5.1z"/>',
+ inbox:'<path d="M3.5 13.5 6 5.5h12l2.5 8V18a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 18z"/><path d="M3.5 13.5H8.5l1.2 2.5h4.6l1.2-2.5h5"/>',
+ key:'<circle cx="8" cy="15" r="4"/><path d="M11 12 19.5 3.5M16 7l2.5 2.5M14 9l2 2"/>',
+ at:'<circle cx="12" cy="12" r="3.8"/><path d="M15.8 12v1.4a2.6 2.6 0 0 0 5.2 0V12a9 9 0 1 0-3.5 7.1"/>',
+ pin2:'<path d="M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0 1 13 0c0 4.8-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/>',
+ sparkle:'<path d="M12 3.5l1.8 5.2 5.2 1.8-5.2 1.8L12 17.5l-1.8-5.2L5 10.5l5.2-1.8zM18.5 15.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z"/>',
+ refresh:'<path d="M20 11a8 8 0 1 0-2.3 5.7M20 4.5V11h-6.5"/>',
+ dm:'<path d="M20.5 3.5 10 14M20.5 3.5 14 20.5l-4-6.5-6.5-4z"/>',
+ lock:'<rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8.5 10.5V7.5a3.5 3.5 0 0 1 7 0v3M12 14.5v2"/>',
+ data:'<path d="M5 19v-3M10 19v-7M15 19V9M20 19V5"/>',
+ help:'<circle cx="12" cy="12" r="8.5"/><path d="M9.6 9.5a2.5 2.5 0 0 1 4.8.8c0 1.7-2.4 2.1-2.4 3.7M12 17v.01"/>'
 };
 const ic=(n,c='')=>`<svg class="ico${c?' '+c:''}" viewBox="0 0 24 24" aria-hidden="true" focusable="false">${I[n]}</svg>`;
 const $=s=>document.querySelector(s);
@@ -1181,14 +1615,15 @@ function sha256u(s){const K=[],H=[1779033703,3144134277,1013904242,2773480762,13
 let uid=store.get('inv_uid'),gkey=store.get('inv_gkey');if(!/^[\w-]{8,64}$/.test(uid||'')||uid.startsWith('sb_')){const a=new Uint8Array(32);crypto.getRandomValues(a);gkey=btoa(String.fromCharCode(...a)).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');uid='g'+sha256u(gkey);store.set('inv_gkey',gkey);store.set('inv_uid',uid)}
 let sb=null,login=false,me={name:null,bio:'',avatar:null,account:false,email:'',followers:0,following:0};
 const V=new Map(),seen=new Set();
-let all=[],fol=[],myv=[],solo=[],loaded=false,feedMode='foryou',view='feed',ptab='mine',upage=null,back='feed',pending=null,pendingUrl=null,thumbBlob=null,amode='up',astep='pick';
+let all=[],fol=[],myv=[],solo=[],loaded=false,feedMode='foryou',view='home',ptab='mine',upage=null,back='home',pending=null,pendingUrl=null,thumbBlob=null,amode='up',astep='pick';
 let ribbonMin=store.get('inv_min')==='1',soundOn=false,smood='';
 // Data saver: only the video on screen loads (also on when the browser asks to save data)
 let dataSaver=store.get('inv_dsave')==='1'||!!(navigator.connection&&navigator.connection.saveData);
 let cont=[],lastTok=null;
 const put=d=>{d.gr=G[(d.id-1)%G.length];const o=V.get(d.id);if(o){Object.assign(o,d);return o}V.set(d.id,d);return d};
 // For you never contains your own videos (the server leaves them out); 'solo' plays one video on its own, e.g. your upload
-const list=()=>feedMode==='following'?fol:feedMode==='solo'?solo:all;
+// 'vibe:Comedy' etc. shows For you videos with that vibe
+const list=()=>feedMode==='following'?fol:feedMode==='solo'?solo:feedMode.startsWith('vibe:')?all.filter(v=>v.mood===feedMode.slice(5)):all;
 async function bearer(){if(!sb)return null;try{const{data}=await sb.auth.getSession();return lastTok=data.session?data.session.access_token:null}catch(e){return null}}
 async function api(p,o={}){const t=await bearer(),h={'X-Uid':uid};if(t)h.Authorization='Bearer '+t;if(o.json)h['Content-Type']='application/json';if(p==='/api/link'&&gkey)h['X-Guest-Key']=gkey;
  let r;try{r=await fetch(p,{method:o.method||'GET',headers:h,body:o.json?JSON.stringify(o.json):o.body})}catch(e){throw new Error('Network problem. Check your internet and try again.')}
@@ -1208,6 +1643,7 @@ const rail=(v,pp)=>`<div class="side">
  <button class="rb" type="button" data-a="like" aria-pressed="${v.liked}" aria-label="Like" title="Like (L)"><span class="rc">${ic('heart')}</span><span class="rn" data-c="like">${fmt(v.likes)}</span></button>
  <button class="rb" type="button" data-a="comments" aria-label="Comments" title="Comments"><span class="rc">${ic('chat')}</span><span class="rn" data-c="com">${fmt(v.comments)}</span></button>
  <button class="rb" type="button" data-a="share" aria-label="Share" title="Share"><span class="rc">${ic('share')}</span><span class="rn">Share</span></button>
+ ${pp?'':(()=>{const m=feedMode.startsWith('vibe:')?feedMode.slice(5):'';return`<button class="rb${m?' von':''}" type="button" data-a="vibe" aria-haspopup="dialog" aria-label="${m?`Vibe: ${m}. Change vibe or reset feed`:'Vibe: pick a topic or reset the feed'}" title="Vibe"><span class="rc">${m?`<span class="vem">${MOOD_ICON[m]}</span>`:ic('sparkle')}</span><span class="rn">${m||'Vibe'}</span></button>`})()}
  <button class="rb" type="button" data-a="sound" aria-label="${soundOn?'Mute':'Unmute'}" title="Sound (M)"><span class="rc">${ic(soundOn?'vol':'mute')}</span></button>
  ${v.mine?`<button class="rb" type="button" data-a="edit" aria-label="Edit video" title="Edit video"><span class="rc">${ic('edit')}</span></button>${pp?`<button class="rb" type="button" data-a="del" aria-label="Delete video" title="Delete video"><span class="rc">${ic('trash')}</span></button>`:''}`:`<button class="rb" type="button" data-a="report" aria-label="Report video" title="Report video"><span class="rc">${ic('flag')}</span></button>`}
  <button class="rb" type="button" data-a="more" aria-label="${ribbonMin?'Show controls':'Hide controls (clean view)'}" aria-expanded="${!ribbonMin}" title="Clean view"><span class="rc">${ic('more')}</span></button></div>`;
@@ -1217,13 +1653,29 @@ const clip=(v,pp)=>`<article class="clip" data-id="${v.id}" data-u="${esc(v.name
  <div class="meta"><div class="who"><button class="hn" type="button" data-a="user" aria-label="Open ${esc(v.handle)} profile">${avatar(v.name,v.avatar)}<span>${esc(v.handle)}</span></button>${!v.mine&&v.name&&!v.following?'<button class="fol" type="button" data-a="follow">Follow</button>':''}</div>
  ${v.collabs&&v.collabs.length?`<p class="cwith">${ic('users')}<span>with ${v.collabs.map(c=>`<button type="button" data-a="cuser" data-user="${esc(c.name)}" aria-label="Open @${esc(c.name)} profile (collaborator)">@${esc(c.name)}</button>`).join(', ')}</span></p>`:''}
  <h3 class="title">${esc(v.title)}</h3>
- <p class="mline"><span class="vw">${ic('eye')}<span data-c="views">${fmt(v.views)}</span><span class="sr-only"> views</span></span>${v.created?`<time class="vd" datetime="${new Date(v.created).toISOString()}">${fmtDate(v.created)}</time>`:''}${v.tags.length?`<span class="tags">${v.tags.map(x=>'#'+esc(x)).join(' ')}</span>`:''}</p></div></div>
+ <p class="mline">${MOOD_ICON[v.mood]?`<span class="pill vpill">${MOOD_ICON[v.mood]} ${esc(v.mood)}</span>`:''}<span class="vw">${ic('eye')}<span data-c="views">${fmt(v.views)}</span><span class="sr-only"> views</span></span>${v.created?`<time class="vd" datetime="${new Date(v.created).toISOString()}">${fmtDate(v.created)}</time>`:''}${v.tags.length?`<span class="tags">${v.tags.map(x=>'#'+esc(x)).join(' ')}</span>`:''}</p></div></div>
  ${rail(v,pp)}</article>`;
-function feed(){const r=$('#ribbon'),a=list();$('#v-feed').classList.toggle('noclips',!a.length);
+// phones: the bar turns see-through only while Home shows videos (on other pages it stays white so it can be read)
+const syncNav=()=>document.body.classList.toggle('feedv',view==='feed'&&!$('#v-feed').classList.contains('noclips'));
+function feed(){const r=$('#ribbon'),a=list();$('#v-feed').classList.toggle('noclips',!a.length);syncNav();
  r.innerHTML=a.length?a.map(clip).join(''):feedMode==='following'
   ?emptyState('users','No videos from people you follow','Follow creators from their videos or the Explore page to see them here.','<button class="btn btn-primary" type="button" data-go="khoj">Find creators</button>')
+  :feedMode.startsWith('vibe:')?emptyState('search',`No ${esc(feedMode.slice(5))} videos yet`,'Try another vibe, or reset the feed.','<button class="btn btn-primary" type="button" data-vopen>Pick a vibe</button> <button class="btn btn-secondary" type="button" data-vreset>Reset feed</button>')
   :emptyState('video','No videos yet','Be the first to share a moment on Vizo.','<button class="btn btn-primary" type="button" data-go="up">Upload a video</button>');
  r.scrollTop=0;observe()}
+// Vibe: pick a topic for the feed; Reset feed (top of the sheet) reloads it and starts fresh from the newest video
+function openVibes(){const cur=feedMode.startsWith('vibe:')?feedMode.slice(5):'',n=m=>all.filter(v=>v.mood===m).length;
+ const b=openDlg('Vibe',`<div class="vibes"><button class="vreset" type="button" data-vreset>${ic('refresh')}<span><b>Reset feed</b><small>Clears the vibe and starts fresh from the newest videos</small></span></button>
+  <p class="lbl">Pick a vibe</p><div class="vgrid" role="group" aria-label="Vibes">${MOODS.map(m=>`<button class="vchip" type="button" data-vibe="${m}" aria-pressed="${cur===m}"><span class="vem" aria-hidden="true">${MOOD_ICON[m]}</span><b>${m}</b><small>${plural(n(m),'video')}</small></button>`).join('')}</div></div>`);
+ b.onclick=e=>{const v=e.target.closest('[data-vibe]');if(v){dlg.close();setMode(v.dataset.vibe===cur?'foryou':'vibe:'+v.dataset.vibe);show('feed');return}
+  if(e.target.closest('[data-vreset]'))resetFeed()}}
+let freshFeed=false;
+async function resetFeed(){if(dlg.open)dlg.close();const r=$('#ribbon');
+ r.innerHTML='<div class="clip skel-clip" aria-hidden="true"><div class="media skel"></div></div>';
+ freshFeed=true;// videos start from the beginning again (no "Resumed at …") until the page is reloaded
+ try{await loadAll()}catch(e){toast(e.message,'err')}
+ feedMode='foryou';setMode('foryou');show('feed');r.scrollTop=0;toast('Feed reset. Starting fresh.','ok')}
+$('#v-feed').addEventListener('click',e=>{if(e.target.closest('[data-vopen]'))openVibes();else if(e.target.closest('[data-vreset]'))resetFeed()});
 // Plays the clip in view and pauses the rest (feed and profile player)
 const watchClips=root=>new IntersectionObserver(es=>es.forEach(e=>{const c=e.target,vd=c.querySelector('video');
  // Only the video in view can be reached with Tab (the others are inert); keyboard focus moves along with the video
@@ -1238,12 +1690,12 @@ let io;function observe(){io&&io.disconnect();io=watchClips($('#ribbon'));docume
 function countView(id){if(seen.has(id)||(view!=='feed'&&!pp))return;seen.add(id);
  api(`/api/videos/${id}/view`,{method:'POST'}).then(d=>{const v=V.get(id);if(v)v.views=d.views;document.querySelectorAll(`.clip[data-id="${id}"] [data-c=views]`).forEach(s=>s.textContent=fmt(d.views))},()=>seen.delete(id))}
 const jump=id=>{const c=document.querySelector(`.clip[data-id="${+id}"]`);c&&c.scrollIntoView({block:'center',inline:'nearest'})};
-function rerender(){const a=document.querySelector('.clip.act');feed();if(a)jump(a.dataset.id);if(view==='khoj')grid();if(view==='me')mine();if(view==='user'&&upage)renderUser();if(pp)refreshPlayer()}
-function paintLike(v,pop){document.querySelectorAll(`.clip[data-id="${v.id}"]`).forEach(c=>{const b=c.querySelector('[data-a=like]');b.setAttribute('aria-pressed',v.liked);c.querySelector('[data-c=like]').textContent=fmt(v.likes);if(pop&&v.liked){b.classList.remove('pop');void b.offsetWidth;b.classList.add('pop')}})}
+function rerender(){const a=document.querySelector('.clip.act');feed();if(a)jump(a.dataset.id);if(view==='home')renderHome();if(view==='khoj')grid();if(view==='me')mine();if(view==='user'&&upage)renderUser();if(pp)refreshPlayer()}
+function paintLike(v,pop){document.querySelectorAll(`.clip[data-id="${v.id}"],.hcard[data-id="${v.id}"]`).forEach(c=>{const b=c.querySelector('[data-a=like]');b.setAttribute('aria-pressed',v.liked);c.querySelector('[data-c=like]').textContent=fmt(v.likes);if(pop&&v.liked){b.classList.remove('pop');void b.offsetWidth;b.classList.add('pop')}})}
 function toggleLike(v){if(needLogin('like videos'))return;v.liked=!v.liked;v.likes+=v.liked?1:-1;paintLike(v,true);
  api(`/api/videos/${v.id}/like`,{method:'POST'}).then(d=>{v.liked=d.liked;v.likes=d.likes;paintLike(v)},()=>{v.liked=!v.liked;v.likes+=v.liked?1:-1;paintLike(v);toast('Could not save your like','err')})}
 function burst(c){const h=document.createElement('i');h.className='burst';h.innerHTML=ic('heart');c.querySelector('.media').appendChild(h);setTimeout(()=>h.remove(),800)}
-const setCount=(v,n)=>{v.comments=n;document.querySelectorAll(`.clip[data-id="${v.id}"] [data-c=com]`).forEach(s=>s.textContent=fmt(n))};
+const setCount=(v,n)=>{v.comments=n;document.querySelectorAll(`.clip[data-id="${v.id}"] [data-c=com],.hcard[data-id="${v.id}"] [data-c=com]`).forEach(s=>s.textContent=fmt(n))};
 // ⋯ clean view, remembered on this device
 function setMin(on){ribbonMin=on;store.set('inv_min',on?'1':'0');document.querySelectorAll('.rib').forEach(r=>r.classList.toggle('min',on));
  document.querySelectorAll('.rib [data-a=more]').forEach(b=>{b.setAttribute('aria-expanded',!on);b.setAttribute('aria-label',on?'Show controls':'Hide controls (clean view)')})}
@@ -1273,6 +1725,7 @@ R.onclick=PR.onclick=e=>{const c=e.target.closest('.clip');if(!c||c.classList.co
   if(a==='share')openShare(v);
   if(a==='sound'){if(vd)setSound(!soundOn);else toast('This demo clip has no sound')}
   if(a==='more')setMin(!ribbonMin);
+  if(a==='vibe')openVibes();
   if(a==='edit')openEdit(v);
   if(a==='del')delVideo(v,b);
   if(a==='report')openReport(v);
@@ -1288,7 +1741,7 @@ $('#ftabs').onclick=e=>{const b=e.target.closest('[data-f]');b&&setMode(b.datase
 function setMode(m){feedMode=m;document.querySelectorAll('#ftabs [data-f]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.f===m));if(m==='following')loadFollowing();else feed()}
 async function loadFollowing(){try{fol=(await api('/api/videos?feed=following')).map(put)}catch(err){toast(err.message,'err')}if(feedMode==='following')feed()}
 async function loadMine(){if(!me.name){myv=[];return}try{myv=(await api('/api/users/'+encodeURIComponent(me.name))).videos.map(put)}catch(e){myv=[]}}
-async function loadAll(){const[f]=await Promise.all([api('/api/videos'),loadMine()]);all=f.map(put);loaded=true}
+async function loadAll(){const[f]=await Promise.all([api('/api/videos'),loadMine(),loadStories()]);all=f.map(put);loaded=true}
 function openVideo(id){id=+id;const v=V.get(id);
  if(all.some(x=>x.id===id)){if(feedMode!=='foryou')setMode('foryou');else feed();show('feed');jump(id);return}
  if(v){solo=[v];setMode('solo');show('feed');return}
@@ -1431,12 +1884,13 @@ function openEdit(v){
  const b=openDlg('Edit video',`<form class="upform" novalidate><div class="field"><label class="lbl" for="et">Title</label><input class="input" id="et" maxlength="70" value="${esc(v.title)}" aria-describedby="et-e"><p class="err" id="et-e"></p></div>
   <div class="field"><label class="lbl" for="edsc">Description <span class="cnt" id="edcount">${(v.description||'').length}/500</span></label><textarea class="input ta" id="edsc" maxlength="500" rows="3" placeholder="Tell viewers about your video">${esc(v.description||'')}</textarea><p class="hint">Shown at the top of the comments.</p></div>
   <fieldset class="field"><legend class="lbl">Filter</legend><div class="chips">${chipGroup('efilter',FILTERS,v.filter)}</div></fieldset>
+  <fieldset class="field"><legend class="lbl">Vibe</legend><div class="chips">${chipGroup('evibe',{'':'None',...Object.fromEntries(MOODS.map(m=>[m,MOOD_ICON[m]+' '+m]))},MOODS.includes(v.mood)?v.mood:'')}</div></fieldset>
   <div class="field"><label class="lbl" for="eg">Hashtags</label><input class="input" id="eg" value="${esc(v.tags.join(' '))}"><p class="hint">Separate with spaces. Up to 5 tags.</p></div>
   <label class="tgl"><span><b>Allow comments</b><small class="sub">When off, nobody can comment and only you see the old comments.</small></span><input type="checkbox" id="ecom"${v.commentsOff?'':' checked'}></label>
   <button class="btn btn-primary block" type="submit" id="esave">Save changes</button></form>`);
  b.oninput=e=>{if(e.target.id==='edsc')$('#edcount').textContent=`${e.target.value.length}/500`};
  b.onsubmit=e=>{e.preventDefault();const t=$('#et').value.trim();if(!t){$('#et-e').textContent='Please add a title.';$('#et').setAttribute('aria-invalid','true');$('#et').focus();return}
-  const s=$('#esave');loading(s,true);api(`/api/videos/${v.id}`,{method:'PATCH',json:{title:t,filter:rv('efilter'),tags:$('#eg').value,description:$('#edsc').value,commentsOff:!$('#ecom').checked}})
+  const s=$('#esave');loading(s,true);api(`/api/videos/${v.id}`,{method:'PATCH',json:{title:t,filter:rv('efilter'),mood:rv('evibe'),tags:$('#eg').value,description:$('#edsc').value,commentsOff:!$('#ecom').checked}})
   .then(d=>{put(d);dlg.close();rerender();toast('Changes saved','ok')},err=>{loading(s,false);toast(err.message,'err')})}}
 function delVideo(v,btn){if(!confirm('Delete this video? This cannot be undone.'))return;btn&&btn.classList.add('is-loading');
  api(`/api/videos/${v.id}`,{method:'DELETE'}).then(()=>{V.delete(v.id);all=all.filter(x=>x.id!==v.id);fol=fol.filter(x=>x.id!==v.id);myv=myv.filter(x=>x.id!==v.id);solo=solo.filter(x=>x.id!==v.id);if(feedMode==='solo'&&!solo.length)feedMode='foryou';if(upage)upage.videos=upage.videos.filter(x=>x.id!==v.id);if(dlg.open)dlg.close();rerender();toast('Video deleted','ok')},err=>{btn&&btn.classList.remove('is-loading');toast(err.message,'err')})}
@@ -1493,7 +1947,7 @@ async function openUser(name){if(!name)return;if(me.name&&name.toLowerCase()===m
  try{const d=await api('/api/users/'+encodeURIComponent(name));d.videos=d.videos.map(put);upage=d;renderUser()}
  catch(err){$('#uwrap').innerHTML=emptyState('alert','Couldn’t open this profile',esc(err.message),`<button class="btn btn-secondary" type="button" id="uretry">Try again</button>`);const r=$('#uretry');r&&(r.onclick=()=>openUser(name))}}
 function renderUser(){const d=upage,bl=d.blocked||d.blockedBy;
- $('#uwrap').innerHTML=`<div class="pcard"><div class="cover"></div><div class="pbody"><div class="prow"><span class="av">${d.avatar?`<img src="${esc(d.avatar)}" alt="">`:esc(letter(d.name))}</span><div class="pbtns">${d.me||bl?'':`<button class="btn sm fbtn ${d.isFollowing?'btn-secondary':'btn-primary'}" type="button" id="ufol" data-follow="${esc(d.name)}" aria-pressed="${d.isFollowing}">${d.isFollowing?ic('check')+'Following':'Follow'}</button>`}${d.me?'':`<button class="icon-btn" type="button" id="umore" data-mmore="user" aria-label="More options for @${esc(d.name)}" aria-haspopup="menu" aria-expanded="false" title="More">${ic('more')}</button>`}</div></div>
+ $('#uwrap').innerHTML=`<div class="pcard"><div class="cover"></div><div class="pbody"><div class="prow"><span class="av">${d.avatar?`<img src="${esc(d.avatar)}" alt="">`:esc(letter(d.name))}</span><div class="pbtns">${d.me||bl?'':`<button class="btn sm fbtn ${d.isFollowing?'btn-secondary':'btn-primary'}" type="button" id="ufol" data-follow="${esc(d.name)}" aria-pressed="${d.isFollowing}">${d.isFollowing?ic('check')+'Following':'Follow'}</button>`}${d.me||bl?'':`<button class="btn sm btn-secondary" type="button" data-msg="${esc(d.name)}"><span class="ico-s">${ic('dm')}</span>Message</button>`}${d.me?'':`<button class="icon-btn" type="button" id="umore" data-mmore="user" aria-label="More options for @${esc(d.name)}" aria-haspopup="menu" aria-expanded="false" title="More">${ic('more')}</button>`}</div></div>
   <h1 class="pname">${esc(d.fullName||'@'+d.name)}</h1>${d.fullName?`<p class="puser">@${esc(d.name)}</p>`:''}<p class="pbio">${esc(d.bio||'Vizo creator')}</p>${linksHtml(d.links)}<div class="stats">${stat(d.videos.length,'Videos')}${fstat(d.followers,'Followers',d.name,'followers')}${fstat(d.following,'Following',d.name,'following')}${stat(d.likes,'Likes')}</div></div></div>
   ${d.blocked?`<div class="coff bnote" role="status">${ic('ban')}<span>You blocked @${esc(d.name)}. You won’t see their videos or comments, and they can’t follow you or interact with your videos.</span><button class="btn sm btn-ghost" type="button" data-unblock>Unblock</button></div>`
    :d.blockedBy?`<div class="coff bnote" role="status">${ic('ban')}<span>You can’t see @${esc(d.name)}’s videos or interact with this account.</span></div>`
@@ -1510,6 +1964,7 @@ async function setBlock(name,on,btn){if(needLogin(on?'block people':'unblock peo
   try{await loadAll();feed()}catch(e){}if(view==='user'&&upage&&upage.name===name)await openUser(name);if(view==='set')loadBlocks()}
  catch(err){btn&&loading(btn,false);toast(err.message,'err')}}
 $('#uwrap').onclick=e=>{const b=e.target.closest('#ufol');if(b&&upage){follow(upage.name,b);return}
+ const mg=e.target.closest('[data-msg]');if(mg){openDM(mg.dataset.msg);return}
  const mo=e.target.closest('#umore');if(mo&&upage){if(mo.getAttribute('aria-expanded')==='true')closeMenu();else openUserMenu(mo);return}
  const bk=e.target.closest('[data-block]');if(bk&&upage){closeMenu();setBlock(upage.name,true);return}
  const ub=e.target.closest('[data-unblock]');if(ub&&upage){closeMenu();setBlock(upage.name,false,ub.closest('#mmenu')?null:ub)}};
@@ -1555,7 +2010,7 @@ $('#sres').onclick=e=>{if(e.target.closest('#qclear')){clearQ();return}
  const u=e.target.closest('[data-user]');if(u)openUser(u.dataset.user)};
 
 // ---------- profile ----------
-async function loadMe(){me=await api('/api/me');if(me.account&&!me.name)me=await api('/api/link',{method:'POST',json:{}});const guest=login&&!me.account;$('.nb.dash').hidden=guest;$('#nbnotif').hidden=guest;if(guest){setBadge(0);if(view==='dash'||view==='notif')show('feed')}if(view==='me')mine();if(view==='up')paintUpGate()}
+async function loadMe(){me=await api('/api/me');if(me.account&&!me.name)me=await api('/api/link',{method:'POST',json:{}});const guest=login&&!me.account;$('.nb.dash').hidden=guest;$('#nbnotif').hidden=$('#nbchat').hidden=guest;if(guest){setBadge(0);setChatBadge(0);if(['dash','notif','chat','dm'].includes(view))show('home')}else loadChatBadge();if(view==='me')mine();if(view==='up')paintUpGate()}
 // Uploading needs an account: guests see a log-in card instead of the form
 function paintUpGate(){const g=login&&!me.account;$('#upgate').hidden=!g;$('#v-up .upgrid').hidden=g}
 $('#upgate').onclick=e=>{const a=e.target.closest('[data-auth]');if(a)goAuth(a.dataset.auth)};
@@ -1565,11 +2020,13 @@ function closeMenu(){const m=$('#mmenu');if(!m)return;const b=m.parentNode.query
 function openMenu(btn,v){closeMenu();const m=document.createElement('div');m.className='mmenu';m.id='mmenu';m.setAttribute('role','menu');m.setAttribute('aria-label','Video options');
  // a video you collaborate on belongs to its owner: you can only leave it
  m.innerHTML=!v.mine?`<p class="mmst">${ic('users')}Collaboration with @${esc(v.name||'user')}</p><button type="button" role="menuitem" class="danger" data-mleave="${v.id}">${ic('logout')}Leave collaboration</button>`
-  :`<p class="mmst">${v.scheduled?ic('clock')+'Goes live '+fmtSched(v.created):v.created?'Posted '+fmtDate(v.created):''}</p><button type="button" role="menuitem" data-medit="${v.id}">${ic('edit')}Edit details</button><button type="button" role="menuitem" data-mcol="${v.id}">${ic('users')}Collaborators</button><button type="button" role="menuitem" class="danger" data-mdel="${v.id}">${ic('trash')}Delete video</button>`;
+  :`<p class="mmst">${v.scheduled?ic('clock')+'Goes live '+fmtSched(v.created):v.created?'Posted '+fmtDate(v.created):''}</p>${v.scheduled?`<button type="button" role="menuitem" data-msched="${v.id}">${ic('clock')}Change time</button><button type="button" role="menuitem" data-mnow="${v.id}">${ic('upload')}Publish now</button>`:''}<button type="button" role="menuitem" data-medit="${v.id}">${ic('edit')}Edit details</button><button type="button" role="menuitem" data-mcol="${v.id}">${ic('users')}Collaborators</button><button type="button" role="menuitem" class="danger" data-mdel="${v.id}">${ic('trash')}Delete video</button>`;
  btn.parentNode.appendChild(m);btn.setAttribute('aria-expanded','true');m.querySelector('button').focus({preventScroll:true})}
 $('#mine').onclick=e=>{const mo=e.target.closest('[data-mmore]');if(mo){const open=mo.getAttribute('aria-expanded')==='true';if(open)closeMenu();else openMenu(mo,V.get(+mo.dataset.mmore));return}
  const ed=e.target.closest('[data-medit]');if(ed){closeMenu();openEdit(V.get(+ed.dataset.medit));return}const dl=e.target.closest('[data-mdel]');if(dl){const v=V.get(+dl.dataset.mdel);closeMenu();delVideo(v,null);return}
  const co=e.target.closest('[data-mcol]');if(co){closeMenu();openCollabs(V.get(+co.dataset.mcol));return}
+ const sc=e.target.closest('[data-msched]');if(sc){closeMenu();openSchedule(V.get(+sc.dataset.msched));return}
+ const nw=e.target.closest('[data-mnow]');if(nw){closeMenu();openSchedule(V.get(+nw.dataset.mnow));setTimeout(()=>$('#rnow')&&$('#rnow').click(),80);return}
  const lv=e.target.closest('[data-mleave]');if(lv){const v=V.get(+lv.dataset.mleave);closeMenu();leaveCollab(v)}};
 // ---------- collaborations ----------
 const COLST={pending:'Pending',accepted:'Accepted',rejected:'Declined'};
@@ -1597,9 +2054,27 @@ function mine(){const my=myv,a=my;$('#pdash').hidden=!me.account;
  const hm=document.querySelector('.hmenu');if(hm){hm.hidden=login&&!me.account;if(hm.hidden)closeSm(false)}
  $('#plogout').hidden=!me.account;$('#phist').hidden=$('#pset').hidden=!me.account;const guest=login&&!me.account;['#pcard','#ptabs','#mine','#mempty'].forEach(s=>$(s).hidden=guest);$('#avbtn .cam').hidden=guest;$('#avbtn').setAttribute('aria-label',guest?'Profile photo (log in to change it)':'Change profile photo');$('#avbtn').title=guest?'Log in to change your photo':'Change profile photo';if(guest&&!$('#pform').hidden)pclose();paintAuth();
  $('#pstats').innerHTML=stat(my.length,'Videos')+fstat(me.followers,'Followers',me.name,'followers')+fstat(me.following,'Following',me.name,'following');
- $('#cmine').textContent=my.length;
-  $('#mine').innerHTML=a.map(v=>`<div class="mt">${stile(v,false,v.mine)}<button class="mtmore" type="button" data-mmore="${v.id}" aria-label="Options for ${esc(v.title)}" aria-haspopup="menu" aria-expanded="false" title="More options">${ic('more')}</button></div>`).join('');
- $('#mempty').innerHTML=a.length?'':emptyState('video','No videos yet','Share your first short video with the community.','<button class="btn btn-primary" type="button" data-go="up">Upload a video</button>')}
+ const sch=my.filter(v=>v.mine&&v.scheduled).sort((x,y)=>x.created-y.created),pub=my.filter(v=>!(v.mine&&v.scheduled)),S=ptab==='sched';
+ $('#cmine').textContent=pub.length;$('#csched').textContent=sch.length;
+ document.querySelectorAll('#ptabs [data-p]').forEach(t=>{t.setAttribute('aria-selected',t.dataset.p===ptab);t.tabIndex=t.dataset.p===ptab?0:-1});
+ const list=S?sch:pub;
+  $('#mine').innerHTML=list.map(v=>`<div class="mt">${stile(v,false,v.mine)}<button class="mtmore" type="button" data-mmore="${v.id}" aria-label="Options for ${esc(v.title)}" aria-haspopup="menu" aria-expanded="false" title="More options">${ic('more')}</button>${S?`<div class="mtwhen"><span>${ic('clock')}<span class="sr-only">Goes live </span>${esc(fmtSched(v.created))}${v.pending?' · after review':''}</span><button class="btn sm btn-secondary" type="button" data-msched="${v.id}" aria-label="Change time for ${esc(v.title)}">Change time</button></div>`:''}</div>`).join('');
+ $('#mempty').innerHTML=list.length?'':S?emptyState('clock','No scheduled videos','When you schedule an upload it waits here until it goes live. You can change its time or publish it early.','<button class="btn btn-primary" type="button" data-go="up">Schedule a video</button>')
+  :emptyState('video','No videos yet','Share your first short video with the community.','<button class="btn btn-primary" type="button" data-go="up">Upload a video</button>')}
+$('#ptabs').onclick=e=>{const t=e.target.closest('[data-p]');if(!t||t.dataset.p===ptab)return;ptab=t.dataset.p;closeMenu();mine();t.focus()};
+$('#ptabs').onkeydown=e=>{if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft')return;e.preventDefault();ptab=ptab==='mine'?'sched':'mine';mine();$(`#ptabs [data-p="${ptab}"]`).focus()};
+// Change when a scheduled video goes live, or publish it now
+const localInput=ts=>{const d=new Date(ts);return new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOString().slice(0,16)};
+function openSchedule(v){const now=Date.now(),b=openDlg('Change time',`<form class="upform" novalidate><p class="sub">“${esc(v.title)}” goes live <b>${esc(fmtSched(v.created))}</b>.${v.pending?' It also has to be approved by our team before others can see it.':''}</p>
+  <div class="field"><label class="lbl" for="rsched">New date and time</label><input class="input" id="rsched" type="datetime-local" value="${localInput(v.created)}" min="${localInput(now+60e3)}" max="${localInput(now+60*864e5)}" aria-describedby="rsched-e rsched-h"><p class="hint" id="rsched-h">1 minute to 60 days from now. Until then only you can see it.</p><p class="err" id="rsched-e"></p></div>
+  <button class="btn btn-primary block" type="submit" id="rsave">Save new time</button><button class="btn btn-secondary block" type="button" id="rnow">${ic('upload')}Publish now</button></form>`);
+ setTimeout(()=>$('#rsched').focus(),60);
+ const done=(d,msg)=>{put(d);dlg.close();loadAll().then(rerender).catch(()=>rerender());mine();toast(msg,'ok')};
+ b.onsubmit=async e=>{e.preventDefault();const at=new Date($('#rsched').value).getTime(),n=Date.now();
+  if(!fieldErr('rsched',!at||isNaN(at)?'Pick a date and time.':at<n+60e3?'Pick a time at least 1 minute from now.':at>n+60*864e5?'Pick a time within the next 60 days.':'')){$('#rsched').focus();return}
+  const s=$('#rsave');loading(s,true);try{const d=await api(`/api/videos/${v.id}/schedule`,{method:'POST',json:{publishAt:at}});done(d,'New time saved: goes live '+fmtSched(d.created))}catch(err){loading(s,false);fieldErr('rsched',err.message)}};
+ b.onclick=async e=>{if(!e.target.closest('#rnow'))return;if(!confirm(v.pending?'Publish this video now? It will go live as soon as it has been reviewed.':'Publish this video now? Everyone will be able to see it.'))return;
+  const s=$('#rnow');loading(s,true);try{const d=await api(`/api/videos/${v.id}/schedule`,{method:'POST',json:{now:true}});done(d,d.pending?'Published. It goes live once it has been reviewed.':'Your video is live!')}catch(err){loading(s,false);toast(err.message,'err')}}}
 const pclose=()=>{$('#pform').hidden=true;$('#pedit').hidden=false;$('#pedit').focus()};
 $('#pedit').onclick=()=>{if(needLogin('edit your profile'))return;$('#pinput').value=me.name||'';$('#pfullin').value=me.fullName||'';$('#fcount').textContent=`${$('#pfullin').value.length}/50`;$('#pbioin').value=me.bio||'';SOCIAL.forEach(([k])=>$('#l-'+k).value=(me.links||{})[k]||'');$('#plinks-e').textContent='';$('#bcount').textContent=`${$('#pbioin').value.length}/120`;fieldErr('pinput','');$('#pform').hidden=false;$('#pedit').hidden=true;$('#pinput').focus()};
 $('#pcancel').onclick=pclose;
@@ -1624,22 +2099,36 @@ $('#avfile').onchange=e=>{const f=e.target.files[0];e.target.value='';if(!f)retu
 $('#prmav').onclick=()=>{if(!confirm('Remove your profile photo?'))return;const b=$('#prmav');loading(b,true);api('/api/me/avatar',{method:'DELETE'}).then(async d=>{me=d;mine();await loadAll();rerender();toast('Photo removed','ok')},err=>toast(err.message,'err')).finally(()=>loading(b,false))};
 
 // ---------- login (Supabase) ----------
-function setAmode(m){amode=m;
- $('#aul').hidden=m!=='up';$('#aful').hidden=m!=='up';$('#ahead').textContent=m==='up'?'Create your account':'Welcome back';$('#ago').textContent=m==='up'?'Sign up':'Log in';
- $('#apass').autocomplete=m==='up'?'new-password':'current-password';$('#amsg').hidden=true;['aname','aemail','apass'].forEach(i=>fieldErr(i,''))}
-// guests first pick Log in or Create an account; the form opens in that mode
-function paintAuth(){const guest=login&&!me.account;$('#apick').hidden=!guest||astep!=='pick';$('#auth').hidden=!guest||astep==='pick'}
+// form modes: up = sign up, in = log in, forgot = email a password-reset link
+const AM={up:['Create your account','Join a community of creators and dreamers.','Sign up'],in:['Welcome back','Good to see you again!','Log in'],forgot:['Reset your password','Enter your email and we’ll send you a link to choose a new password.','Send reset link']};
+function setAmode(m){amode=m;const t=AM[m];
+ $('#aul').hidden=$('#aful').hidden=m!=='up';$('#apf').hidden=m==='forgot';$('#aforgot').hidden=m!=='in';
+ $('#ahead').textContent=t[0];$('#asub').textContent=t[1];$('#ago').textContent=t[2];
+ $('#apass').autocomplete=m==='up'?'new-password':'current-password';$('#amsg').hidden=$('#aok').hidden=true;['aname','aemail','apass'].forEach(i=>fieldErr(i,''));
+ $('#aswitch').innerHTML=m==='up'?'Already have an account? <button class="link" type="button" data-amode="in">Log in</button>':m==='in'?'Don’t have an account? <button class="link" type="button" data-amode="up">Sign up</button>':'Remembered it? <button class="link" type="button" data-amode="in">Back to log in</button>'}
+$('#aswitch').onclick=e=>{const b=e.target.closest('[data-amode]');if(b){setAmode(b.dataset.amode);$(b.dataset.amode==='up'?'#aname':'#aemail').focus()}};
+$('#aforgot').onclick=()=>{setAmode('forgot');$('#aemail').focus()};
+// guests first see the welcome screen (Get started / I already have an account); the form opens in that mode
+function paintAuth(){const guest=login&&!me.account;$('#apick').hidden=!guest||astep!=='pick';$('#auth').hidden=!guest||astep==='pick';if(!$('#apick').hidden)paintWelcome()}
+// welcome collage: thumbnails of real public videos (decorative); colour cards when there are none yet
+function paintWelcome(){const pick=[...all].sort((a,b)=>(!!b.thumb-!!a.thumb)||trendScore(b)-trendScore(a)).slice(0,5);
+ $('#wcollage').innerHTML=(pick.length?pick:[0,1,2,3,4].map(i=>({gr:G[i%G.length]}))).map((v,i)=>`<span class="wc wc${i}" style="background-image:${v.gr}">${v.thumb?`<img src="${esc(v.thumb)}" alt="" loading="lazy" decoding="async">`:v.emoji?`<b>${esc(v.emoji)}</b>`:''}</span>`).join('')}
 $('#apick').onclick=e=>{const a=e.target.closest('[data-auth]');if(a)goAuth(a.dataset.auth)};
 $('#aback').onclick=()=>{astep='pick';paintAuth();$('#apick [data-auth]').focus()};
 $('#apw').onclick=()=>{const p=$('#apass'),show=p.type==='password';p.type=show?'text':'password';$('#apw').setAttribute('aria-label',show?'Hide password':'Show password');$('#apw').innerHTML=ic(show?'eyeoff':'eye')};
 const friendly=m=>/invalid login|invalid credentials/i.test(m)?'Wrong email or password.':/already registered|already exists/i.test(m)?'An account with this email already exists. Try logging in.':/rate limit|too many/i.test(m)?'Too many attempts. Please wait a minute and try again.':/password/i.test(m)&&/6/.test(m)?'Password must be at least 6 characters.':/fetch|network|not running/i.test(m)?'Login service is not reachable right now. Please try again later.':m;
-$('#auth').onsubmit=async e=>{e.preventDefault();const btn=$('#ago'),al=$('#amsg'),email=$('#aemail').value.trim(),password=$('#apass').value,name=$('#aname').value.trim().replace(/^@/,'');al.hidden=true;
+$('#auth').onsubmit=async e=>{e.preventDefault();const btn=$('#ago'),al=$('#amsg'),email=$('#aemail').value.trim(),password=$('#apass').value,name=$('#aname').value.trim().replace(/^@/,'');al.hidden=true;$('#aok').hidden=true;
  let ok=fieldErr('aemail',/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)?'':'Enter a valid email address.');
- ok=fieldErr('apass',password.length>=6?'':'Password must be at least 6 characters.')&&ok;
+ if(amode!=='forgot')ok=fieldErr('apass',password.length>=6?'':'Password must be at least 6 characters.')&&ok;
  if(amode==='up')ok=fieldErr('aname',!name||NAME_RE.test(name)?'':'Use 3–24 letters, numbers, _ or .')&&ok;
  if(!ok){const f=document.querySelector('#auth [aria-invalid="true"]');f&&f.focus();return}
  if(!sb){al.textContent='Login is not available right now.';al.hidden=false;return}
  loading(btn,true);
+ // the same answer whether or not the email has an account, so nobody can use this form to find out who signed up
+ if(amode==='forgot'){try{const r=await sb.auth.resetPasswordForEmail(email,{redirectTo:location.origin+'/'});if(r.error)throw r.error;
+   $('#aok').textContent=`If ${email} has a Vizo account, we’ve sent it a link to choose a new password. Check your inbox (and spam folder).`;$('#aok').hidden=false}
+  catch(err){al.textContent=friendly(err.message||'Something went wrong. Please try again.');al.hidden=false}
+  loading(btn,false);return}
  try{const r=amode==='up'?await sb.auth.signUp({email,password}):await sb.auth.signInWithPassword({email,password});
   if(r.error)throw r.error;
   if(!r.data.session){al.textContent='Check your email to confirm your account, then log in.';al.hidden=false;loading(btn,false);return}
@@ -1648,12 +2137,22 @@ $('#auth').onsubmit=async e=>{e.preventDefault();const btn=$('#ago'),al=$('#amsg
   if(amode==='up'&&(name||full)){try{await api('/api/me',{method:'POST',json:upd})}catch(err){store.set('inv_flash',err.message+' You can change it in Edit profile.')}}
   location.reload()}
  catch(err){al.textContent=friendly(err.message||'Something went wrong. Please try again.');al.hidden=false;loading(btn,false)}};
+// Coming back from a password-reset email: the link signs you in for this one step, then you choose a new password
+function openNewPassword(){
+ const b=openDlg('Choose a new password',`<form class="npw" novalidate><p class="sub">Use at least 6 characters. You’ll stay logged in on this device.</p><div class="field"><label class="lbl" for="npass">New password</label><div class="pw"><input class="input" id="npass" type="password" autocomplete="new-password" placeholder="At least 6 characters" aria-describedby="npass-e"><button class="icon-btn" type="button" id="npw" aria-label="Show password">${ic('eye')}</button></div><p class="err" id="npass-e"></p></div><button class="btn btn-primary block" type="submit" id="nsave">Save new password</button></form>`);
+ setTimeout(()=>$('#npass').focus(),60);
+ b.onclick=e=>{if(e.target.closest('#npw')){const p=$('#npass'),s=p.type==='password';p.type=s?'text':'password';$('#npw').setAttribute('aria-label',s?'Hide password':'Show password');$('#npw').innerHTML=ic(s?'eyeoff':'eye')}};
+ b.onsubmit=async e=>{e.preventDefault();const p=$('#npass').value;if(!fieldErr('npass',p.length>=6?'':'Password must be at least 6 characters.')){$('#npass').focus();return}
+  const s=$('#nsave');loading(s,true);
+  try{const r=await sb.auth.updateUser({password:p});if(r.error)throw r.error;try{await api('/api/link',{method:'POST',json:{}})}catch(e){}store.set('inv_flash','Your password is updated. You’re logged in.');location.reload()}
+  catch(err){fieldErr('npass',/same|different/i.test(err.message||'')?'Choose a password you haven’t used here before.':friendly(err.message||'Something went wrong. Please try again.'));loading(s,false)}}}
 $('#plogout').onclick=async()=>{if(!confirm('Log out of Vizo on this device?'))return;loading($('#plogout'),true);
  // this device stops getting your push notifications, so the next person using it doesn't see them
  try{await pushOff(true)}catch(e){}try{await sb.auth.signOut()}catch(e){}location.reload()};
 
 // ---------- upload ----------
 $('#filters').innerHTML=chipGroup('filter',FILTERS,'none');
+$('#vibes').innerHTML=VIBE_CHIPS('vibe');
 $('#filters').onchange=()=>{$('#pv').className='pv fx-'+rv('filter')};
 const parseTags=s=>[...new Set(s.split(/[\s,#]+/).map(t=>t.replace(/[^\p{L}\p{M}\p{N}_]/gu,'').toLowerCase().slice(0,30)).filter(Boolean))];
 function paintTags(){const t=parseTags($('#tags').value);$('#gcount').textContent=`${Math.min(t.length,MAXTAGS)}/${MAXTAGS}`;
@@ -1733,7 +2232,7 @@ async function startUpload(){if(needLogin('upload videos'))return;const t=$('#ti
  if(!pending){$('#ferr').textContent='Choose a video to upload first.';$('#drop').focus();return}
  if(scan.state==='busy'||scan.state==='blocked')return;
  if(!fieldErr('title',t?'':'Please add a title.')){$('#title').focus();return}
- const q=new URLSearchParams({title:t,tags:parseTags($('#tags').value).slice(0,MAXTAGS).join(' '),filter:rv('filter'),scan:scan.state==='ok'?'passed':'unchecked',...(at?{publishAt:at}:{}),...($('#desc').value.trim()?{description:$('#desc').value.trim()}:{})}),x=new XMLHttpRequest(),tk=await bearer(),thumb=thumbBlob,scanned=scan.state==='ok';
+ const q=new URLSearchParams({title:t,tags:parseTags($('#tags').value).slice(0,MAXTAGS).join(' '),filter:rv('filter'),...(rv('vibe')?{mood:rv('vibe')}:{}),scan:scan.state==='ok'?'passed':'unchecked',...(at?{publishAt:at}:{}),...($('#desc').value.trim()?{description:$('#desc').value.trim()}:{})}),x=new XMLHttpRequest(),tk=await bearer(),thumb=thumbBlob,scanned=scan.state==='ok';
  xhr=x;x.open('POST','/api/videos?'+q);x.setRequestHeader('X-Uid',uid);if(tk)x.setRequestHeader('Authorization','Bearer '+tk);x.setRequestHeader('Content-Type',pending.type);
  upState('up',0);$('#upstat').scrollIntoView({block:'nearest',behavior:'smooth'});
  x.upload.onprogress=e=>{if(e.lengthComputable)upState('up',Math.round(e.loaded/e.total*100))};
@@ -1745,7 +2244,7 @@ async function startUpload(){if(needLogin('upload videos'))return;const t=$('#ti
   if(v.pending){notify({title:'Video sent for review',text:scanned?`“${v.title}” will appear once our team has checked it. Until then only you can see it.`:`“${v.title}” stays private until our team has checked it, because the safety check couldn’t run.`,thumb:thumbUrl,action:'View',onAction:()=>show('me')})}
   else if(v.scheduled){notify({title:'Video scheduled',text:`“${v.title}” goes live ${fmtSched(v.created)}.`,thumb:thumbUrl,action:'View',onAction:()=>show('me')})}
   else notify({title:'Your video is live! 🎉',text:`“${v.title}” is now in the feed.`,thumb:thumbUrl,action:'View',onAction:()=>openVideo(v.id)});
-  clearPick();$('#file').value='';$('#title').value='';$('#tcount').textContent='0/70';$('#tags').value='';paintTags();$('#desc').value='';$('#dcount').textContent='0/500';document.querySelector('input[name=filter][value=none]').checked=true;document.querySelector('input[name=when][value=now]').checked=true;$('#schedf').hidden=true;$('#sched').value='';dashData=null;$('#pv').className='pv';
+  clearPick();$('#file').value='';$('#title').value='';$('#tcount').textContent='0/70';$('#tags').value='';paintTags();$('#desc').value='';$('#dcount').textContent='0/500';document.querySelector('input[name=vibe][value=""]').checked=true;document.querySelector('input[name=filter][value=none]').checked=true;document.querySelector('input[name=when][value=now]').checked=true;$('#schedf').hidden=true;$('#sched').value='';dashData=null;$('#pv').className='pv';
   if(!me.name)loadMe().catch(()=>{});if(v.scheduled||v.pending){show('me')}else{solo=[v];setMode('solo');show('feed')}updatePost()};
  x.onerror=()=>{xhr=null;upState('err',0,'Network problem. Check your internet and try again.');notify({title:'Upload failed',text:'Network problem. Check your internet and try again.',type:'err',action:'Retry',onAction:()=>{show('up');startUpload()}})};
  x.onabort=()=>{xhr=null;upState('');toast('Upload cancelled')};
@@ -1756,15 +2255,18 @@ $('#upretry').onclick=()=>startUpload();
 
 // ---------- notifications ----------
 let notifs=null,nunread=0;
-const NT_ICON={like:'heart',comment:'chat',reply:'reply',follow:'userplus',upload:'check',collab:'users',collabres:'users'};
+const NT_ICON={mention:'at',like:'heart',comment:'chat',reply:'reply',follow:'userplus',upload:'check',uploaded:'upload',story:'camera',storylive:'check',collab:'users',collabres:'users'};
+const SELF_N=['upload','uploaded','story','storylive'];// about your own uploads: shown with the Vizo logo
 function setBadge(n){nunread=n;const b=$('#nbadge');b.hidden=!n;b.textContent=n>9?'9+':n;$('#nbnotif').setAttribute('aria-label',n?`Notifications, ${n} unread`:'Notifications')}
 function nrow(n){const who=n.name?`<b>@${esc(n.name)}</b>`:'<b>Someone</b>',vt=n.title?`“${esc(n.title)}”`:'your video';
- const text=n.type==='like'?`${who} liked your video ${vt}`:n.type==='comment'?`${who} commented on ${vt}: <q>${esc(n.text)}</q>`:n.type==='reply'?`${who} replied to your comment on ${vt}: <q>${esc(n.text)}</q>`:n.type==='follow'?`${who} started following you`:n.type==='collab'?`${who} invited you to collaborate on ${vt}`:n.type==='collabres'?`${who} ${n.status==='accepted'?'accepted':'declined'} your invitation to collaborate on ${vt}`:`Your video ${vt} is live`;
- const target=n.type==='follow'?(n.name?`data-user="${esc(n.name)}"`:''):`data-vid="${n.video}"`;
- const pic=n.type==='upload'?`<span class="avatar nlogo"><img src="/icon.svg" alt=""></span>`:avatar(n.name,n.avatar);
+ const text=n.type==='like'?`${who} liked your video ${vt}`:n.type==='comment'?`${who} commented on ${vt}: <q>${esc(n.text)}</q>`:n.type==='reply'?`${who} replied to your comment on ${vt}: <q>${esc(n.text)}</q>`:n.type==='follow'?`${who} started following you`:n.type==='collab'?`${who} invited you to collaborate on ${vt}`:n.type==='collabres'?`${who} ${n.status==='accepted'?'accepted':'declined'} your invitation to collaborate on ${vt}`:n.type==='uploaded'?(n.pending?`Your video ${vt} is uploaded. It goes live once it has been reviewed.`:n.scheduled?`Your video ${vt} is uploaded and scheduled.`:`Your video ${vt} is uploaded.`):n.type==='story'?(n.pending?'Your story is added. Others will see it once it has been reviewed.':'Your story is live for 24 hours.'):n.type==='storylive'?'Your story was approved and is now visible to everyone.':n.type==='mention'?`${who} mentioned you in their story`:`Your video ${vt} is live`;
+ // stories open your story viewer; a video that isn't public yet opens your profile (where it shows Under review / Scheduled)
+ const target=n.type==='mention'?`data-storyof="${esc(n.name||'')}"`:n.story?'data-mystory="1"':n.type==='follow'?(n.name?`data-user="${esc(n.name)}"`:''):n.type==='uploaded'&&(n.pending||n.scheduled)?'data-go="me"':`data-vid="${n.video}"`;
+ const pic=SELF_N.includes(n.type)?`<span class="avatar nlogo"><img src="/icon.svg" alt=""></span>`:avatar(n.name,n.avatar);
  const right=n.type==='collab'?(n.status==='pending'?`<span class="ncol"><button class="btn sm btn-primary" type="button" data-cans="1" data-cv="${n.video}">Accept</button><button class="btn sm btn-ghost" type="button" data-cans="0" data-cv="${n.video}">Decline</button></span>`:`<span class="cst st-${n.status}">${COLST[n.status]}</span>`)
   :n.type==='follow'?(n.name?`<button class="btn sm ${n.followBack?'btn-ghost':'btn-secondary'}" type="button" data-follow="${esc(n.name)}" aria-pressed="${!!n.followBack}">${n.followBack?ic('check')+'Following':'Follow back'}</button>`:'')
-  :`<button class="nthumb" type="button" data-vid="${n.video}" aria-label="Open video" style="background:${G[(n.video-1)%G.length]}">${n.thumb?`<img src="${esc(n.thumb)}" alt="" loading="lazy">`:esc(n.emoji||'🎬')}</button>`;
+  :n.story?`<button class="nthumb" type="button" ${n.type==='mention'?`data-storyof="${esc(n.name||'')}" aria-label="Watch the story"`:'data-mystory="1" aria-label="Watch your story"'} style="background:${G[0]}">${n.thumb?`<img src="${esc(n.thumb)}" alt="" loading="lazy">`:'🎬'}</button>`
+  :`<button class="nthumb" type="button" ${target.startsWith('data-go')?target:`data-vid="${n.video}"`} aria-label="Open video" style="background:${G[(n.video-1)%G.length]}">${n.thumb?`<img src="${esc(n.thumb)}" alt="" loading="lazy">`:esc(n.emoji||'🎬')}</button>`;
  return `<div class="nrow${n.unread?' new':''}"><span class="nav-av">${pic}<span class="ntype t-${n.type}">${ic(NT_ICON[n.type])}</span></span><button class="nmain" type="button" ${target}><p>${text}</p><small>${ago(n.created)}${n.unread?' · New':''}</small></button>${right}</div>`}
 function renderNotifs(){const L=$('#nlist');
  if(!notifs){L.innerHTML=('<div class="skel-n"><span class="skel" style="width:46px;height:46px;border-radius:50%"></span><div><i class="skel" style="width:70%"></i><i class="skel" style="width:30%;margin-top:8px"></i></div><span class="skel" style="width:44px;height:58px;border-radius:10px"></span></div>').repeat(4);return}
@@ -1778,6 +2280,8 @@ $('#nlist').onclick=e=>{const f=e.target.closest('[data-follow]');if(f){follow(f
  const ca=e.target.closest('[data-cans]');if(ca){const acc=ca.dataset.cans==='1',vid=+ca.dataset.cv,bs=[...ca.parentNode.querySelectorAll('button')];bs.forEach(x=>loading(x,true));
   api(`/api/collabs/${vid}`,{method:'POST',json:{accept:acc}}).then(d=>{(notifs||[]).forEach(n=>{if(n.type==='collab'&&n.video===vid)n.status=d.status});renderNotifs();toast(acc?'You’re now a collaborator':'Invitation declined','ok');if(acc)loadMine().then(()=>{if(view==='me')mine()})},
    err=>{bs.forEach(x=>loading(x,false));toast(err.message,'err')});return}
+ const so=e.target.closest('[data-storyof]');if(so){const nm=so.dataset.storyof;loadStories().then(()=>{if(SP.some(p=>p.name===nm))openStories(nm);else toast('This story is no longer available.')});return}
+ const st=e.target.closest('[data-mystory]');if(st){loadStories().then(()=>{if(SP.some(p=>p.mine))openStories('mine');else toast('This story is no longer available.')});return}
  const v=e.target.closest('[data-vid]');if(v){openVideo(v.dataset.vid);return}
  const u=e.target.closest('[data-user]');if(u)openUser(u.dataset.user)};
 setInterval(()=>{if(!document.hidden)loadNotifs()},60000);
@@ -1839,7 +2343,7 @@ $('#dbody').onclick=e=>{const a=e.target.closest('[data-auth]');if(a)goAuth(a.da
 // ---------- continue watching (resume + saving your place) ----------
 const mmss=s=>Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');
 // Jump to where you left off, once each time the video is shown, after its metadata (duration) is known
-function resumeAt(c,vd,v){if(!v||!v.resume||c._resumed)return;c._resumed=true;
+function resumeAt(c,vd,v){if(!v||!v.resume||c._resumed||freshFeed)return;c._resumed=true;
  const go=()=>ensureDuration(vd).then(()=>{if(!isFinite(vd.duration)||v.resume<vd.duration-2){vd.currentTime=v.resume;toast('Resumed at '+mmss(v.resume))}});
  vd.readyState>=1?go():vd.addEventListener('loadedmetadata',go,{once:true})}
 // Some files (e.g. recorded in a browser) don't state their length; seeking far ahead makes the browser work it out
@@ -1898,8 +2402,18 @@ $('#hclear').onclick=()=>{if(!confirm('Clear your whole watch history? This also
  api('/api/history',{method:'DELETE'}).then(()=>{hItems=[];hNext=null;cont=[];V.forEach(v=>v.resume=0);paintHistory();toast('Watch history cleared','ok');$('#v-hist h1').focus()},err=>toast(err.message,'err')).finally(()=>loading(b,false))};
 
 // ---------- settings: notification types, blocked accounts, data saver ----------
-const NPREF=[['follow','New followers','When someone follows you'],['comment','Comments','Comments on your videos'],['reply','Replies','Replies to your comments'],['collab','Collaborations','Invitations to collaborate, and answers to yours'],['like','Likes','Likes on your videos'],['upload','Your videos going live','When your upload (or scheduled video) is published']];
-async function openSettings(){const N=$('#nprefs');$('#dsave').checked=dataSaver;$('#nprefs-s').textContent='';
+const NPREF=[['follow','New followers','When someone follows you'],['comment','Comments','Comments on your videos'],['reply','Replies','Replies to your comments'],['collab','Collaborations','Invitations to collaborate, and answers to yours'],['like','Likes','Likes on your videos'],['upload','Your uploads and stories','When your video or story is uploaded, approved, or goes live'],['mention','Story mentions','When someone tags you in their story']];
+// Settings: a grouped list; Notifications, Privacy & security, Blocked users, Theme and Help open as sub-pages
+let spanel=null;
+function openSPanel(p){spanel=p;$('#smain').hidden=!!p;document.querySelectorAll('#v-set .spanel').forEach(x=>x.hidden=x.dataset.p!==p);
+ const el=p&&document.querySelector(`#v-set .spanel[data-p="${p}"]`);$('#stitle').textContent=el?el.dataset.t:'Settings';
+ $('#sback').setAttribute('aria-label',p?'Back to Settings':'Back to profile');$('#v-set .pad').scrollTop=0;$('#stitle').focus({preventScroll:true})}
+// ← goes back one step (sub-page → the page that opened it → Settings → profile) and returns focus to the row you used
+let sstack=[];
+$('#v-set').addEventListener('click',e=>{const b=e.target.closest('[data-sp]');if(b){sstack.push({p:spanel,btn:b});openSPanel(b.dataset.sp)}});
+$('#sback').onclick=()=>{if(!spanel){show('me');return}const s=sstack.pop()||{p:null};openSPanel(s.p);if(s.btn&&s.btn.isConnected&&s.btn.offsetParent)s.btn.focus()};
+$('#schpw').onclick=()=>openNewPassword();
+async function openSettings(){const N=$('#nprefs');$('#dsave').checked=dataSaver;$('#nprefs-s').textContent='';$('#sacct').hidden=!me.account;sstack=[];openSPanel(null);paintTheme();
  if(login&&!me.account){N.innerHTML=emptyState('users','Log in to change these settings','','<button class="btn btn-primary" type="button" data-auth="in">Log in</button>');$('#blist').innerHTML='';$('#pushst').textContent='Log in to use push notifications.';$('#pushtgl').checked=false;$('#pushtgl').disabled=true;return}
  paintPush();
  N.innerHTML='<span class="skel" style="display:block;height:180px;border-radius:14px"></span>';
@@ -1907,7 +2421,7 @@ async function openSettings(){const N=$('#nprefs');$('#dsave').checked=dataSaver
  catch(err){N.innerHTML=emptyState('alert','Couldn’t load your settings',esc(err.message))}
  loadBlocks()}
 async function loadBlocks(){const L=$('#blist');L.innerHTML='<span class="skel" style="display:block;height:60px;border-radius:14px"></span>';
- try{const rows=await api('/api/blocks');L.innerHTML=rows.length?rows.map(r=>`<div class="brow">${avatar(r.name,r.avatar,'av-36')}<span class="fnm"><b>${esc(r.fullName||'@'+r.name)}</b>${r.fullName?`<small>@${esc(r.name)}</small>`:''}</span><button class="btn sm btn-secondary" type="button" data-ub="${esc(r.name)}">Unblock</button></div>`).join(''):'<p class="hint" style="padding:10px 0 2px">You haven’t blocked anyone.</p>'}
+ try{const rows=await api('/api/blocks');$('#sbn').textContent=rows.length||'';L.innerHTML=rows.length?rows.map(r=>`<div class="brow">${avatar(r.name,r.avatar,'av-36')}<span class="fnm"><b>${esc(r.fullName||'@'+r.name)}</b>${r.fullName?`<small>@${esc(r.name)}</small>`:''}</span><button class="btn sm btn-secondary" type="button" data-ub="${esc(r.name)}">Unblock</button></div>`).join(''):'<p class="hint" style="padding:10px 0 2px">You haven’t blocked anyone.</p>'}
  catch(err){L.innerHTML=emptyState('alert','Couldn’t load blocked accounts',esc(err.message))}}
 $('#nprefs').onchange=async e=>{const i=e.target.closest('[data-np]');if(!i)return;const s=$('#nprefs-s');i.disabled=true;s.textContent='Saving…';
  try{await api('/api/me/notification-prefs',{method:'POST',json:{[i.dataset.np]:i.checked}});s.textContent='Saved';loadNotifs()}
@@ -1945,9 +2459,10 @@ $('#dsave').onchange=e=>{dataSaver=e.target.checked;store.set('inv_dsave',dataSa
 function openShortcuts(){openDlg('Keyboard shortcuts',`<div class="kbd"><kbd>↑</kbd><span>Previous video</span><kbd>↓</kbd><span>Next video</span><kbd>Space</kbd><span>Play / pause</span><kbd>M</kbd><span>Sound on / off</span><kbd>L</kbd><span>Like</span><kbd>Esc</kbd><span>Close a panel, menu or the player</span><kbd>?</kbd><span>Show this list</span></div><p class="hint">Shortcuts don’t work while you’re typing or inside a panel. Tab moves between buttons; the first Tab shows “Skip to main content”.</p>`)}
 
 // ---------- navigation, theme, keyboard ----------
-function show(n){if(sideOpen())dlg.close();closePlayer();view=n;$('#uppill').hidden=!xhr||n==='up';document.querySelectorAll('.view').forEach(x=>x.classList.toggle('on',x.id==='v-'+n));
+let prevView='home';
+function show(n){if(sideOpen())dlg.close();closePlayer();if(n!==view&&!['me','set','hist'].includes(view))prevView=view;view=n;syncNav();$('#uppill').hidden=!xhr||n==='up';document.querySelectorAll('.view').forEach(x=>x.classList.toggle('on',x.id==='v-'+n));
  document.querySelectorAll('.nb').forEach(b=>{if(b.dataset.v===n)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});
- if(n==='khoj'){grid();if(me.account)loadContinue()}if(n==='me'){astep='pick';mine()}if(n==='notif'){paintMute();openNotifs()}if(n==='dash')openDash();
+ if(n==='home'){renderHome();if(loaded)loadStories().then(()=>{if(view==='home')$('#hstories').innerHTML=storyRow()})}if(n==='chat')openChats();if(n!=='dm')stopDm();if(n==='khoj'){grid();if(me.account)loadContinue()}if(n==='me'){astep='pick';mine()}if(n==='notif'){paintMute();openNotifs()}if(n==='dash')openDash();
  if(n==='set')openSettings();if(n==='hist')openHistory(true);
  if(n==='set'||n==='hist')setTimeout(()=>{const h=document.querySelector('#v-'+n+' h1');h&&h.focus({preventScroll:true})},30);
  if(n==='up'){paintUpGate();if(!(login&&!me.account))loadScanner().catch(()=>{})}
@@ -1958,13 +2473,19 @@ const BASE_TITLE=document.title;
 function syncUrl(v){const p=v&&v.slug&&view==='feed'?'/v/'+v.slug:'/';if(location.pathname+location.search!==p)history.replaceState(null,'',p);document.title=v&&view==='feed'?v.title+' · '+v.handle+' · Vizo':BASE_TITLE}
 document.querySelector('nav').onclick=e=>{const b=e.target.closest('.nb');b&&show(b.dataset.v)};
 const isDark=()=>{const t=document.documentElement.dataset.theme;return t?t==='dark':!matchMedia('(prefers-color-scheme: light)').matches};
-// Theme: Light / Dark saved in this browser (inv_theme); Auto follows the device setting (nothing saved)
+// Theme: Light (default) / Dark / Auto, saved in this browser (inv_theme); Auto follows the device setting
 const themeChoice=()=>document.documentElement.dataset.theme||'auto';
-function paintTheme(){const d=isDark(),c=themeChoice();document.querySelector('meta[name=theme-color]').content=d?'#0E0E13':'#FFFFFF';
+function paintTheme(){const d=isDark(),c=themeChoice();document.querySelector('meta[name=theme-color]').content=d?'#0E0E13':'#F7F6FC';
+ document.querySelectorAll('#stheme [data-th]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.th===c));
+ const tv=$('#sthv');if(tv)tv.innerHTML=({light:'Light',dark:'Dark',auto:'Auto'})[c]+ic(c==='dark'?'moon':c==='auto'?'half':'sun');
  $('#smthemeic').innerHTML=ic(d?'moon':'sun');
  document.querySelectorAll('#smtheme [data-th]').forEach(b=>b.setAttribute('aria-checked',b.dataset.th===c))}
-function setTheme(t){if(t==='auto'){delete document.documentElement.dataset.theme;try{localStorage.removeItem('inv_theme')}catch(e){}}
- else{document.documentElement.dataset.theme=t;store.set('inv_theme',t)}paintTheme()}
+// Profile ← goes back to the screen you came from (Home if there is none)
+$('#pback').onclick=()=>show(prevView&&prevView!=='me'?prevView:'home');
+$('#stheme').onclick=e=>{const b=e.target.closest('[data-th]');b&&setTheme(b.dataset.th)};
+$('#sedit').onclick=()=>{show('me');$('#pedit').click()};
+$('#slogout').onclick=()=>$('#plogout').click();
+function setTheme(t){if(t==='auto')delete document.documentElement.dataset.theme;else document.documentElement.dataset.theme=t;store.set('inv_theme',t);paintTheme()}
 
 // ---------- Settings (gear) menu ----------
 const SM=$('#smenu'),GEAR=$('#gear');
@@ -1980,19 +2501,18 @@ SM.onclick=e=>{const b=e.target.closest('button');if(!b)return;
  const a=b.dataset.sm;
  if(a==='theme'){const sub=$('#smtheme'),open=sub.hidden;sub.hidden=!open;b.setAttribute('aria-expanded',open);if(open)(sub.querySelector('[aria-checked=true]')||sub.querySelector('button')).focus();return}
  closeSm(false);
- if(a==='edit'){show('me');setTimeout(()=>{$('#pedit').click();$('#pform').scrollIntoView({block:'nearest',behavior:'smooth'})},0)}
  if(a==='hist')show('hist');
  if(a==='settings')show('set');
  if(a==='logout')$('#plogout').click();
  if(a==='login')goAuth('in')};
 // Phones: the gear sits on the Profile page (there is no top bar); computers: in the sidebar header
 // The gear lives on the Profile page (phones and computers)
-const HM=document.querySelector('.hmenu');$('#v-me .prof').prepend(HM);
+const HM=document.querySelector('.hmenu');$('#v-me .ptop').append(HM);
 
 // ---------- Notifications: Mute / Unmute all types at once (uses the same settings as the Settings page) ----------
 async function paintMute(){const b=$('#nmute');if(!me.account){b.hidden=true;$('#nmute-s').textContent='';return}b.hidden=false;
  let p;try{p=await api('/api/me/notification-prefs')}catch(e){return}
- const m=!!p.muted;b.setAttribute('aria-pressed',m);$('#nmutet').textContent=m?'Unmute notifications':'Mute notifications';$('#nmuteic').innerHTML=ic(m?'bell':'belloff');
+ const m=!!p.muted;b.setAttribute('aria-pressed',m);$('#nmutet').textContent=m?'Unmute':'Mute';b.setAttribute('aria-label',m?'Unmute notifications':'Mute notifications');$('#nmuteic').innerHTML=ic(m?'bell':'belloff');
  $('#nmute-s').textContent=m?'Notifications are muted. New activity won’t show here until you unmute.':''}
 $('#nmute').onclick=async()=>{const b=$('#nmute'),muted=b.getAttribute('aria-pressed')==='true';loading(b,true);
  try{await api('/api/me/notification-prefs',{method:'POST',json:{muted:!muted}});toast(muted?'Notifications unmuted':'Notifications muted','ok')}
@@ -2025,6 +2545,294 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&sideOpen()){dlg.clo
  else if(k==='l'&&v){toggleLike(v)}
  else if(e.key==='?'){e.preventDefault();openShortcuts()}});
 
+// ---------- Home: creators row + video cards (tap a video to watch it in Feed) ----------
+let loadErr=null;
+function renderHome(){const S=$('#hstories'),C=$('#hcards');
+ if(!loaded){S.innerHTML='<span class="skel hsk"></span>'.repeat(5);C.innerHTML=loadErr?emptyState('alert','Couldn’t load videos',esc(loadErr)):'<span class="skel hcsk"></span>'.repeat(2);return}
+ $('#hstories').innerHTML=storyRow();
+ C.innerHTML=all.length?all.map(hcard).join(''):emptyState('video','No videos yet','Be the first to share a moment on Vizo.','<button class="btn btn-primary" type="button" data-go="up">Upload a video</button>');
+ // "More" only where the caption is cut off
+ C.querySelectorAll('.hcx').forEach(p=>{if(p.scrollHeight>p.clientHeight+2)p.nextElementSibling.hidden=false})}
+const hcard=v=>`<article class="hcard" data-id="${v.id}" aria-label="${esc(v.title)}, by ${esc(v.handle)}">
+ <div class="hch"><button class="hcu" type="button" data-user="${esc(v.name||'')}" aria-label="Open ${esc(v.handle)} profile">${avatar(v.name,v.avatar,'av-36')}<span><b>${esc(v.fullName||v.handle)}</b><small>${v.created?ago(v.created):''}${v.fullName?' · '+esc(v.handle):''}</small></span></button>${!v.mine&&v.name&&!v.following?`<button class="btn sm btn-secondary" type="button" data-follow="${esc(v.name)}" aria-pressed="false">Follow</button>`:''}</div>
+ <p class="hcx"><b>${esc(v.title)}</b>${v.description?' '+esc(v.description):''}${v.tags.length?` <span class="htags">${v.tags.map(t=>'#'+esc(t)).join(' ')}</span>`:''}</p><button class="link hmore" type="button" data-a="more" hidden>More</button>
+ <button class="hcm" type="button" data-a="open" aria-label="Play ${esc(v.title)}">${v.thumb?`<img class="th fx-${esc(v.filter)}" src="${esc(v.thumb)}" alt="" loading="lazy" decoding="async">`:still(v)}<span class="hpl">${ic('play')}</span><span class="hvw">${ic('eye')}${fmt(v.views)}</span></button>
+ <div class="hca"><button class="hab" type="button" data-a="like" aria-pressed="${v.liked}" aria-label="Like">${ic('heart')}<span data-c="like">${fmt(v.likes)}</span></button><button class="hab" type="button" data-a="comments" aria-label="Comments">${ic('chat')}<span data-c="com">${fmt(v.comments)}</span></button><button class="hab hsh" type="button" data-a="share" aria-label="Share">${ic('share')}<span>Share</span></button></div></article>`;
+$('#hstories').onclick=e=>{if(e.target.closest('[data-addstory]')){addStory();return}const sv=e.target.closest('[data-sv]');if(sv){openStories(sv.dataset.sv);return}const u=e.target.closest('[data-user]');if(u)openUser(u.dataset.user)};
+$('#hcards').onclick=e=>{const u=e.target.closest('[data-user]');if(u&&u.dataset.user){openUser(u.dataset.user);return}
+ const f=e.target.closest('[data-follow]');if(f){follow(f.dataset.follow,f);return}
+ const c=e.target.closest('.hcard'),b=e.target.closest('[data-a]'),v=c&&V.get(+c.dataset.id);if(!v||!b)return;const a=b.dataset.a;
+ if(a==='open')openVideo(v.id);if(a==='like')toggleLike(v);if(a==='comments')openComments(v);if(a==='share')openShare(v);
+ if(a==='more'){c.classList.add('open');b.hidden=true}};
+
+// ---------- stories: a photo or short video that disappears after 24 hours ----------
+let SP=[];// people with live stories (from the server: yours first, unseen next)
+async function loadStories(){try{SP=await api('/api/stories')}catch(e){SP=[]}}
+// The row on Home: You (tap your photo to watch your stories, + to add one), people with stories (gradient ring = something new,
+// grey = all seen), then other creators (opens their profile)
+function storyRow(){const mineP=SP.find(p=>p.mine),others=SP.filter(p=>!p.mine),have=new Set(SP.map(p=>p.name));
+ const you=me.account?`<div class="hst" role="listitem"><button class="hsb" type="button" ${mineP?'data-sv="mine" aria-label="Watch your story"':'data-addstory aria-label="Add a story"'}><span class="hsr${mineP?' on':''}">${avatar(me.name,me.avatar)}</span></button><button class="hadd" type="button" data-addstory aria-label="Add a story" title="Add a story">${ic('plus')}</button><b>Your story</b></div>`:'';
+ const ss=others.map(p=>`<div class="hst" role="listitem"><button class="hsb" type="button" data-sv="${esc(p.name)}" aria-label="Watch @${esc(p.name)}’s story${p.seen?'':' (new)'}"><span class="hsr${p.seen?' seen':' on'}">${avatar(p.name,p.avatar)}</span></button><b>${esc((p.fullName||p.name).split(' ')[0])}</b></div>`).join('');
+ const cs=creators(all).filter(c=>!c.mine&&!have.has(c.name)).sort((a,b)=>(b.following-a.following)||(b.likes-a.likes)).slice(0,12)
+  .map(c=>`<div class="hst" role="listitem"><button class="hsb" type="button" data-user="${esc(c.name)}" aria-label="Open @${esc(c.name)} profile"><span class="hsr">${avatar(c.name,c.avatar)}</span></button><b>${esc((c.fullName||c.name).split(' ')[0])}</b></div>`).join('');
+ return you+ss+cs}
+// Add a story: pick a photo or video, then the editor opens: add texts, a location and @tags, drag them where you want.
+// The browser safety check must pass before it can be shared; it goes live at once (people can report it).
+const SMAX_IMG=8*1024*1024,SMAX_VID=30*1024*1024;
+const OV_COLORS=['#FFFFFF','#16133D','#FF3D6E','#FF9F1C','#FFD23F','#2BD07B','#2F6BFF','#7B2FF7'],OV_LIGHT=['#FFFFFF','#FFD23F','#2BD07B','#FF9F1C'];
+// one text / location / @tag on a story; in the editor each is a button you can drag, in the viewer a @tag opens the profile
+function ovHtml(o,i,mode){const ink=o.style==='box'?(OV_LIGHT.includes(o.color)?'#16133D':'#FFFFFF'):o.color;
+ const label=(o.type==='location'?'📍 ':o.type==='mention'?'@':'')+esc(o.text);
+ const st=`left:${o.x*100}%;top:${o.y*100}%;--s:${o.size};--bg:${o.color};color:${ink}`,cls=`ov ov-${o.type} ov-${o.style}`;
+ if(mode==='edit')return`<button class="${cls}" type="button" style="${st}" data-i="${i}" aria-label="${o.type==='mention'?'Tag':o.type==='location'?'Location':'Text'}: ${esc(o.text)}. Drag or use arrow keys to move; Enter to edit">${label}</button>`;
+ if(o.type==='mention')return`<button class="${cls}" type="button" style="${st}" data-user="${esc(o.text)}" aria-label="Open @${esc(o.text)} profile">${label}</button>`;
+ return`<span class="${cls}" style="${st}">${label}</span>`}
+let ED=null;
+function addStory(){if(needLogin('add stories'))return;const f=$('#sfile');f.value='';f.click()}
+$('#sfile').onchange=e=>{const f=e.target.files[0];if(!f)return;const img=f.type.startsWith('image/'),vid=f.type.startsWith('video/');
+ if(!img&&!vid){toast('Choose a photo or a video.','err');return}
+ if(f.size>(img?SMAX_IMG:SMAX_VID)){toast(img?'Photos must be under 8 MB.':'Story videos must be under 30 MB.','err');return}
+ ED={file:f,url:URL.createObjectURL(f),img,items:[],scan:'busy',ret:document.activeElement};
+ $('#semedia').innerHTML=img?`<img src="${ED.url}" alt="Your story">`:`<video src="${ED.url}" muted playsinline loop autoplay aria-label="Your story video"></video>`;
+ paintEd();closePanel();$('#se').hidden=false;$('#app').inert=true;setTimeout(()=>$('#setext').focus(),30);runCheck()};
+function runCheck(){const d=ED;paintScanEd('busy','Checking your '+(d.img?'photo':'video')+'…');
+ checkMedia(d.url,d.img,m=>{if(ED===d)paintScanEd('busy',m)}).then(r=>{if(ED===d)paintScanEd(r.state,r.msg)}).catch(()=>{if(ED===d)paintScanEd('error')})}
+function paintScanEd(st,msg){ED.scan=st;const s=$('#sscan');s.className='scan '+st;
+ s.innerHTML=st==='busy'?`<span class="spin-s" aria-hidden="true"></span><span>${esc(msg)}</span>`:st==='ok'?`${ic('check')}<span>Safety check passed</span>`
+  :st==='blocked'?`${ic('alert')}<div><b>This can’t be shared</b><p>It looks like it contains nudity or sexual content, which isn’t allowed on Vizo.</p></div>`
+  :st==='long'?`${ic('alert')}<span>${esc(msg)}</span>`:`${ic('alert')}<span>The safety check couldn’t run (check your internet). <button class="link" type="button" id="serecheck">Try again</button></span>`;
+ $('#spost').disabled=st!=='ok'}
+function paintEd(){$('#seov').innerHTML=ED.items.map((o,i)=>ovHtml(o,i,'edit')).join('');$('#secount').textContent=ED.items.length?`${ED.items.length}/12`:'';if(edSel>=ED.items.length)edSel=-1;paintSel()}
+function closeEditor(){if(!ED)return;edSel=-1;$('#sesel').hidden=true;const r=ED.ret;URL.revokeObjectURL(ED.url);ED=null;$('#semedia').innerHTML='';$('#seov').innerHTML='';$('#se').hidden=true;$('#app').inert=false;r&&r.isConnected&&r.focus()}
+$('#sex').onclick=()=>{if(ED&&ED.items.length&&!confirm('Discard this story?'))return;closeEditor()};
+// the edit panel: text (or location / @username), colour, background on/off, size
+let edI=-1,edType='text';
+const PANEL={text:['Text','Type something…',120],location:['Location','Search a place, e.g. Noida or Pink City',60],mention:['Tag someone','@username',25]};
+function openPanel(i,type){edI=i;const o=i>=0?ED.items[i]:{type,text:'',color:'#FFFFFF',style:type==='text'?'plain':'box',size:1};edType=o.type;
+ const P=PANEL[o.type];$('#selbl').textContent=P[0];$('#setxt').placeholder=P[1];$('#setxt').maxLength=P[2];$('#setxt').value=o.text;fieldErr('setxt','');
+ $('#secolors').dataset.c=o.color;$('#sestyle').setAttribute('aria-pressed',o.style==='box');$('#sesize').value=o.size;$('#sedel').hidden=i<0;paintColors();
+ $('#sesug').hidden=true;$('#sesug').innerHTML='';$('#sepanel').hidden=false;setTimeout(()=>$('#setxt').focus(),30)}
+function closePanel(){$('#sepanel').hidden=true;edI=-1}
+function paintColors(){const c=$('#secolors').dataset.c;$('#secolors').innerHTML=OV_COLORS.map(x=>`<button type="button" role="radio" aria-checked="${x===c}" aria-label="Colour ${x}" data-c="${x}" style="--sw:${x}"></button>`).join('')}
+$('#secolors').onclick=e=>{const b=e.target.closest('[data-c]');if(b){$('#secolors').dataset.c=b.dataset.c;paintColors();$(`#secolors [data-c="${b.dataset.c}"]`).focus()}};
+$('#sestyle').onclick=()=>{const b=$('#sestyle');b.setAttribute('aria-pressed',b.getAttribute('aria-pressed')!=='true')};
+$('#setext').onclick=()=>openPanel(-1,'text');$('#seloc').onclick=()=>openPanel(-1,'location');$('#setag').onclick=()=>openPanel(-1,'mention');
+$('#secancel').onclick=()=>{closePanel();$('#setext').focus()};
+$('#sedel').onclick=()=>{const i=edI;closePanel();if(i>=0)removeItem(i);else $('#setext').focus()};
+$('#sepanel').onsubmit=async e=>{e.preventDefault();let t=$('#setxt').value.trim();if(edType==='mention')t=t.replace(/^@/,'');
+ if(!t){fieldErr('setxt',edType==='mention'?'Enter a username.':'Type something first.');$('#setxt').focus();return}
+ if(edI<0&&ED.items.length>=12){fieldErr('setxt','A story can have up to 12 texts and stickers.');return}
+ if(edType==='mention'){if(!NAME_RE.test(t)){fieldErr('setxt','Enter a username: 3–24 letters, numbers, _ or .');return}
+  const go=$('#sedone');loading(go,true);try{const u=await api('/api/users/'+encodeURIComponent(t));t=u.name}catch(err){loading(go,false);fieldErr('setxt',/not found/i.test(err.message)?`There’s no Vizo account called @${t}.`:err.message);$('#setxt').focus();return}loading(go,false)}
+ const o={type:edType,text:t,color:$('#secolors').dataset.c,style:$('#sestyle').getAttribute('aria-pressed')==='true'?'box':'plain',size:+$('#sesize').value};
+ if(edI>=0)Object.assign(ED.items[edI],o);else ED.items.push({...o,x:.5,y:edType==='text'?.42:edType==='location'?.62:.7});
+ const k=edI>=0?edI:ED.items.length-1;closePanel();edSel=k;paintEd();ovEl(k)&&ovEl(k).focus()};
+// Texts and stickers: tap to select (frame with ✕ and a resize handle), tap again to edit. Drag to move.
+// Resize: the corner handle, two fingers (pinch), the mouse wheel, or + / − keys. Arrow keys move, Delete removes.
+let edSel=-1,drag=null,rsz=null;const touches=new Map();let pinch=null;
+const clampSz=v=>Math.round(Math.min(2.5,Math.max(.6,v))*100)/100,clamp01=v=>Math.min(.97,Math.max(.03,v));
+const ovEl=i=>$(`#seov [data-i="${i}"]`);
+function paintSel(){const S=$('#sesel'),el=edSel>=0&&ovEl(edSel);if(!el){S.hidden=true;return}
+ const st=$('#sestage').getBoundingClientRect(),r=el.getBoundingClientRect();S.hidden=false;
+ Object.assign(S.style,{left:r.left-st.left-6+'px',top:r.top-st.top-6+'px',width:r.width+12+'px',height:r.height+12+'px'});
+ document.querySelectorAll('#seov .ov').forEach(x=>x.classList.toggle('sel',x===el))}
+function setSize(i,v){const o=ED.items[i];o.size=clampSz(v);const el=ovEl(i);if(el)el.style.setProperty('--s',o.size);paintSel()}
+function moveTo(i,x,y){const o=ED.items[i];o.x=clamp01(x);o.y=clamp01(y);const el=ovEl(i);if(el){el.style.left=o.x*100+'%';el.style.top=o.y*100+'%'}paintSel()}
+function removeItem(i){ED.items.splice(i,1);edSel=-1;paintEd();$('#setext').focus()}
+const stageR=()=>$('#sestage').getBoundingClientRect();
+$('#seov').addEventListener('pointerdown',e=>{touches.set(e.pointerId,{x:e.clientX,y:e.clientY});
+ const el=e.target.closest('.ov');
+ // second finger on the stage: pinch the selected item
+ if(touches.size===2&&edSel>=0){const[a,b2]=[...touches.values()];pinch={d0:Math.hypot(a.x-b2.x,a.y-b2.y)||1,s0:ED.items[edSel].size};drag=null;return}
+ if(!el){if(edSel>=0){edSel=-1;paintSel()}return}
+ const i=+el.dataset.i,r=stageR(),o=ED.items[i],was=edSel===i;edSel=i;paintSel();
+ drag={i,el,sx:e.clientX,sy:e.clientY,ox:o.x,oy:o.y,w:r.width,h:r.height,moved:false,was};el.setPointerCapture(e.pointerId);el.classList.add('drag')});
+$('#seov').addEventListener('pointermove',e=>{if(touches.has(e.pointerId))touches.set(e.pointerId,{x:e.clientX,y:e.clientY});
+ if(pinch&&touches.size>=2&&edSel>=0){const[a,b2]=[...touches.values()];setSize(edSel,pinch.s0*Math.hypot(a.x-b2.x,a.y-b2.y)/pinch.d0);return}
+ if(!drag)return;const dx=(e.clientX-drag.sx)/drag.w,dy=(e.clientY-drag.sy)/drag.h;if(Math.abs(dx)+Math.abs(dy)>.01)drag.moved=true;moveTo(drag.i,drag.ox+dx,drag.oy+dy)});
+['pointerup','pointercancel'].forEach(t=>$('#seov').addEventListener(t,e=>{touches.delete(e.pointerId);if(touches.size<2)pinch=null;if(!drag)return;
+ drag.el.classList.remove('drag');const d=drag;drag=null;
+ // a tap (no movement) on an item that was already selected opens it for editing
+ if(!d.moved&&d.was&&t==='pointerup')openPanel(d.i)}));
+$('#seov').addEventListener('wheel',e=>{const el=e.target.closest('.ov');const i=el?+el.dataset.i:edSel;if(i<0)return;e.preventDefault();if(edSel!==i){edSel=i}setSize(i,ED.items[i].size+(e.deltaY<0?.1:-.1))},{passive:false});
+// the corner handle: drag away from the centre to grow, towards it to shrink
+$('#seresize').addEventListener('pointerdown',e=>{if(edSel<0)return;e.preventDefault();e.stopPropagation();const r=ovEl(edSel).getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
+ rsz={cx,cy,d0:Math.hypot(e.clientX-cx,e.clientY-cy)||1,s0:ED.items[edSel].size};$('#seresize').setPointerCapture(e.pointerId)});
+$('#seresize').addEventListener('pointermove',e=>{if(rsz)setSize(edSel,rsz.s0*Math.hypot(e.clientX-rsz.cx,e.clientY-rsz.cy)/rsz.d0)});
+['pointerup','pointercancel'].forEach(t=>$('#seresize').addEventListener(t,()=>{rsz=null}));
+$('#seselx').onclick=()=>{if(edSel>=0)removeItem(edSel)};
+// keyboard: focus selects; Enter edits (a click); arrows move; + / − resize; Delete removes
+$('#seov').addEventListener('focusin',e=>{const el=e.target.closest('.ov');if(el&&edSel!==+el.dataset.i){edSel=+el.dataset.i;paintSel()}});
+$('#seov').addEventListener('click',e=>{const el=e.target.closest('.ov');if(el&&e.detail===0)openPanel(+el.dataset.i)});
+$('#seov').onkeydown=e=>{const el=e.target.closest('.ov');if(!el)return;const i=+el.dataset.i,o=ED.items[i],d={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]}[e.key];
+ if(d){e.preventDefault();moveTo(i,o.x+d[0]*.02,o.y+d[1]*.02)}
+ else if(e.key==='+'||e.key==='='){e.preventDefault();setSize(i,o.size+.1)}else if(e.key==='-'||e.key==='_'){e.preventDefault();setSize(i,o.size-.1)}
+ else if(e.key==='Delete'||e.key==='Backspace'){e.preventDefault();removeItem(i)}};
+addEventListener('resize',()=>{if(!$('#se').hidden)paintSel()});
+// Place suggestions: built into the app (no outside service), matched on the name, old names and famous nicknames
+const PLACES=[['Noida','Smart City','Uttar Pradesh'],['Greater Noida','','Uttar Pradesh'],['Gurugram','Millennium City','Haryana','gurgaon'],['Delhi','Capital of India','Delhi','new delhi dilli ncr'],
+ ['Mumbai','City of Dreams','Maharashtra','bombay'],['Pune','Oxford of the East','Maharashtra','poona'],['Nagpur','Orange City','Maharashtra'],['Nashik','Wine Capital of India','Maharashtra','nasik'],['Aurangabad','City of Gates','Maharashtra','chhatrapati sambhajinagar'],['Lonavala','','Maharashtra'],['Kolhapur','','Maharashtra'],
+ ['Kolkata','City of Joy','West Bengal','calcutta'],['Darjeeling','Queen of the Hills','West Bengal'],
+ ['Bengaluru','Silicon Valley of India','Karnataka','bangalore'],['Mysuru','City of Palaces','Karnataka','mysore'],['Hampi','City of Ruins','Karnataka'],['Coorg','Scotland of India','Karnataka','kodagu'],
+ ['Chennai','Gateway to South India','Tamil Nadu','madras'],['Madurai','Temple City','Tamil Nadu'],['Coimbatore','Manchester of South India','Tamil Nadu'],['Ooty','Queen of Hill Stations','Tamil Nadu','udhagamandalam'],['Kanyakumari','Land’s End of India','Tamil Nadu','cape comorin'],
+ ['Hyderabad','City of Pearls','Telangana'],['Visakhapatnam','City of Destiny','Andhra Pradesh','vizag'],['Tirupati','','Andhra Pradesh'],['Vijayawada','','Andhra Pradesh'],
+ ['Jaipur','Pink City','Rajasthan'],['Udaipur','City of Lakes','Rajasthan'],['Jodhpur','Blue City','Rajasthan'],['Jaisalmer','Golden City','Rajasthan'],['Pushkar','','Rajasthan'],['Mount Abu','','Rajasthan'],['Ajmer','','Rajasthan'],['Bikaner','','Rajasthan'],
+ ['Agra','City of the Taj','Uttar Pradesh'],['Lucknow','City of Nawabs','Uttar Pradesh'],['Varanasi','Spiritual Capital of India','Uttar Pradesh','banaras benares kashi'],['Prayagraj','Sangam City','Uttar Pradesh','allahabad'],['Kanpur','','Uttar Pradesh','cawnpore'],['Mathura','Birthplace of Krishna','Uttar Pradesh'],['Vrindavan','','Uttar Pradesh'],['Ayodhya','','Uttar Pradesh'],['Ghaziabad','','Uttar Pradesh'],
+ ['Amritsar','Golden Temple City','Punjab'],['Ludhiana','','Punjab'],['Chandigarh','City Beautiful','Chandigarh'],
+ ['Shimla','Queen of the Hills','Himachal Pradesh','simla'],['Manali','','Himachal Pradesh'],['Kullu','Valley of Gods','Himachal Pradesh'],['McLeod Ganj','Little Lhasa','Himachal Pradesh','dharamshala dharamsala'],['Kasol','','Himachal Pradesh'],['Spiti Valley','','Himachal Pradesh'],
+ ['Rishikesh','Yoga Capital of the World','Uttarakhand'],['Haridwar','Gateway to the Gods','Uttarakhand'],['Dehradun','','Uttarakhand'],['Mussoorie','Queen of the Hills','Uttarakhand'],['Nainital','Lake District of India','Uttarakhand'],
+ ['Kashmir','Paradise on Earth','Jammu & Kashmir'],['Srinagar','','Jammu & Kashmir'],['Gulmarg','Meadow of Flowers','Jammu & Kashmir'],['Ladakh','Land of High Passes','Ladakh','leh'],
+ ['Ahmedabad','Manchester of India','Gujarat','amdavad'],['Surat','Diamond City','Gujarat'],['Vadodara','Sanskari Nagari','Gujarat','baroda'],['Rann of Kutch','White Desert','Gujarat'],
+ ['Bhopal','City of Lakes','Madhya Pradesh'],['Indore','Cleanest City of India','Madhya Pradesh'],['Ujjain','City of Temples','Madhya Pradesh'],['Gwalior','','Madhya Pradesh'],['Khajuraho','','Madhya Pradesh'],
+ ['Goa','Pearl of the Orient','Goa','panaji'],['Baga Beach','','Goa'],['Calangute Beach','Queen of Beaches','Goa'],['Anjuna Beach','','Goa'],
+ ['Kochi','Queen of the Arabian Sea','Kerala','cochin'],['Munnar','','Kerala'],['Alappuzha','Venice of the East','Kerala','alleppey'],['Thiruvananthapuram','Evergreen City of India','Kerala','trivandrum'],['Kozhikode','City of Spices','Kerala','calicut'],
+ ['Puducherry','French Riviera of the East','Puducherry','pondicherry pondy'],['Bhubaneswar','Temple City of India','Odisha'],['Puri','','Odisha'],['Patna','','Bihar'],['Bodh Gaya','','Bihar'],
+ ['Ranchi','City of Waterfalls','Jharkhand'],['Jamshedpur','Steel City','Jharkhand'],['Guwahati','Gateway to the Northeast','Assam'],['Shillong','Scotland of the East','Meghalaya'],['Cherrapunji','','Meghalaya','sohra'],['Gangtok','','Sikkim'],['Port Blair','','Andaman & Nicobar'],
+ ['Taj Mahal','','Agra'],['India Gate','','New Delhi'],['Red Fort','','Delhi','lal qila'],['Qutub Minar','','Delhi'],['Connaught Place','','New Delhi','cp'],['DLF Cyber City','','Gurugram'],
+ ['Gateway of India','','Mumbai'],['Marine Drive','Queen’s Necklace','Mumbai'],['Juhu Beach','','Mumbai'],['Hawa Mahal','Palace of Winds','Jaipur'],['Amber Fort','','Jaipur','amer'],['Golden Temple','','Amritsar','harmandir sahib'],
+ ['Charminar','','Hyderabad'],['Mysore Palace','','Mysuru'],['Victoria Memorial','','Kolkata'],['Howrah Bridge','','Kolkata'],['Marina Beach','','Chennai'],['Dashashwamedh Ghat','','Varanasi'],['Dal Lake','','Srinagar'],['Statue of Unity','','Gujarat'],
+ ['Dubai','City of Gold','UAE'],['London','','United Kingdom'],['Paris','City of Light','France'],['New York','The Big Apple','USA','nyc'],['Singapore','Lion City','Singapore'],['Bangkok','City of Angels','Thailand'],['Bali','Island of the Gods','Indonesia'],['Maldives','','Maldives'],['Kathmandu','City of Temples','Nepal'],['Tokyo','','Japan']];
+const placeLabel=p=>p[1]?`${p[0]} · ${p[1]}`:p[0];
+function findPlaces(q){q=q.trim().toLowerCase();if(!q)return[];const words=s=>s.toLowerCase().split(/[\s·,&]+/);
+ return PLACES.map(p=>{const name=p[0].toLowerCase(),all=[p[0],p[1],p[2],p[3]||''].join(' ').toLowerCase();
+  const r=name.startsWith(q)?0:(p[3]||'').split(' ').some(w=>w.startsWith(q))?1:words(p[0]+' '+p[1]).some(w=>w.startsWith(q))?2:all.includes(q)?3:9;return[r,p]})
+  .filter(x=>x[0]<9).sort((a,b)=>a[0]-b[0]||a[1][0].localeCompare(b[1][0])).slice(0,6).map(x=>x[1])}
+function paintSug(){const S=$('#sesug');if(edType!=='location'){S.hidden=true;return}const m=findPlaces($('#setxt').value);
+ S.hidden=!m.length;S.innerHTML=m.map((p,k)=>`<button class="sesugo" type="button" data-place="${k}"><span class="sesi">${ic('pin2')}</span><span><b>${esc(p[0])}</b><small>${esc([p[1],p[2]].filter(Boolean).join(' · '))}</small></span></button>`).join('');S._m=m}
+$('#setxt').addEventListener('input',paintSug);
+$('#setxt').addEventListener('keydown',e=>{if(e.key==='ArrowDown'&&!$('#sesug').hidden){e.preventDefault();$('#sesug button').focus()}});
+$('#sesug').onkeydown=e=>{const bs=[...$('#sesug').querySelectorAll('button')],k=bs.indexOf(document.activeElement);
+ if(e.key==='ArrowDown'){e.preventDefault();(bs[k+1]||bs[k]).focus()}else if(e.key==='ArrowUp'){e.preventDefault();(k>0?bs[k-1]:$('#setxt')).focus()}};
+// picking a suggestion adds it straight away (with its famous name)
+$('#sesug').onclick=e=>{const b=e.target.closest('[data-place]');if(!b)return;$('#setxt').value=placeLabel($('#sesug')._m[+b.dataset.place]);$('#sesug').hidden=true;$('#sepanel').requestSubmit()};
+$('#se').addEventListener('click',e=>{if(e.target.closest('#serecheck'))runCheck()});
+document.addEventListener('keydown',e=>{if($('#se').hidden||dlg.open||e.key!=='Escape')return;e.preventDefault();e.stopPropagation();if(!$('#sepanel').hidden){closePanel();$('#setext').focus()}else $('#sex').click()},true);
+$('#spost').onclick=async()=>{if(!ED||ED.scan!=='ok')return;const s=$('#spost'),d=ED;loading(s,true);
+ const ov=d.items.map(({type,text,x,y,size,color,style})=>({type,text,x,y,size,color,style}));
+ try{await api('/api/stories?scan=passed'+(ov.length?'&ov='+encodeURIComponent(JSON.stringify(ov)):''),{method:'POST',body:d.file});
+  loading(s,false);closeEditor();notify({title:'Your story is live',text:'It stays up for 24 hours.'});
+  await loadStories();if(view==='home')renderHome();loadNotifs()}
+ catch(err){loading(s,false);s.disabled=false;toast(err.message,'err')}};
+// Browser safety check for one photo, or frames of a video (up to 30 s). Resolves {state:'ok'|'blocked'|'long'|'error'}.
+async function checkMedia(url,isImg,progress){
+ const el=isImg?new Image():document.createElement('video');
+ if(!isImg){el.muted=true;el.playsInline=true;el.preload='auto'}
+ el.src=url;await new Promise((res,rej)=>{if(isImg){el.onload=res;el.onerror=rej}else{el.onloadeddata=res;el.onerror=rej;setTimeout(res,6000)}});
+ if(!isImg&&el.duration>30.5)return{state:'long',msg:`This video is ${Math.round(el.duration)} seconds long. Story videos can be up to 30 seconds.`};
+ let m;try{m=await loadScanner()}catch(e){return{state:'error'}}
+ const c=document.createElement('canvas');c.width=c.height=224;const x=c.getContext('2d',{willReadFrequently:true});
+ const look=async()=>{const w=isImg?el.naturalWidth:el.videoWidth,h=isImg?el.naturalHeight:el.videoHeight;if(!w||!h)return[0,0];const s=Math.min(w,h),crops=[[0,0,w,h]];if(Math.abs(w-h)>8)crops.push([(w-s)/2,(h-s)/2,s,s]);
+  let ex=0,sx=0;for(const[a,b2,cw,ch]of crops){x.drawImage(el,a,b2,cw,ch,0,0,224,224);const p=Object.fromEntries((await m.classify(c)).map(r=>[r.className,r.probability]));ex=Math.max(ex,(p.Porn||0)+(p.Hentai||0));sx=Math.max(sx,p.Sexy||0)}return[ex,sx]};
+ if(isImg){const[ex,sx]=await look();return{state:ex>=.5||sx>=.92?'blocked':'ok'}}
+ const dur=el.duration||1,n=Math.max(3,Math.min(8,Math.ceil(dur/2)));let hits=0,sexy=0;
+ for(let i=0;i<n&&hits<2;i++){progress(`Checking your video… ${Math.round(i/n*100)}%`);if(!await seekTo(el,Math.min(dur-.05,(i+.5)*dur/n)))continue;const[ex,sx]=await look();if(ex>=.65)hits=2;else if(ex>=.4)hits++;if(sx>=.92)sexy++}
+ el.removeAttribute('src');el.load();
+ return{state:hits>=2||sexy>=Math.max(2,Math.ceil(n*.4))?'blocked':'ok'}}
+// Story viewer: full screen; tap right / left (or → ←) for next / previous, hold (or Space) to pause, Esc closes
+let svP=0,svI=0,svRaf=0,svT0=0,svDone=0,svPaused=false,svRet=null;
+const SV_IMG_MS=5000;
+function openStories(name){const i=name==='mine'?SP.findIndex(p=>p.mine):SP.findIndex(p=>p.name===name);if(i<0)return;
+ svRet=document.activeElement;svP=i;const p=SP[i];svI=Math.max(0,p.stories.findIndex(s=>!s.seen));if(p.mine||p.seen)svI=0;
+ $('#sv').hidden=false;$('#app').inert=true;document.body.classList.add('svopen');showStory();setTimeout(()=>$('#svx').focus(),30)}
+function closeStories(){cancelAnimationFrame(svRaf);const v=$('#svmedia video');v&&v.pause();$('#svmedia').innerHTML='';$('#sv').hidden=true;$('#app').inert=false;document.body.classList.remove('svopen');
+ if(view==='home')$('#hstories').innerHTML=storyRow();svRet&&svRet.isConnected&&svRet.focus()}
+function showStory(){cancelAnimationFrame(svRaf);const p=SP[svP],st=p.stories[svI];svPaused=false;svDone=0;svT0=performance.now();
+ $('#svbars').innerHTML=p.stories.map((s,i)=>`<span><i style="width:${i<svI?100:0}%"></i></span>`).join('');
+ $('#svwho').innerHTML=`${avatar(p.name,p.avatar,'av-36')}<span><b>${esc(p.mine?'Your story':p.fullName||'@'+p.name)}</b><small>${ago(st.created)}</small></span>`;$('#svwho').dataset.user=p.name;
+ $('#svmedia').innerHTML=`<div class="svstage">${st.kind==='image'?`<img src="${esc(st.src)}" alt="Story photo by @${esc(p.name)}">`:`<video src="${esc(st.src)}" playsinline autoplay ${soundOn?'':'muted'} aria-label="Story video by @${esc(p.name)}"></video>`}<div class="svov">${(st.overlays||[]).map(o=>ovHtml(o,0,'view')).join('')}</div></div>`;
+ $('#svrep').hidden=!!p.mine;
+ $('#svsound').hidden=st.kind!=='video';$('#svsound').innerHTML=ic(soundOn?'vol':'mute');$('#svsound').setAttribute('aria-label',soundOn?'Mute':'Unmute');
+ $('#svpause').innerHTML=ic('pause');$('#svpause').setAttribute('aria-label','Pause');
+ $('#svfoot').innerHTML=p.mine?`<button class="svbtn" type="button" id="svviews">${ic('eye')}${plural(st.views||0,'viewer')}</button><button class="svbtn" type="button" id="svdel">${ic('trash')}Delete</button>`:'';
+ const v=$('#svmedia video');if(v){v.onended=()=>nextStory();v.onerror=()=>nextStory();v.play().catch(()=>{v.muted=true;v.play().catch(()=>{})})}
+ if(!st.seen&&!p.mine){st.seen=true;p.seen=p.stories.every(x=>x.seen);api(`/api/stories/${st.id}/view`,{method:'POST'}).catch(()=>{})}
+ tick()}
+function tick(){const p=SP[svP];if(!p||$('#sv').hidden)return;const st=p.stories[svI],v=$('#svmedia video'),bar=$('#svbars span:nth-child('+(svI+1)+') i');
+ let f;if(v){f=v.duration?v.currentTime/v.duration:0}else{const t=svPaused?svDone:svDone+(performance.now()-svT0);f=t/SV_IMG_MS;if(f>=1){nextStory();return}}
+ if(bar)bar.style.width=Math.min(100,f*100)+'%';svRaf=requestAnimationFrame(tick)}
+function pauseStory(on){if(svPaused===on)return;svPaused=on;const v=$('#svmedia video');
+ if(on){svDone+=performance.now()-svT0;v&&v.pause()}else{svT0=performance.now();v&&v.play().catch(()=>{})}
+ $('#svpause').innerHTML=ic(on?'play':'pause');$('#svpause').setAttribute('aria-label',on?'Play':'Pause')}
+function nextStory(){const p=SP[svP];if(svI<p.stories.length-1){svI++;showStory()}else if(svP<SP.length-1){svP++;svI=Math.max(0,SP[svP].stories.findIndex(s=>!s.seen));showStory()}else closeStories()}
+function prevStory(){if(svI>0){svI--;showStory()}else if(svP>0){svP--;svI=SP[svP].stories.length-1;showStory()}else showStory()}
+$('#svx').onclick=closeStories;$('#svnext').onclick=()=>{if(svHeld){svHeld=false;return}nextStory()};$('#svprev').onclick=()=>{if(svHeld){svHeld=false;return}prevStory()};
+$('#svpause').onclick=()=>pauseStory(!svPaused);
+$('#svsound').onclick=()=>{setSound(!soundOn);const v=$('#svmedia video');if(v)v.muted=!soundOn;$('#svsound').innerHTML=ic(soundOn?'vol':'mute');$('#svsound').setAttribute('aria-label',soundOn?'Mute':'Unmute')};
+$('#svwho').onclick=()=>{const u=$('#svwho').dataset.user;closeStories();if(u)openUser(u)};
+$('#svmedia').addEventListener('click',e=>{const t=e.target.closest('.ov[data-user]');if(t){closeStories();openUser(t.dataset.user)}});
+$('#svrep').onclick=()=>{const st=SP[svP]&&SP[svP].stories[svI];if(!st||needLogin('report stories'))return;pauseStory(true);
+ const b=openDlg('Report story',`<form class="upform" novalidate><p class="sub">Why are you reporting this story? Reports are anonymous; the admin reviews them.</p><div class="optlist" role="radiogroup" aria-label="Reason">${REASONS.map((r,i)=>`<label class="opt"><input type="radio" name="srr" value="${esc(r)}"${i?'':' checked'}>${esc(r)}</label>`).join('')}</div><button class="btn btn-danger block" type="submit" id="srgo">Report story</button></form>`);
+ b.onsubmit=async e=>{e.preventDefault();const g=$('#srgo');loading(g,true);try{await api(`/api/stories/${st.id}/report`,{method:'POST',json:{reason:b.querySelector('[name=srr]:checked').value}});dlg.close();toast('Thanks. The admin will look at this story.','ok')}catch(err){loading(g,false);toast(err.message,'err')}}};
+// hold to pause (touch or mouse on the picture)
+// a hold anywhere on the picture pauses; letting go resumes, and that release doesn't count as a tap
+let svHold=null,svHeld=false;const SVC=$('#sv .svcard');
+SVC.addEventListener('pointerdown',e=>{if(e.target.closest('.svhead,.svfoot,.ov[data-user]'))return;svHeld=false;clearTimeout(svHold);svHold=setTimeout(()=>{svHeld=true;pauseStory(true)},250)});
+['pointerup','pointercancel'].forEach(t=>SVC.addEventListener(t,()=>{clearTimeout(svHold);if(svHeld)pauseStory(false)}));
+$('#svfoot').onclick=async e=>{const p=SP[svP],st=p&&p.stories[svI];if(!st)return;
+ if(e.target.closest('#svviews')){pauseStory(true);try{const d=await api(`/api/stories/${st.id}/viewers`);
+   openDlg('Viewers',d.total?`<p class="sub">${plural(d.total,'person')} saw this story${d.total>d.viewers.length?' (guests are only counted)':''}.</p><div class="flist">${d.viewers.map(v=>`<button class="fwho" type="button" data-user="${esc(v.name)}">${avatar(v.name,v.avatar,'av-36')}<span class="fnm"><b>${esc(v.fullName||'@'+v.name)}</b><small>${ago(v.at)}</small></span></button>`).join('')}</div>`:emptyState('eye','No viewers yet','When people watch this story, they’ll be listed here.'));
+   $('#dlgb').onclick=ev=>{const u=ev.target.closest('[data-user]');if(u){dlg.close();closeStories();openUser(u.dataset.user)}}}catch(err){toast(err.message,'err')}return}
+ if(e.target.closest('#svdel')){pauseStory(true);if(!confirm('Delete this story?')){pauseStory(false);return}
+  try{await api(`/api/stories/${st.id}`,{method:'DELETE'});p.stories.splice(svI,1);toast('Story deleted','ok');
+   if(!p.stories.length){SP.splice(svP,1);closeStories()}else{svI=Math.min(svI,p.stories.length-1);showStory()}}catch(err){toast(err.message,'err');pauseStory(false)}}};
+document.addEventListener('keydown',e=>{if($('#sv').hidden||dlg.open)return;
+ const k=e.key;if(k==='Escape')closeStories();else if(k==='ArrowRight')nextStory();else if(k==='ArrowLeft')prevStory();else if(k===' '&&!/BUTTON/.test(e.target.tagName))pauseStory(!svPaused);else return;
+ e.preventDefault();e.stopPropagation()},true);
+dlg.addEventListener('close',()=>{if(!$('#sv').hidden&&svPaused&&!$('#svpause').matches(':focus'))pauseStory(false)});
+
+// ---------- chat: one-to-one messages ----------
+let dmPeer=null,dmIds=new Set(),dmLast=0,dmFirst=0,dmTimer=null;
+function setChatBadge(n){const b=$('#cbadge');b.hidden=!n;b.textContent=n>9?'9+':n;$('#nbchat').setAttribute('aria-label',n?`Messages, ${n} unread`:'Messages')}
+async function loadChatBadge(){if(!me.account)return;try{setChatBadge((await api('/api/me/unread-messages')).unread)}catch(e){}}
+setInterval(()=>{if(!document.hidden&&me.account)loadChatBadge()},30000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&me.account)loadChatBadge()});
+async function openChats(){const L=$('#clist');
+ if(login&&!me.account){L.innerHTML=emptyState('dm','Log in to see your messages','Chat one-to-one with other Vizo creators.','<button class="btn btn-primary" type="button" data-auth="in">Log in</button>');return}
+ if(!L.children.length)L.innerHTML='<span class="skel csk"></span>'.repeat(3);
+ try{const d=await api('/api/chats');setChatBadge(d.unread);
+  L.innerHTML=d.chats.length?`<div class="clist">${d.chats.map(c=>`<button class="crow${c.unread?' new':''}" type="button" data-chat="${esc(c.name)}">${avatar(c.name,c.avatar)}<span class="crm"><b>${esc(c.fullName||'@'+c.name)}</b><small>${c.last.mine?'You: ':''}${esc(c.last.text)}</small></span><span class="crt"><small>${ago(c.last.created)}</small>${c.unread?`<b class="cun"><span class="sr-only">Unread: </span>${c.unread>9?'9+':c.unread}</b>`:''}</span></button>`).join('')}</div>`
+   :emptyState('dm','No messages yet','Start a conversation: tap New message, or Message on a creator’s profile.','<button class="btn btn-primary" type="button" data-newmsg>New message</button>')}
+ catch(err){L.innerHTML=emptyState('alert','Couldn’t load your messages',esc(err.message),'<button class="btn btn-secondary" type="button" data-go="chat">Try again</button>')}}
+function newMessage(){if(needLogin('send messages'))return;
+ const b=openDlg('New message',`<form class="colform" novalidate><label class="lbl" for="cto">To</label><div class="colrow"><input class="input" id="cto" placeholder="@username" autocomplete="off" autocapitalize="off" spellcheck="false" aria-describedby="cto-e"><button class="btn btn-primary" type="submit" id="ctogo">Chat</button></div><p class="err" id="cto-e"></p></form>`);
+ setTimeout(()=>$('#cto').focus(),60);
+ b.onsubmit=async e=>{e.preventDefault();const n=$('#cto').value.trim().replace(/^@/,'');if(!fieldErr('cto',NAME_RE.test(n)?'':'Enter a username: 3–24 letters, numbers, _ or .')){$('#cto').focus();return}
+  const s=$('#ctogo');loading(s,true);
+  try{await api('/api/chats/'+encodeURIComponent(n));dlg.close();openDM(n)}catch(err){fieldErr('cto',/not found/i.test(err.message)?`There’s no Vizo account called @${n}.`:err.message);loading(s,false);$('#cto').focus()}}}
+$('#cnew').onclick=newMessage;
+$('#clist').onclick=e=>{if(e.target.closest('[data-newmsg]')){newMessage();return}const r=e.target.closest('[data-chat]');if(r)openDM(r.dataset.chat)};
+// A conversation: newest 50 messages, then new ones every few seconds while it is open
+function openDM(name){if(needLogin('send messages'))return;stopDm();dmPeer=name;dmIds=new Set();dmLast=dmFirst=0;show('dm');
+ $('#dmwho').innerHTML='<span class="skel" style="display:block;width:150px;height:22px"></span>';delete $('#dmwho').dataset.user;$('#dml').innerHTML='';$('#dmin').value='';$('#dmsend').disabled=true;$('#dmf').hidden=false;
+ dmLoad('first');dmTimer=setInterval(()=>{if(view==='dm'&&!document.hidden)dmLoad('new')},4000)}
+function stopDm(){clearInterval(dmTimer);dmTimer=null}
+const hhmm=t=>new Date(t).toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});
+const bubble=m=>`<div class="dmb${m.mine?' mine':''}"><p>${esc(m.text)}</p><time datetime="${new Date(m.created).toISOString()}" title="${esc(new Date(m.created).toLocaleString())}">${hhmm(m.created)}</time></div>`;
+const olderBtn='<button class="btn sm btn-ghost dmold" type="button">Load earlier messages</button>';
+async function dmLoad(kind){const name=dmPeer,L=$('#dml');
+ try{const q=kind==='old'?`?before=${dmFirst}`:kind==='new'&&dmLast?`?after=${dmLast}`:'';
+  const d=await api(`/api/chats/${encodeURIComponent(name)}${q}`);if(name!==dmPeer||view!=='dm')return;
+  if(kind==='first'){const w=$('#dmwho');w.innerHTML=`${avatar(d.peer.name,d.peer.avatar,'av-36')}<span><b>${esc(d.peer.fullName||'@'+d.peer.name)}</b>${d.peer.fullName?`<small>@${esc(d.peer.name)}</small>`:''}</span>`;w.dataset.user=d.peer.name;w.setAttribute('aria-label',`Open @${d.peer.name} profile`);
+   if(!d.messages.length)L.innerHTML=`<p class="dmempty">Say hi to ${esc(d.peer.fullName||'@'+d.peer.name)} 👋</p>`;loadChatBadge()}
+  const ids=d.messages.map(m=>m.id);if(ids.length){if(kind!=='old')dmLast=Math.max(dmLast,...ids);if(kind!=='new')dmFirst=dmFirst?Math.min(dmFirst,...ids):Math.min(...ids)}
+  const fresh=d.messages.filter(m=>!dmIds.has(m.id));fresh.forEach(m=>dmIds.add(m.id));
+  if(kind==='old'){const h=L.scrollHeight;L.querySelector('.dmold')?.remove();L.insertAdjacentHTML('afterbegin',(d.more?olderBtn:'')+fresh.map(bubble).join(''));L.scrollTop=L.scrollHeight-h;return}
+  if(!fresh.length)return;
+  const near=L.scrollHeight-L.scrollTop-L.clientHeight<80;L.querySelector('.dmempty')?.remove();
+  L.insertAdjacentHTML('beforeend',fresh.map(bubble).join(''));if(kind==='first'&&d.more)L.insertAdjacentHTML('afterbegin',olderBtn);
+  if(kind==='first'||near)L.scrollTop=L.scrollHeight;if(kind==='new')loadChatBadge()}
+ catch(err){if(kind==='first'||err.status===403||/block/i.test(err.message)){stopDm();$('#dmf').hidden=true;const bl=/block/i.test(err.message);
+  L.innerHTML=emptyState(bl?'ban':'alert',bl?'You can’t message this account':'Couldn’t open this chat',esc(err.message),'<button class="btn btn-secondary" type="button" data-go="chat">Back to Messages</button>')}}}
+$('#dmin').oninput=()=>{$('#dmsend').disabled=!$('#dmin').value.trim()};
+$('#dmf').onsubmit=async e=>{e.preventDefault();const t=$('#dmin').value.trim(),s=$('#dmsend');if(!t||!dmPeer||s.classList.contains('is-loading'))return;loading(s,true);
+ try{const d=await api(`/api/chats/${encodeURIComponent(dmPeer)}`,{method:'POST',json:{text:t}}),L=$('#dml');$('#dmin').value='';L.querySelector('.dmempty')?.remove();
+  // shown at once; the next check for new messages skips it (same id)
+  if(!dmIds.has(d.message.id)){dmIds.add(d.message.id);if(!dmFirst)dmFirst=d.message.id;L.insertAdjacentHTML('beforeend',bubble(d.message))}L.scrollTop=L.scrollHeight}
+ catch(err){toast(err.message,'err')}finally{loading(s,false);s.disabled=!$('#dmin').value.trim();$('#dmin').focus()}};
+$('#dml').onclick=e=>{if(e.target.closest('.dmold'))dmLoad('old')};
+$('#dmback').onclick=()=>show('chat');
+$('#dmwho').onclick=()=>{const u=$('#dmwho').dataset.user;if(u)openUser(u)};
+
 // ---------- start ----------
 async function loadData(){
  try{await loadAll();feed();
@@ -2032,15 +2840,21 @@ async function loadData(){
   if(sm){let v=[...V.values()].find(x=>x.slug===sm[1]);if(!v){try{v=put(await api('/api/videos/s/'+sm[1]))}catch(e){toast(e.message,'err');history.replaceState(null,'','/')}}if(v)openVideo(v.id)}
   else if(/^\d+$/.test(id||''))openVideo(id);if(un)openUser(un);
   if(sp.get('notif')&&me.account)show('notif')}
- catch(e){$('#v-feed').classList.add('noclips');R.innerHTML=emptyState('alert','Couldn’t load videos',esc(e.message),'<button class="btn btn-secondary" type="button" id="fretry">Try again</button>');$('#fretry').onclick=()=>{R.innerHTML='';loadData()}}
- if(view==='khoj')grid();if(view==='me')mine()}
+ catch(e){loadErr=e.message;$('#v-feed').classList.add('noclips');R.innerHTML=emptyState('alert','Couldn’t load videos',esc(e.message),'<button class="btn btn-secondary" type="button" id="fretry">Try again</button>');$('#fretry').onclick=()=>{R.innerHTML='';loadErr=null;loadData()}}
+ if(view==='home')renderHome();if(view==='khoj')grid();if(view==='me')mine()}
 (async()=>{
  const flash=store.get('inv_flash');if(flash){store.set('inv_flash','');setTimeout(()=>toast(flash),700)}
  try{const c=await (await fetch('/api/config')).json();
   if(c.login&&window.supabase){sb=window.supabase.createClient(location.origin+'/sb',c.supabaseKey,{auth:{storageKey:'inv_auth',persistSession:true,autoRefreshToken:true,detectSessionInUrl:false}});login=true}}catch(e){}
+ // password-reset link: #access_token=…&refresh_token=…&type=recovery (or #error_code=… when it expired)
+ const hp=new URLSearchParams(location.hash.slice(1));let recovering=false;
+ if(hp.get('type')==='recovery'||hp.get('error_code')){history.replaceState(null,'',location.pathname+location.search);
+  if(sb&&hp.get('access_token')){try{const r=await sb.auth.setSession({access_token:hp.get('access_token'),refresh_token:hp.get('refresh_token')||''});if(r.error)throw r.error;recovering=true}catch(e){setTimeout(()=>toast('That reset link didn’t work. Ask for a new one from Log in → Forgot password.','err'),900)}}
+  else setTimeout(()=>toast(hp.get('error_code')==='otp_expired'?'This reset link has expired or was already used. Ask for a new one from Log in → Forgot password.':'That link didn’t work. Please try again.','err'),900)}
  try{await loadMe()}catch(e){}
  await loadData();
  hideSplash();
+ if(recovering)openNewPassword();
  loadNotifs();
 })();
 </script>

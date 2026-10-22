@@ -21,7 +21,7 @@ if (PROD && !(SB_URL && SB_KEY)) {
 }
 const PUB = path.join(__dirname, 'public');
 const DATA = process.env.DATA_DIR || path.join(__dirname, 'data');
-const DIRS = { uploads: path.join(DATA, 'uploads'), avatars: path.join(DATA, 'avatars'), thumbs: path.join(DATA, 'thumbs') };
+const DIRS = { uploads: path.join(DATA, 'uploads'), avatars: path.join(DATA, 'avatars'), thumbs: path.join(DATA, 'thumbs'), stories: path.join(DATA, 'stories') };
 const MAX = 100 * 1024 * 1024; // 100 MB video
 const MAX_SEC = 60; // longest video, checked on the server from the file itself (1 s of slack for rounding)
 // Which new uploads wait for an admin before anyone else can see them:
@@ -35,7 +35,8 @@ const THMAX = 1024 * 1024; // 1 MB thumbnail
 // Storage: each account may keep this much video, and uploads stop while the disk has less than MIN_FREE left
 const QUOTA = (Number(process.env.UPLOAD_QUOTA_MB) || 2048) * 1048576;
 const MIN_FREE = (Number(process.env.MIN_FREE_MB) || 1024) * 1048576;
-const MOODS = ['Comedy', 'Energy', 'Learning', 'Food', 'Travel'];
+// Vibes (stored in videos.mood): optional; '' = no vibe
+const MOODS = ['Comedy', 'Sad', 'Motivation', 'Love', 'Dance', 'Music', 'Food', 'Travel', 'Learning', 'Sports', 'Fashion', 'Chill', 'Energy', 'Gaming'];
 const FILTERS = ['none', 'warm', 'cool', 'bw', 'vintage', 'vivid'];
 const REASONS = ['Spam', 'Nudity or sexual content', 'Violence or danger', 'Hate or harassment', 'Copyright', 'Other'];
 const EXT = { 'video/mp4': '.mp4', 'video/quicktime': '.mov', 'video/webm': '.webm', 'video/x-m4v': '.m4v', 'video/3gpp': '.3gp' };
@@ -149,6 +150,33 @@ db.exec(`CREATE TABLE IF NOT EXISTS collabs(video INTEGER NOT NULL, uid TEXT NOT
   status TEXT NOT NULL CHECK(status IN ('pending','accepted','rejected')), invited INTEGER NOT NULL, responded INTEGER,
   PRIMARY KEY(video, uid));
 CREATE INDEX IF NOT EXISTS collabs_uid ON collabs(uid, status);`);
+// Chat: one-to-one messages between accounts. `read` is when the recipient opened them (NULL = unread).
+db.exec(`CREATE TABLE IF NOT EXISTS messages(id INTEGER PRIMARY KEY AUTOINCREMENT, sender TEXT NOT NULL, recipient TEXT NOT NULL,
+  body TEXT NOT NULL, created INTEGER NOT NULL, read INTEGER, CHECK(sender <> recipient));
+CREATE INDEX IF NOT EXISTS messages_pair ON messages(sender, recipient, id);
+CREATE INDEX IF NOT EXISTS messages_unread ON messages(recipient, read);`);
+// Stories: a photo or a short video that disappears after 24 hours. Like videos, a new story waits for review (UPLOAD_REVIEW).
+db.exec(`CREATE TABLE IF NOT EXISTS stories(id INTEGER PRIMARY KEY AUTOINCREMENT, uid TEXT NOT NULL, file TEXT NOT NULL UNIQUE, mime TEXT NOT NULL,
+  kind TEXT NOT NULL CHECK(kind IN ('image','video')), duration REAL, size INTEGER NOT NULL, created INTEGER NOT NULL, expires INTEGER NOT NULL,
+  pending INTEGER NOT NULL DEFAULT 0, scan TEXT);
+CREATE INDEX IF NOT EXISTS stories_live ON stories(expires, uid);
+CREATE TABLE IF NOT EXISTS story_views(story INTEGER NOT NULL, uid TEXT NOT NULL, at INTEGER NOT NULL, PRIMARY KEY(story, uid));`);
+addCol('videos', 'uploaded', 'INTEGER'); // when the file arrived (older videos: unknown, so no "uploaded" notification)
+addCol('videos', 'approved', 'INTEGER'); // when an admin approved a video that waited for review
+addCol('stories', 'approved', 'INTEGER');
+addCol('stories', 'overlays', 'TEXT'); // JSON: texts, location and @tags placed on the story (see cleanOverlays)
+db.exec(`CREATE TABLE IF NOT EXISTS story_mentions(story INTEGER NOT NULL, uid TEXT NOT NULL, PRIMARY KEY(story, uid));
+CREATE INDEX IF NOT EXISTS story_mentions_uid ON story_mentions(uid);
+CREATE TABLE IF NOT EXISTS story_reports(story INTEGER NOT NULL, uid TEXT NOT NULL, reason TEXT NOT NULL, created INTEGER NOT NULL, PRIMARY KEY(story, uid));`);
+// Stories go live at once (no admin review); stories that were still waiting are released once
+migrate('2026-10-22-stories-live-at-once', () => db.prepare('UPDATE stories SET pending=0 WHERE pending=1').run());
+// The upload form never sent a vibe, so every uploaded video got 'Comedy' by default: clear those once (demo clips keep theirs),
+// and give two demo clips the closer new vibes
+migrate('2026-10-22-vibes', () => {
+  db.prepare("UPDATE videos SET mood='' WHERE file IS NOT NULL AND mood='Comedy'").run();
+  db.prepare("UPDATE videos SET mood='Dance' WHERE file IS NULL AND handle='@bombay_beats'").run();
+  db.prepare("UPDATE videos SET mood='Sports' WHERE file IS NULL AND handle='@gully_boys'").run();
+});
 db.exec('CREATE UNIQUE INDEX IF NOT EXISTS users_name ON users(name COLLATE NOCASE)');
 // Every video gets a short public link id, like YouTube: /v/aB3dE9xKq2Z
 addCol('videos', 'slug', 'TEXT');
@@ -352,7 +380,7 @@ const blockedBetween = (a, b) => !!a && !!b && a !== b && !!blockedQ.get(a, b, b
 const notBlocked = (me, other) => `NOT EXISTS(SELECT 1 FROM blocks bk WHERE (bk.blocker=${me} AND bk.blocked=${other}) OR (bk.blocker=${other} AND bk.blocked=${me}))`; // fixed SQL names only
 const needNoBlock = (a, b) => { if (blockedBetween(a, b)) throw Object.assign(fail(403, "You can't interact with this account because of a block."), { blocked: true }); };
 // In-app notification types that exist, and per-user settings (default: on)
-const NTYPES = ['follow', 'comment', 'reply', 'like', 'upload', 'collab'];
+const NTYPES = ['follow', 'comment', 'reply', 'like', 'upload', 'collab', 'mention'];
 function prefsOf(uid) {
   const p = Object.fromEntries(NTYPES.map(t => [t, true])), rows = db.prepare('SELECT type, enabled FROM notif_prefs WHERE uid=?').all(uid);
   for (const r of rows) if (r.type in p) p[r.type] = !!r.enabled;
@@ -400,12 +428,12 @@ function meOut(uid, email = '') {
 const DEMOS = [
   ['Dilli ki sabse tez chai wala', 'The fastest chai seller in Delhi', '@chaiwala_raju', 'Food', ['chai', 'delhi', 'taste'], '☕', 1240],
   ['Jugaad se banaya cooler', 'A homemade hack cooler', '@desi_jugaad', 'Learning', ['hack', 'diy'], '🛠️', 860],
-  ['Mumbai local mein dance', 'Dancing on the Mumbai local train', '@bombay_beats', 'Energy', ['dance', 'mumbai'], '💃', 3100],
+  ['Mumbai local mein dance', 'Dancing on the Mumbai local train', '@bombay_beats', 'Dance', ['dance', 'mumbai'], '💃', 3100],
   ['Dada ji ki hasi wali kahani', "Grandpa's funny story", '@dadaji_stories', 'Comedy', ['story', 'comedy'], '😂', 2210],
   ['Manali ki pehli barf', 'First snow in Manali', '@pahadi_diaries', 'Travel', ['manali', 'snow'], '🏔️', 1540],
   ['60 second mein UPI kaise kaam karta hai', 'How UPI works in 60 seconds', '@paisa_gyaan', 'Learning', ['upi', 'money'], '📱', 970],
   ['Maa ke haath ke aloo parathe', "Mom's homemade aloo paratha", '@ghar_ka_khana', 'Food', ['paratha', 'homemade'], '🫓', 4020],
-  ['Cricket gali ka last over', 'Last over of street cricket', '@gully_boys', 'Energy', ['cricket', 'street'], '🏏', 2760],
+  ['Cricket gali ka last over', 'Last over of street cricket', '@gully_boys', 'Sports', ['cricket', 'street'], '🏏', 2760],
 ];
 if (db.prepare('SELECT COUNT(*) n FROM videos').get().n === 0) {
   const ins = db.prepare('INSERT INTO videos(title,handle,mood,tags,emoji,likes,created) VALUES(?,?,?,?,?,?,0)');
@@ -473,6 +501,48 @@ function mediaUrl(dir, name, v) {
   const exp = Math.ceil(Date.now() / 216e5) * 21600 + 86400; // seconds; the same link for 6 h, so the browser can cache it
   return `/${dir}/${name}?e=${exp}&s=${mediaSig(name, exp)}`;
 }
+// Story files are always served through a signed link that stops working when the story expires
+const STORY_MS = 864e5, STORY_SEC = 30, STORY_IMG_MAX = 8 * 1024 * 1024, STORY_VID_MAX = 30 * 1024 * 1024;
+function storySrc(s) { const exp = Math.ceil(s.expires / 1000); return `/stories/${s.file}?e=${exp}&s=${mediaSig(s.file, exp)}`; }
+const storyById = db.prepare('SELECT * FROM stories WHERE id=?');
+function removeStory(id) {
+  const st = storyById.get(id); if (!st) return;
+  for (const t of ['story_views', 'story_mentions', 'story_reports']) db.prepare(`DELETE FROM ${t} WHERE story=?`).run(id);
+  db.prepare('DELETE FROM stories WHERE id=?').run(id);
+  rm(DIRS.stories, st.file);
+}
+// visible to its owner; to others once approved, until it expires, and never across a block
+const storyVisible = (st, uid) => !!st && st.expires > Date.now() && (st.uid === uid || (!st.pending && !blockedBetween(uid, st.uid)));
+// Texts and stickers placed on a story: up to 12; x / y are the centre as a share of the 9:16 story (0–1), size 0.6–2.5.
+// A @tag must be an existing account you're not blocked with; tagged people get a notification.
+const OV_COLORS = ['#FFFFFF', '#16133D', '#FF3D6E', '#FF9F1C', '#FFD23F', '#2BD07B', '#2F6BFF', '#7B2FF7'];
+function cleanOverlays(raw, uid) {
+  if (!raw) return { list: [], tags: [] };
+  if (raw.length > 6000) throw fail(400, 'Too many texts and stickers.');
+  let a; try { a = JSON.parse(raw); } catch { throw fail(400, 'Invalid story texts or stickers.'); }
+  if (!Array.isArray(a)) throw fail(400, 'Invalid story texts or stickers.');
+  if (a.length > 12) throw fail(400, 'A story can have up to 12 texts and stickers.');
+  const list = [], tags = new Set(), num = (v, lo, hi, d) => { v = Number(v); return Number.isFinite(v) ? Math.min(hi, Math.max(lo, v)) : d; };
+  for (const o of a) {
+    const type = o && ['text', 'location', 'mention'].includes(o.type) ? o.type : null;
+    if (!type) throw fail(400, 'Invalid story sticker.');
+    let t;
+    if (type === 'mention') {
+      const n = cleanName(o.text), u = n && byName.get(n);
+      if (!u || !u.uid.startsWith('sb_')) throw fail(400, `There's no Vizo account called @${n || '?'}.`);
+      if (blockedBetween(uid, u.uid)) throw fail(403, `You can't tag @${u.name}.`);
+      t = u.name; if (u.uid !== uid) tags.add(u.uid);
+    } else { t = text(o.text, type === 'location' ? 60 : 120); if (!t) continue; }
+    list.push({ type, text: t, x: Math.round(num(o.x, 0, 1, .5) * 1000) / 1000, y: Math.round(num(o.y, 0, 1, .5) * 1000) / 1000,
+      size: Math.round(num(o.size, .6, 2.5, 1) * 100) / 100, color: OV_COLORS.includes(o.color) ? o.color : '#FFFFFF', style: o.style === 'box' ? 'box' : 'plain' });
+  }
+  return { list, tags: [...tags] };
+}
+const overlaysOf = st => { try { return JSON.parse(st.overlays || '[]'); } catch { return []; } };
+const storyOut = (st, uid) => ({ id: st.id, kind: st.kind, src: storySrc(st), duration: st.duration || null, created: st.created, expires: st.expires, overlays: overlaysOf(st),
+  ...(st.uid === uid ? { mine: true, pending: !!st.pending, views: db.prepare('SELECT COUNT(*) n FROM story_views WHERE story=?').get(st.id).n } : {}) });
+const sweepStories = () => { for (const r of db.prepare('SELECT id FROM stories WHERE expires<=?').all(Date.now())) removeStory(r.id); };
+sweepStories(); setInterval(sweepStories, 600e3);
 const out = (v, me) => ({
   id: v.id, slug: v.slug, title: v.title, description: v.description || '', name: v.uname || null, fullName: v.ufull || '', handle: '@' + (v.uname || cleanName(v.handle) || 'user'),
   avatar: v.uav ? '/avatars/' + v.uav : null, mood: v.mood, tags: JSON.parse(v.tags), emoji: v.emoji,
@@ -727,6 +797,7 @@ function pushCollab(video, uid, what) {
 }
 const pushFollow = (follower, followee) => notifyPush(followee, 'follow', follower, 'f:' + follower, { title: 'New follower', body: `${at(nameOf(follower))} started following you`, url: '/?u=' + encodeURIComponent(nameOf(follower) || '') }, 864e5);
 function pushApproved(v) {
+  db.prepare('UPDATE videos SET approved=? WHERE id=?').run(Date.now(), v.id);
   const live = v.created <= Date.now();
   notifyPush(v.owner, 'upload', null, 'ap:' + v.id, { title: 'Video approved', body: live ? `Your video “${v.title}” is live` : `Your video “${v.title}” was approved and goes live as scheduled`, url: live ? '/v/' + v.slug : '/?notif=1' });
   if (live) db.prepare('INSERT OR IGNORE INTO push_log(uid,key,sent) VALUES(?,?,?)').run(v.owner, 'live:' + v.id, Date.now());
@@ -775,7 +846,7 @@ const routes = [
     needDisk(want + inflightAll);
     const title = text(p.get('title'), 70);
     if (!title) throw fail(400, 'Please add a title.');
-    const mood = MOODS.includes(p.get('mood')) ? p.get('mood') : MOODS[0];
+    const mood = MOODS.includes(p.get('mood')) ? p.get('mood') : '';
     const filter = FILTERS.includes(p.get('filter')) ? p.get('filter') : 'none';
     // Optional schedule: publish later (at least 1 minute, at most 60 days ahead)
     const now = Date.now(), at = p.get('publishAt') ? Number(p.get('publishAt')) : null;
@@ -798,7 +869,7 @@ const routes = [
       db.exec('BEGIN');
       try {
         id = Number(q.insert.run(title, '@' + u.name, uid, mood, JSON.stringify(parseTags(p.get('tags'))), file, info.mime, filter, at || now, newSlug(), desc(p.get('description')), size).lastInsertRowid);
-        db.prepare('UPDATE videos SET hidden=?, pending=?, scan=?, duration=? WHERE id=?').run(held, held, scan, info.duration, id);
+        db.prepare('UPDATE videos SET hidden=?, pending=?, scan=?, duration=?, uploaded=? WHERE id=?').run(held, held, scan, info.duration, now, id);
         db.exec('COMMIT');
       } catch (e) { db.exec('ROLLBACK'); rm(DIRS.uploads, file); throw e; }
       // live at once: no "your video is live" push to the person who just posted it
@@ -822,13 +893,30 @@ const routes = [
     const title = text(b.title, 70);
     if (!title) throw fail(400, 'Please add a title.');
     db.prepare('UPDATE videos SET title=?, mood=?, tags=?, filter=?, description=? WHERE id=?').run(
-      title, MOODS.includes(b.mood) ? b.mood : v.mood, JSON.stringify(parseTags(b.tags)), FILTERS.includes(b.filter) ? b.filter : v.filter,
+      title, MOODS.includes(b.mood) || b.mood === '' ? b.mood : v.mood, JSON.stringify(parseTags(b.tags)), FILTERS.includes(b.filter) ? b.filter : v.filter,
       'description' in b ? desc(b.description) : v.description, v.id);
     // Turn comments on or off (owner only, checked by ownVideo above)
     if ('commentsOff' in b) {
       if (typeof b.commentsOff !== 'boolean') throw fail(400, 'commentsOff must be true or false.');
       db.prepare('UPDATE videos SET comments_off=? WHERE id=?').run(b.commentsOff ? 1 : 0, v.id);
     }
+    json(res, 200, out(video(uid, v.id), uid));
+  }],
+
+  // Change when a scheduled video goes live (owner only, only while it is still scheduled):
+  // a new time 1 minute to 60 days ahead ({publishAt}), or right now ({now:true}). A video waiting for review still waits for it.
+  ['POST', /^\/api\/videos\/(\d+)\/schedule$/, async ({ req, res, uid, m }) => {
+    limit(req, 'vedit', 120, 600e3);
+    const v = ownVideo(uid, +m[1]), b = await readJson(req), now = Date.now();
+    if (v.created <= now) throw fail(409, 'This video is already live.');
+    let at = now;
+    if (b.now !== true) {
+      at = Number(b.publishAt);
+      if (!Number.isFinite(at) || at < now + 60e3 || at > now + 60 * 864e5) throw fail(400, 'Pick a time at least 1 minute and at most 60 days from now.');
+    }
+    db.prepare('UPDATE videos SET created=? WHERE id=?').run(at, v.id);
+    // published now by its owner: no "your video is live" push to them, like an upload that goes live at once
+    if (b.now === true && !v.pending) db.prepare('INSERT OR IGNORE INTO push_log(uid,key,sent) VALUES(?,?,?)').run(uid, 'live:' + v.id, now);
     json(res, 200, out(video(uid, v.id), uid));
   }],
 
@@ -1057,8 +1145,17 @@ const routes = [
       ...db.prepare(`SELECT 'like' type, l.created, u.name, u.avatar, v.id vid, v.title, v.thumb, v.emoji, v.hidden vh, v.created vc
         FROM likes l JOIN videos v ON v.id=l.video LEFT JOIN users u ON u.uid=l.uid
         WHERE v.owner=? AND l.uid<>? AND l.created IS NOT NULL AND ${notBlocked('?', 'l.uid')} ORDER BY l.created DESC LIMIT 50`).all(uid, uid, uid, uid),
-      ...db.prepare(`SELECT 'upload' type, created, id vid, title, thumb, emoji, hidden vh, created vc
-        FROM videos WHERE owner=? AND created <= ? AND pending=0 ORDER BY created DESC LIMIT 20`).all(uid, Date.now()),
+      // "is live": when it went public (publish time, or the approval if that came later)
+      ...db.prepare(`SELECT 'upload' type, MAX(created, COALESCE(approved, 0)) created, id vid, title, thumb, emoji, hidden vh, created vc
+        FROM videos WHERE owner=? AND created <= ? AND pending=0 ORDER BY 2 DESC LIMIT 20`).all(uid, Date.now()),
+      // "uploaded": right after the file arrived (waiting for review, scheduled, or live)
+      ...db.prepare(`SELECT 'uploaded' type, uploaded created, id vid, title, thumb, emoji, hidden vh, created vc, (pending=1 OR approved IS NOT NULL) pending
+        FROM videos WHERE owner=? AND uploaded IS NOT NULL ORDER BY uploaded DESC LIMIT 20`).all(uid),
+      // your stories while they last: added, and approved by the admin
+      ...db.prepare(`SELECT 'story' type, created, id sid, kind, file, expires, (pending=1 OR approved IS NOT NULL) pending FROM stories WHERE uid=? AND expires>? ORDER BY created DESC LIMIT 20`).all(uid, Date.now()),
+      ...db.prepare(`SELECT 'mention' type, s.created, u.name, u.avatar, s.id sid, s.kind, s.file, s.expires FROM story_mentions sm JOIN stories s ON s.id=sm.story
+        LEFT JOIN users u ON u.uid=s.uid WHERE sm.uid=$me AND s.expires>$now AND ${notBlocked('$me', 's.uid')} ORDER BY s.created DESC LIMIT 30`).all({ me: uid, now: Date.now() }),
+      ...db.prepare(`SELECT 'storylive' type, approved created, id sid, kind, file, expires, 0 pending FROM stories WHERE uid=? AND expires>? AND approved IS NOT NULL ORDER BY approved DESC LIMIT 20`).all(uid, Date.now()),
       // collaboration invitations to you (with their current answer) and answers to your invitations
       ...db.prepare(`SELECT 'collab' type, c.invited created, c.status, u.name, u.avatar, v.id vid, v.title, v.thumb, v.emoji, v.hidden vh, v.created vc
         FROM collabs c JOIN videos v ON v.id=c.video LEFT JOIN users u ON u.uid=v.owner
@@ -1068,15 +1165,17 @@ const routes = [
         WHERE v.owner=$me AND c.responded IS NOT NULL AND ${notBlocked('$me', 'c.uid')} ORDER BY c.responded DESC LIMIT 50`).all({ me: uid }),
     ];
     const mutes = db.prepare('SELECT type, start, stop FROM notif_mutes WHERE uid=?').all(uid);
-    const pref = t => t === 'collabres' ? 'collab' : t;
+    const pref = t => t === 'collabres' ? 'collab' : ['uploaded', 'story', 'storylive'].includes(t) ? 'upload' : t;
     const muted = n => mutes.some(x => (x.type === pref(n.type) || x.type === 'all') && n.created >= x.start && (x.stop === null || n.created < x.stop));
     const items = rows.filter(n => !muted(n)).sort((a, b) => b.created - a.created).slice(0, 80).map(n => ({
       type: n.type, created: n.created, unread: n.created > seen,
       name: n.name || null, avatar: n.avatar ? '/avatars/' + n.avatar : null, followBack: n.type === 'follow' ? !!n.back : undefined,
       text: n.text, video: n.vid, title: n.title, emoji: n.emoji,
       // a collaboration on a video that isn't public yet shows no thumbnail (its signed link is only for the owner)
-      thumb: (n.type === 'collab' && (n.vh || n.vc > Date.now())) ? null : mediaUrl('thumbs', n.thumb, { hidden: n.vh, created: n.vc }),
-      status: n.status,
+      thumb: n.sid ? (n.kind === 'image' ? storySrc(n) : null)
+        : (n.type === 'collab' && (n.vh || n.vc > Date.now())) ? null : mediaUrl('thumbs', n.thumb, { hidden: n.vh, created: n.vc }),
+      status: n.status, story: n.sid || undefined, pending: n.pending === undefined ? undefined : !!n.pending,
+      scheduled: n.type === 'uploaded' ? n.vc > n.created + 60e3 : undefined,
     }));
     json(res, 200, { items, unread: items.filter(i => i.unread).length });
   }],
@@ -1515,7 +1614,179 @@ const routes = [
       .map(r => ({ name: r.name, fullName: r.fullname || '', avatar: r.avatar ? '/avatars/' + r.avatar : null, since: r.created })));
   }],
 
+  // ----- stories -----
+  // Add a story: a JPG / PNG / WebP photo (up to 8 MB) or a video (up to 30 MB and 30 seconds), checked by the server itself,
+  // with optional texts, a location and @tags (?ov=<JSON>). Confirmed accounts only; 20 a day per account.
+  // It is live at once (no admin review; people can report it) and disappears after 24 hours.
+  ['POST', /^\/api\/stories$/, async ({ req, res, uid, verified, url }) => {
+    needVerified(uid, verified, 'add stories');
+    limit(req, 'story', 30, 3600e3); limit(req, 'story-acct', 20, 864e5, uid);
+    const type = ctype(req), len = +req.headers['content-length'] || 0, isImg = type.startsWith('image/');
+    if (!isImg && !type.startsWith('video/')) throw fail(415, 'Choose a photo or a video.');
+    const max = isImg ? STORY_IMG_MAX : STORY_VID_MAX, big = isImg ? 'Photos must be under 8 MB.' : 'Story videos must be under 30 MB.';
+    if (len > max) throw fail(413, big);
+    needDisk((len || max) + inflightAll);
+    const ov = cleanOverlays(url.searchParams.get('ov'), uid);
+    ensureUser(uid);
+    const release = reserve(uid, len || max), tmp = tmpName(DIRS.stories);
+    let id;
+    try {
+      const size = await save(req, tmp, max, big);
+      let mime, ext, duration = null;
+      if (isImg) { mime = imageType(tmp); if (!mime) throw fail(415, 'This file is not a JPG, PNG or WebP image.'); ext = IMG[mime]; }
+      else {
+        let info; try { info = probeVideo(tmp); } catch (e) { throw fail(415, e instanceof Bad ? e.message : 'The video file is damaged or not supported.'); }
+        if (info.duration > STORY_SEC + 1) throw fail(400, `This video is ${Math.round(info.duration)} seconds long. Story videos must be 30 seconds or shorter.`);
+        ({ mime, ext, duration } = info);
+      }
+      const file = crypto.randomUUID() + ext;
+      fs.renameSync(tmp, path.join(DIRS.stories, file));
+      // the browser's safety check result is kept for the admin (shown with reports)
+      const scan = url.searchParams.get('scan') === 'passed' ? 'passed' : 'unchecked', now = Date.now();
+      db.exec('BEGIN');
+      try {
+        id = Number(db.prepare('INSERT INTO stories(uid,file,mime,kind,duration,size,created,expires,pending,scan,overlays) VALUES(?,?,?,?,?,?,?,?,0,?,?)')
+          .run(uid, file, mime, isImg ? 'image' : 'video', duration, size, now, now + STORY_MS, scan, ov.list.length ? JSON.stringify(ov.list) : null).lastInsertRowid);
+        for (const t of ov.tags) db.prepare('INSERT OR IGNORE INTO story_mentions(story,uid) VALUES(?,?)').run(id, t);
+        db.exec('COMMIT');
+      } catch (e) { db.exec('ROLLBACK'); rm(DIRS.stories, file); throw e; }
+      const who = at(nameOf(uid));
+      for (const t of ov.tags) notifyPush(t, 'mention', uid, 'sm:' + id, { title: 'New mention', body: `${who} mentioned you in their story`, url: '/?notif=1' });
+    } finally { release(); fs.rmSync(tmp, { force: true }); }
+    json(res, 201, { story: storyOut(storyById.get(id), uid) });
+  }],
+  // Stories to show: one entry per person with live stories, oldest story first. Yours first, then people you follow,
+  // then everyone else; people whose stories you have all seen go last.
+  ['GET', /^\/api\/stories$/, ({ res, uid }) => {
+    const rows = db.prepare(`SELECT s.*, u.name, u.fullname, u.avatar FROM stories s JOIN users u ON u.uid=s.uid
+      WHERE s.expires>? AND (s.uid=? OR s.pending=0) ORDER BY s.created LIMIT 2000`).all(Date.now(), uid || '');
+    const seen = new Set(uid ? db.prepare('SELECT story FROM story_views WHERE uid=?').all(uid).map(r => r.story) : []);
+    const fol = new Set(uid ? db.prepare('SELECT followee FROM follows WHERE follower=?').all(uid).map(r => r.followee) : []);
+    const by = new Map();
+    for (const st of rows) {
+      if (st.uid !== uid && blockedBetween(uid, st.uid)) continue;
+      let p = by.get(st.uid);
+      if (!p) by.set(st.uid, p = { name: st.name, fullName: st.fullname || '', avatar: st.avatar ? '/avatars/' + st.avatar : null, mine: st.uid === uid, following: fol.has(st.uid), stories: [] });
+      p.stories.push({ ...storyOut(st, uid), seen: st.uid === uid || seen.has(st.id) });
+    }
+    const people = [...by.values()].filter(p => p.name).map(p => ({ ...p, seen: p.stories.every(x => x.seen), latest: p.stories[p.stories.length - 1].created }));
+    const rank = p => p.mine ? 0 : !p.seen && p.following ? 1 : !p.seen ? 2 : 3;
+    json(res, 200, people.sort((a, b) => rank(a) - rank(b) || b.latest - a.latest));
+  }],
+  ['POST', /^\/api\/stories\/(\d+)\/view$/, ({ req, res, uid, m }) => {
+    need(uid); limit(req, 'story-view', 900, 600e3);
+    const st = storyById.get(+m[1]);
+    if (!storyVisible(st, uid)) throw fail(404, 'This story is no longer available.');
+    if (st.uid !== uid) db.prepare('INSERT OR IGNORE INTO story_views(story,uid,at) VALUES(?,?,?)').run(st.id, uid, Date.now());
+    json(res, 200, { ok: true });
+  }],
+  // Report someone else's story (confirmed accounts, once per person). The admin sees it on the admin page; nothing is hidden automatically.
+  ['POST', /^\/api\/stories\/(\d+)\/report$/, async ({ req, res, uid, verified, m }) => {
+    needVerified(uid, verified, 'report stories');
+    limit(req, 'sreport', 20, 3600e3, uid); limit(req, 'sreport-net', 60, 3600e3);
+    const st = storyById.get(+m[1]);
+    if (!storyVisible(st, uid) || st.uid === uid) throw fail(404, 'This story is no longer available.');
+    const b = await readJson(req), reason = REASONS.includes(b.reason) ? b.reason : 'Other';
+    db.prepare('INSERT OR IGNORE INTO story_reports(story,uid,reason,created) VALUES(?,?,?,?)').run(st.id, uid, reason, Date.now());
+    json(res, 200, { ok: true });
+  }],
+  // Who saw your story (accounts with a username; guests only count)
+  ['GET', /^\/api\/stories\/(\d+)\/viewers$/, ({ res, uid, m }) => {
+    needAccount(uid, 'see who viewed your story');
+    const st = storyById.get(+m[1]);
+    if (!st || st.uid !== uid) throw fail(404, 'Story not found.');
+    const rows = db.prepare(`SELECT u.name, u.fullname, u.avatar, sv.at FROM story_views sv LEFT JOIN users u ON u.uid=sv.uid
+      WHERE sv.story=? ORDER BY sv.at DESC LIMIT 500`).all(st.id);
+    json(res, 200, { total: db.prepare('SELECT COUNT(*) n FROM story_views WHERE story=?').get(st.id).n,
+      viewers: rows.filter(r => r.name).map(r => ({ name: r.name, fullName: r.fullname || '', avatar: r.avatar ? '/avatars/' + r.avatar : null, at: r.at })) });
+  }],
+  ['DELETE', /^\/api\/stories\/(\d+)$/, ({ res, uid, m }) => {
+    needAccount(uid, 'delete stories');
+    const st = storyById.get(+m[1]);
+    if (!st || st.uid !== uid) throw fail(404, 'Story not found.');
+    removeStory(st.id); json(res, 200, { ok: true });
+  }],
+
+  // ----- chat: one-to-one messages between accounts -----
+  // Conversations, newest first, with the last message and how many are unread. People you blocked (or who blocked you) are left out.
+  ['GET', /^\/api\/chats$/, ({ req, res, uid }) => {
+    needAccount(uid, 'see your messages');
+    limit(req, 'chat-read', 900, 600e3, uid);
+    const rows = db.prepare(`SELECT peer, MAX(id) last FROM (SELECT id, CASE WHEN sender=? THEN recipient ELSE sender END peer
+      FROM messages WHERE sender=? OR recipient=?) GROUP BY peer ORDER BY last DESC LIMIT 100`).all(uid, uid, uid);
+    const msg = db.prepare('SELECT sender, body, created FROM messages WHERE id=?');
+    const unreadQ = db.prepare('SELECT COUNT(*) n FROM messages WHERE sender=? AND recipient=? AND read IS NULL');
+    const chats = rows.filter(r => !blockedBetween(uid, r.peer)).map(r => {
+      const u = getUser.get(r.peer) || {}, m = msg.get(r.last);
+      return { name: u.name || null, fullName: u.fullname || '', avatar: u.avatar ? '/avatars/' + u.avatar : null,
+        last: { text: m.body, mine: m.sender === uid, created: m.created }, unread: unreadQ.get(r.peer, uid).n };
+    }).filter(c => c.name);
+    json(res, 200, { chats, unread: chats.reduce((s, c) => s + c.unread, 0) });
+  }],
+  // Unread total for the badge (cheap enough to poll)
+  ['GET', /^\/api\/me\/unread-messages$/, ({ req, res, uid }) => {
+    needAccount(uid, 'see your messages');
+    limit(req, 'chat-read', 900, 600e3, uid);
+    const n = db.prepare(`SELECT COUNT(*) n FROM messages m WHERE m.recipient=? AND m.read IS NULL AND ${notBlocked('m.recipient', 'm.sender')}`).get(uid).n;
+    json(res, 200, { unread: n });
+  }],
+  // One conversation: the newest 50 messages (?before=<id> for older ones, ?after=<id> for new ones). Opening it marks them read.
+  ['GET', /^\/api\/chats\/([^/]+)$/, ({ req, res, uid, m, url }) => {
+    needAccount(uid, 'see your messages');
+    limit(req, 'chat-read', 900, 600e3, uid);
+    const u = userByName(m[1]);
+    if (u.uid === uid) throw fail(400, "You can't message yourself.");
+    if (!u.uid.startsWith('sb_')) throw fail(404, 'Only Vizo accounts can receive messages.');
+    needNoBlock(uid, u.uid);
+    const before = +url.searchParams.get('before') || 0, after = +url.searchParams.get('after') || 0;
+    const pair = '((sender=? AND recipient=?) OR (sender=? AND recipient=?))', args = [uid, u.uid, u.uid, uid];
+    const rows = after
+      ? db.prepare(`SELECT * FROM messages WHERE ${pair} AND id>? ORDER BY id LIMIT 100`).all(...args, after)
+      : db.prepare(`SELECT * FROM messages WHERE ${pair} ${before ? 'AND id<?' : ''} ORDER BY id DESC LIMIT 51`).all(...args, ...(before ? [before] : [])).reverse();
+    const more = !after && rows.length > 50; if (more) rows.shift();
+    db.prepare('UPDATE messages SET read=? WHERE sender=? AND recipient=? AND read IS NULL').run(Date.now(), u.uid, uid);
+    json(res, 200, {
+      peer: { name: u.name, fullName: u.fullname || '', avatar: u.avatar ? '/avatars/' + u.avatar : null },
+      messages: rows.map(r => ({ id: r.id, text: r.body, mine: r.sender === uid, created: r.created, read: r.sender === uid ? !!r.read : undefined })), more,
+    });
+  }],
+  // Send a message. Needs a confirmed email; blocked either way is refused. Spam limits: 60 messages per 10 minutes per account
+  // (120 per network) and at most 20 new conversations per hour.
+  ['POST', /^\/api\/chats\/([^/]+)$/, async ({ req, res, uid, verified, m }) => {
+    needVerified(uid, verified, 'send messages');
+    const u = userByName(m[1]);
+    if (u.uid === uid) throw fail(400, "You can't message yourself.");
+    if (!u.uid.startsWith('sb_')) throw fail(404, 'Only Vizo accounts can receive messages.');
+    needNoBlock(uid, u.uid);
+    const b = await readJson(req), t = text(b.text, 1000);
+    if (!t) throw fail(400, 'Write a message first.');
+    limit(req, 'chat-send', 60, 600e3, uid); limit(req, 'chat-send-net', 120, 600e3);
+    const known = db.prepare('SELECT 1 FROM messages WHERE (sender=? AND recipient=?) OR (sender=? AND recipient=?) LIMIT 1').get(uid, u.uid, u.uid, uid);
+    if (!known) limit(req, 'chat-new', 20, 3600e3, uid);
+    ensureUser(uid);
+    const now = Date.now(), id = db.prepare('INSERT INTO messages(sender,recipient,body,created) VALUES(?,?,?,?)').run(uid, u.uid, t, now).lastInsertRowid;
+    json(res, 201, { message: { id: Number(id), text: t, mine: true, created: now, read: false } });
+  }],
+
   // ----- admin (needs X-Admin-Key) -----
+  // Reported stories that haven't expired yet, most reported first
+  ['GET', /^\/api\/admin\/stories$/, ({ req, res }) => {
+    needAdmin(req);
+    json(res, 200, db.prepare(`SELECT s.*, u.name, COUNT(r.uid) n, GROUP_CONCAT(r.reason, '|') reasons, MAX(r.created) last FROM story_reports r
+      JOIN stories s ON s.id=r.story LEFT JOIN users u ON u.uid=s.uid WHERE s.expires>? GROUP BY s.id ORDER BY n DESC, last DESC LIMIT 200`).all(Date.now())
+      .map(st => ({ id: st.id, kind: st.kind, src: storySrc(st), overlays: overlaysOf(st), name: st.name, created: st.created, expires: st.expires, scan: st.scan,
+        reports: st.n, last: st.last, reasons: st.reasons.split('|').reduce((o, k) => (o[k] = (o[k] || 0) + 1, o), {}) })));
+  }],
+  ['POST', /^\/api\/admin\/stories\/(\d+)\/dismiss$/, ({ req, res, m }) => {
+    needAdmin(req);
+    db.prepare('DELETE FROM story_reports WHERE story=?').run(+m[1]);
+    json(res, 200, { ok: true });
+  }],
+  ['DELETE', /^\/api\/admin\/stories\/(\d+)$/, ({ req, res, m }) => {
+    needAdmin(req);
+    if (!storyById.get(+m[1])) throw fail(404, 'Story not found.');
+    removeStory(+m[1]); json(res, 200, { ok: true });
+  }],
   ['GET', /^\/api\/admin\/comment-reports$/, ({ req, res }) => {
     needAdmin(req);
     const rows = db.prepare(`SELECT c.id, c.text, c.video vid, v.title, u.name, COUNT(r.uid) n, GROUP_CONCAT(r.reason, '|') reasons, MAX(r.created) last
@@ -1661,6 +1932,7 @@ function sendFile(req, res, fp, type, cache) {
 }
 
 const MEDIA_OF = {
+  stories: db.prepare('SELECT mime, expires FROM stories WHERE file=?'),
   uploads: db.prepare('SELECT mime, hidden, created FROM videos WHERE file=?'),
   thumbs: db.prepare('SELECT hidden, created FROM videos WHERE thumb=?'),
 };
@@ -1692,10 +1964,15 @@ http.createServer(async (req, res) => {
     }
     if (req.method !== 'GET' && req.method !== 'HEAD') throw fail(405, 'Method not allowed.');
 
-    const m = /^\/(uploads|avatars|thumbs)\/([0-9a-f-]{36}(\.[a-z0-9]{2,4}))$/.exec(p);
+    const m = /^\/(uploads|avatars|thumbs|stories)\/([0-9a-f-]{36}(\.[a-z0-9]{2,4}))$/.exec(p);
     if (m) {
       let type = Object.keys(IMG).find(k => IMG[k] === m[3]), cache = 'public';
-      if (m[1] !== 'avatars') {
+      if (m[1] === 'stories') {
+        // a story file needs a valid signed link (only handed to people allowed to see it) and stops when the story expires
+        const st = MEDIA_OF.stories.get(m[2]), e = Number(url.searchParams.get('e')), sg = url.searchParams.get('s') || '';
+        type = st && st.expires > Date.now() && e * 1000 > Date.now() && safeEq(sg, mediaSig(m[2], e)) ? st.mime : null;
+        cache = 'private';
+      } else if (m[1] !== 'avatars') {
         // Video files and thumbnails belong to a video; a hidden or scheduled one needs a valid signed link
         const v = MEDIA_OF[m[1]].get(m[2]);
         if (m[1] === 'uploads') type = v && v.mime;

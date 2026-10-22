@@ -105,6 +105,8 @@ main{max-width:920px;margin:0 auto;padding:28px 20px 60px;display:grid;gap:20px}
     <div class="list" id="list" style="margin-top:18px"></div>
     <div class="head" style="margin-top:36px"><div><h1>Reported comments</h1><p class="sub">Reports never delete a comment by themselves. Keep clears the reports; Delete removes the comment.</p></div></div>
     <div class="list" id="clist" style="margin-top:18px"></div>
+    <div class="head" style="margin-top:36px"><div><h1>Reported stories</h1><p class="sub">Stories go live as soon as they are posted (after the browser safety check) and disappear after 24 hours. Reports never remove a story by themselves.</p></div></div>
+    <div class="list" id="slist" style="margin-top:18px"></div>
   </section>
 </main>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -126,7 +128,7 @@ function empty(){$('#list').innerHTML=`<div class="empty card"><span class="ei">
 let rows=[];
 async function load(btn){if(btn)loading(btn,true);else $('#list').innerHTML='<div class="skel" style="height:200px;border-radius:22px"></div><div class="skel" style="height:200px;border-radius:22px"></div>';
  try{rows=await api('/api/admin/reports');$('#login').hidden=true;$('#dash').hidden=false;$('#logout').hidden=false;summary(rows);
-  loadComments();
+  loadComments();loadStoriesQ();
   if(!rows.length){empty();return}
   $('#list').innerHTML=rows.map(r=>{const reasons=Object.entries(r.reasons).sort((a,b)=>b[1]-a[1]);return `<article class="item" data-id="${r.id}">
    <div class="media">${r.src?`<video src="${esc(r.src)}"${r.thumb?` poster="${esc(r.thumb)}"`:''} controls muted playsinline preload="metadata"></video>`:esc(r.emoji)}</div>
@@ -153,6 +155,26 @@ $('#clist').onclick=async e=>{const b=e.target.closest('[data-cdo]');if(!b)retur
  try{await api(del?`/api/admin/comments/${id}`:`/api/admin/comments/${id}/dismiss`,del?'DELETE':'POST');const next=item.nextElementSibling||item.previousElementSibling;
   item.remove();crows=crows.filter(r=>String(r.id)!==id);if(!crows.length)loadComments();const f=next&&next.isConnected&&next.querySelector('[data-cdo]');(f||$('#refresh')).focus();toast(del?'Comment deleted':'Comment kept — reports cleared','ok')}
  catch(err){loading(b,false);item.querySelectorAll('[data-cdo]').forEach(x=>x.disabled=false);toast(err.message,'err');if(err.status===401)showLogin('Your admin key is no longer valid.')}};
+// Reported stories
+let srows=[];
+const ovText=o=>(o.type==='location'?'📍 ':o.type==='mention'?'@':'')+o.text;
+async function loadStoriesQ(){const L=$('#slist');
+ try{srows=await api('/api/admin/stories');
+  L.innerHTML=srows.length?srows.map(r=>{const reasons=Object.entries(r.reasons).sort((a,b)=>b[1]-a[1]);return `<article class="item" data-sid="${r.id}">
+   <div class="media">${r.kind==='image'?`<img src="${esc(r.src)}" alt="Story photo by @${esc(r.name||'unknown')}" style="width:100%;height:100%;object-fit:contain">`:`<video src="${esc(r.src)}" controls muted playsinline preload="metadata"></video>`}</div>
+   <div><h2>${r.kind==='image'?'Photo':'Video'} story by @${esc(r.name||'unknown')}</h2><p class="meta">${r.reports} report${r.reports>1?'s':''} · last ${ago(r.last)} · posted ${ago(r.created)} · disappears in ${Math.max(1,Math.round((r.expires-Date.now())/36e5))} h</p>
+   ${r.overlays&&r.overlays.length?`<p class="meta">Text on it: ${r.overlays.map(o=>'“'+esc(ovText(o))+'”').join(', ')}</p>`:''}
+   <div class="pills">${reasons.map(([k,n])=>`<span class="pill">${esc(k)} <b>${n}</b></span>`).join('')}</div>
+   <div class="actions"><button class="btn btn-secondary" type="button" data-sdo="keep" aria-label="Keep story by @${esc(r.name||'unknown')}">${ic('check')}Keep story</button><button class="btn btn-danger" type="button" data-sdo="delete" aria-label="Delete story by @${esc(r.name||'unknown')}">${ic('trash')}Delete story</button></div>
+   <p class="note">Browser safety check when posted: ${r.scan==='passed'?'passed (a hint only; look at it yourself)':'did not run'}. Keep clears the reports; Delete removes the story for everyone.</p></div></article>`}).join('')
+  :`<div class="empty card"><span class="ei">${ic('shield')}</span><b>No reported stories</b></div>`}
+ catch(e){L.innerHTML=`<div class="empty card"><span class="ei">${ic('alert')}</span><b>Couldn’t load reported stories</b><p>${esc(e.message)}</p></div>`}}
+$('#slist').onclick=async e=>{const b=e.target.closest('[data-sdo]');if(!b)return;const item=b.closest('.item'),id=item.dataset.sid,del=b.dataset.sdo==='delete';
+ if(!confirm(del?'Delete this story for everyone? This cannot be undone.':'Keep this story and clear its reports?'))return;
+ item.querySelectorAll('[data-sdo]').forEach(x=>x.disabled=true);loading(b,true);
+ try{await api(del?`/api/admin/stories/${id}`:`/api/admin/stories/${id}/dismiss`,del?'DELETE':'POST');const next=item.nextElementSibling||item.previousElementSibling;
+  item.remove();srows=srows.filter(r=>String(r.id)!==id);if(!srows.length)loadStoriesQ();const f=next&&next.isConnected&&next.querySelector('[data-sdo]');(f||$('#refresh')).focus();toast(del?'Story deleted':'Story kept — reports cleared','ok')}
+ catch(err){loading(b,false);item.querySelectorAll('[data-sdo]').forEach(x=>x.disabled=false);toast(err.message,'err');if(err.status===401)showLogin('Your admin key is no longer valid.')}};
 $('#login').onsubmit=e=>{e.preventDefault();const k=$('#key').value.trim();if(!k){showLogin('Enter the admin key.');return}
  key=k;try{sessionStorage.setItem('inv_admin',key)}catch(_){}load($('#open'))};
 $('#refresh').onclick=()=>load($('#refresh'));
