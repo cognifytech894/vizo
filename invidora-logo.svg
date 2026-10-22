@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 330 101" width="330" height="101" role="img" aria-label="invidora">
+  <defs>
+    <linearGradient id="lg-i" x1="0" y1="27" x2="0" y2="99" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FF9A1F"/><stop offset=".55" stop-color="#A92BF0"/><stop offset="1" stop-color="#3A3BF0"/></linearGradient>
+    <linearGradient id="lg-d" x1="2" y1="1" x2="20" y2="23" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FFA21F"/><stop offset="1" stop-color="#FF3D6E"/></linearGradient>
+    <linearGradient id="lg-p" x1="28" y1="18" x2="92" y2="62" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FF8A2A"/><stop offset=".2" stop-color="#E8366D"/><stop offset=".42" stop-color="#A92BF0"/><stop offset=".64" stop-color="#3B4BF2"/><stop offset=".9" stop-color="#00CFF5"/></linearGradient>
+    <mask id="lg-m"><path d="M31 24L86 55.5L31 88Z" fill="#fff" stroke="#fff" stroke-width="12" stroke-linejoin="round"/><path d="M36 41L63 55.5L36 70.5Z" fill="#000" stroke="#000" stroke-width="6" stroke-linejoin="round"/></mask>
+  </defs>
+  <circle cx="12" cy="12" r="11.5" fill="url(#lg-d)"/>
+  <path d="M1 38a11 11 0 0 1 22 0V99H19A18 18 0 0 1 1 81Z" fill="url(#lg-i)"/>
+  <rect x="18" y="8" width="82" height="93" fill="url(#lg-p)" mask="url(#lg-m)"/>
+  <text x="112" y="74" font-family="Poppins,'Baloo 2',Arial,sans-serif" font-weight="700" font-size="56" letter-spacing="-1" fill="#1B1445">invidora</text>
+</svg>

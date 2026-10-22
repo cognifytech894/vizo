@@ -1,0 +1,18 @@
+# Render.com blueprint. Needs a paid plan because videos are kept on a persistent disk.
+services:
+  - type: web
+    name: invidora
+    runtime: docker
+    plan: starter
+    healthCheckPath: /api/config
+    disk:
+      name: invidora-data
+      mountPath: /data
+      sizeGB: 10
+    envVars:
+      - key: SUPABASE_URL
+        sync: false # your Supabase project URL, e.g. https://xxxx.supabase.co
+      - key: SUPABASE_ANON_KEY
+        sync: false # Supabase "anon public" key
+      - key: ADMIN_KEY
+        generateValue: true

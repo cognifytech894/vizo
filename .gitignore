@@ -1,0 +1,6 @@
+data/
+node_modules/
+.env
+supabase/.temp/
+supabase/.branches/
+backups/

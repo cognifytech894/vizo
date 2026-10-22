@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Invidora – देखो. दिखाओ. छा जाओ.</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Hind:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#1B1445;--bg2:#271C63;--ink:#FFF4D6;--mute:#B9AEE6;--haldi:#F6B800;--gulaal:#E8366D;--card:#2F2378;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#FFF1CC;--bg2:#FFE39A;--ink:#1B1445;--mute:#5B4FA0;--card:#FFFFFF}}
+:root[data-theme="light"]{--bg:#FFF1CC;--bg2:#FFE39A;--ink:#1B1445;--mute:#5B4FA0;--card:#FFFFFF}
+:root[data-theme="dark"]{--bg:#1B1445;--bg2:#271C63;--ink:#FFF4D6;--mute:#B9AEE6;--card:#2F2378}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+*{box-sizing:border-box;margin:0}
+body{height:100%;background:var(--bg);color:var(--ink);font-family:Hind,system-ui,sans-serif;overflow:hidden}
+h1,h2,h3,.d{font-family:'Baloo 2',Hind,sans-serif}
+#app{height:100%;max-width:520px;margin:auto;display:flex;flex-direction:column;position:relative}
+header{display:flex;align-items:center;justify-content:space-between;padding:10px 16px}
+.brand{display:flex;gap:8px;align-items:center;font:800 24px 'Baloo 2';letter-spacing:.2px}
+.brand small{display:block;font:500 11px Hind;color:var(--mute);margin-top:-8px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:0 16px 10px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1.5px solid var(--mute);background:none;color:var(--ink);padding:5px 14px;border-radius:999px;font:600 14px Hind;cursor:pointer}
+.chip[aria-pressed=true]{background:var(--haldi);border-color:var(--haldi);color:#1B1445}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--gulaal);outline-offset:2px}
+main{flex:1;min-height:0;position:relative}
+.view{position:absolute;inset:0;display:none}
+.view.on{display:block}
+/* Ribbon: sideways deck, neighbours peek */
+#ribbon{height:100%;display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 11% 12px;scrollbar-width:none}
+#ribbon::-webkit-scrollbar{display:none}
+.clip{flex:none;width:100%;height:100%;scroll-snap-align:center;border-radius:28px 28px 28px 6px;position:relative;overflow:hidden;background:var(--card);transform:scale(.92);opacity:.6;transition:transform .25s,opacity .25s}
+.clip.act{transform:none;opacity:1}
+.scene{position:absolute;inset:0;display:grid;place-items:center;font-size:110px;background-size:300% 300%;animation:drift 8s ease-in-out infinite alternate}
+.scene.up{background:#000;font-size:0;animation:none}
+video{width:100%;height:100%;object-fit:cover}
+@keyframes drift{to{background-position:100% 100%}}
+.emo{animation:bob 2.4s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-10px) rotate(4deg)}}
+.meta{position:absolute;left:0;right:0;bottom:0;padding:48px 16px 14px;background:linear-gradient(transparent,rgba(10,6,40,.88));color:#FFF4D6}
+.meta h3{font-size:20px;line-height:1.2}
+.meta p{font-size:14px;opacity:.85;margin-top:2px}
+.tag{display:inline-block;margin-top:6px;font-size:13px;color:var(--haldi)}
+.side{position:absolute;right:10px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:14px;align-items:center}
+.ib{width:46px;height:46px;border-radius:50%;border:0;background:rgba(10,6,40,.55);color:#FFF4D6;font-size:20px;cursor:pointer;display:grid;place-items:center}
+.ib[aria-pressed=true]{background:var(--gulaal)}
+.cnt{font-size:12px;color:#FFF4D6;text-align:center;margin-top:-10px}
+.bar{position:absolute;left:0;right:0;top:0;height:4px;background:rgba(255,255,255,.2)}
+.bar i{display:block;height:100%;width:0;background:var(--haldi)}
+.act .bar i{animation:fill 12s linear infinite}
+@keyframes fill{to{width:100%}}
+.hint{position:absolute;bottom:4px;left:0;right:0;text-align:center;font-size:12px;color:var(--mute)}
+/* Khoj */
+.pad{height:100%;overflow-y:auto;padding:4px 16px 16px}
+.sb{display:flex;gap:8px;background:var(--card);border-radius:999px;padding:6px 8px 6px 16px;border:2px solid var(--haldi)}
+.sb input{flex:1;min-width:0;border:0;background:none;color:var(--ink);font:500 16px Hind}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.tile{aspect-ratio:3/4;border-radius:18px 18px 18px 4px;position:relative;overflow:hidden;cursor:pointer;border:0;color:#FFF4D6;text-align:left}
+.tile .scene{font-size:56px;animation:none}
+.tile span{position:absolute;left:0;right:0;bottom:0;padding:22px 10px 8px;background:linear-gradient(transparent,rgba(10,6,40,.85));font:700 14px/1.2 'Baloo 2'}
+.empty{margin-top:30px;text-align:center;color:var(--mute)}
+/* Daalo */
+.form{display:grid;gap:14px;max-width:420px;margin:auto}
+.drop{border:2.5px dashed var(--haldi);border-radius:24px;padding:28px 16px;text-align:center;cursor:pointer;display:block}
+.drop b{font:700 20px 'Baloo 2';display:block}
+.drop small{color:var(--mute)}
+label.l{font:600 14px Hind;color:var(--mute);display:grid;gap:4px}
+.f{padding:11px 14px;border-radius:14px;border:1.5px solid var(--mute);background:var(--card);color:var(--ink);font:500 16px Hind;width:100%}
+.btn{border:0;border-radius:999px;background:var(--haldi);color:#1B1445;font:800 18px 'Baloo 2';padding:11px 20px;cursor:pointer}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.msg{font-size:14px;min-height:20px;color:var(--gulaal)}
+/* nav */
+nav{display:flex;justify-content:space-around;align-items:center;padding:8px 10px 10px;background:var(--bg2);border-radius:24px 24px 0 0}
+.nb{background:none;border:0;color:var(--mute);font:600 12px Hind;display:grid;gap:2px;justify-items:center;cursor:pointer;padding:4px 14px;border-radius:14px}
+.nb svg{width:24px;height:24px}
+.nb[aria-selected=true]{color:var(--haldi)}
+.nb.plus{background:var(--haldi);color:#1B1445;border-radius:18px 18px 18px 4px;padding:8px 18px;margin-top:-18px;box-shadow:0 6px 0 var(--gulaal)}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--haldi);color:#1B1445;padding:8px 16px;border-radius:999px;font:700 14px Hind;opacity:0;pointer-events:none;transition:opacity .2s;z-index:9}
+.toast.on{opacity:1}
+aside,.arr{display:none}
+.arr{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:48px;height:48px;font-size:22px;background:var(--haldi);color:#1B1445}
+#prev{left:14px}#next{right:14px}
+aside h2{font-size:20px;margin-bottom:10px}
+aside .tg{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px}
+aside p{font-size:13px;color:var(--mute);line-height:1.5}
+/* WEB layout: sidebar + stage + trending */
+@media(min-width:900px){
+#app{max-width:1380px;display:grid;grid-template-columns:230px minmax(0,1fr) 280px;grid-template-rows:auto 1fr;grid-template-areas:"header chips aside" "nav main aside";column-gap:8px}
+header{grid-area:header;padding:18px 16px}
+.chips{grid-area:chips;padding:20px 16px 10px}
+main{grid-area:main}
+nav{grid-area:nav;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:6px;border-radius:24px;margin:0 0 16px 12px;padding:14px 10px}
+.nb{display:flex;gap:12px;align-items:center;justify-content:flex-start;font-size:17px;padding:10px 14px}
+.nb.plus{margin:12px 0 6px;justify-content:center;box-shadow:0 5px 0 var(--gulaal)}
+#ribbon{padding:4px calc(50% - 180px) 12px;gap:22px}
+.clip{width:360px;max-height:780px;align-self:center}
+.arr{display:grid}
+.grid{grid-template-columns:repeat(4,1fr)}
+.pad{padding:4px 24px 20px}
+aside{grid-area:aside;display:block;padding:20px 16px;overflow-y:auto}
+}
+@media(prefers-reduced-motion:reduce){.scene,.emo,.act .bar i{animation:none}.clip{transition:none}}
+</style>
+</head>
+<body>
+<div id="app">
+<header>
+  <div class="brand">
+    <svg width="38" height="38" viewBox="0 0 40 40" aria-hidden="true"><path d="M13 0H27A13 13 0 0 1 40 13V27A13 13 0 0 1 27 40H4A4 4 0 0 1 0 36V13A13 13 0 0 1 13 0Z" fill="#F6B800"/><rect x="17" y="20" width="6" height="14" rx="3" fill="#1B1445"/><path d="M16.5 6L25.5 11.5L16.5 17Z" fill="#E8366D" stroke="#E8366D" stroke-width="1.6" stroke-linejoin="round"/></svg>
+    <div>Invidora<small>देखो. दिखाओ. छा जाओ.</small></div>
+  </div>
+  <button class="ib" id="theme" aria-label="Theme badlo" style="background:var(--card);color:var(--ink)">◐</button>
+</header>
+<div class="chips" id="chips" role="group" aria-label="Mood chuno"></div>
+<main>
+  <section class="view on" id="v-feed"><button class="ib arr" id="prev" aria-label="Pichla video">‹</button><div id="ribbon" tabindex="0" aria-label="Video ribbon"></div><button class="ib arr" id="next" aria-label="Agla video">›</button></section>
+  <section class="view" id="v-khoj"><div class="pad">
+    <div class="sb"><input id="q" type="search" placeholder="Video, creator ya #tag khojo" aria-label="Khoj"><button class="btn" id="go" style="padding:6px 16px;font-size:16px">Khojo</button></div>
+    <div class="grid" id="grid"></div><p class="empty" id="empty" hidden>Kuch nahi mila. Doosra shabd try karo ya mood badlo.</p>
+  </div></section>
+  <section class="view" id="v-up"><div class="pad"><div class="form">
+    <h2 class="d">Apna video daalo</h2>
+    <label class="drop" for="file"><b id="fname">Video chuno</b><small>Max 60 second · mp4, mov, webm</small></label>
+    <input id="file" type="file" accept="video/*" hidden>
+    <label class="l">Title<input class="f" id="title" maxlength="70" placeholder="Jaise: Dilli ki sabse tez chai"></label>
+    <label class="l">Mood<select class="f" id="cat"></select></label>
+    <label class="l">#Tags (space se alag)<input class="f" id="tags" placeholder="chai dilli swad"></label>
+    <p class="msg" id="msg" role="status"></p>
+    <button class="btn" id="post" disabled>Video post karo</button>
+  </div></div></section>
+  <section class="view" id="v-me"><div class="pad"><h2 class="d" style="margin-bottom:4px">Mere video</h2><p style="color:var(--mute)">Aapke daale hue video yahan dikhenge.</p><div class="grid" id="mine"></div><p class="empty" id="mempty">Abhi koi video nahi. Neeche + dabao.</p></div></section>
+</main>
+<nav role="tablist" aria-label="Menu">
+  <button class="nb" role="tab" data-v="feed" aria-selected="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="7" y="4" width="10" height="16" rx="3"/><path d="M3 8v8M21 8v8"/></svg>Feed</button>
+  <button class="nb" role="tab" data-v="khoj" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/></svg>Khoj</button>
+  <button class="nb plus" role="tab" data-v="up" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Daalo</button>
+  <button class="nb" role="tab" data-v="me" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg>Meri</button>
+</nav>
+<aside aria-label="Trending"><h2 class="d">Abhi trending</h2><div class="tg" id="trend"></div><h2 class="d">Shortcut</h2><p>← → keys se agla ya pichla video. Video par click karke play/pause.</p></aside>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<script>
+const MOODS=['Sab','Hasya','Josh','Gyaan','Khana','Safar'];
+const G=['linear-gradient(135deg,#F6B800,#E8366D,#5B2BD0)','linear-gradient(135deg,#00B7A8,#2B3FD0,#E8366D)','linear-gradient(135deg,#FF7A18,#E8366D,#7A1FA2)','linear-gradient(135deg,#2BD07B,#0B7A8F,#1B1445)','linear-gradient(135deg,#FFD23F,#FF7A18,#C2185B)','linear-gradient(135deg,#6EC6FF,#5B2BD0,#E8366D)'];
+let vids=[
+ {t:'Dilli ki sabse tez chai wala',u:'@chaiwala_raju',c:'Khana',g:['chai','dilli','swad'],e:'☕',l:1240},
+ {t:'Jugaad se banaya cooler',u:'@desi_jugaad',c:'Gyaan',g:['jugaad','diy'],e:'🛠️',l:860},
+ {t:'Mumbai local mein dance',u:'@bombay_beats',c:'Josh',g:['dance','mumbai'],e:'💃',l:3100},
+ {t:'Dada ji ki hasi wali kahani',u:'@dadaji_stories',c:'Hasya',g:['kahani','hasya'],e:'😂',l:2210},
+ {t:'Manali ki pehli barf',u:'@pahadi_diaries',c:'Safar',g:['manali','barf'],e:'🏔️',l:1540},
+ {t:'60 second mein UPI kaise kaam karta hai',u:'@paisa_gyaan',c:'Gyaan',g:['upi','paisa'],e:'📱',l:970},
+ {t:'Maa ke haath ke aloo parathe',u:'@ghar_ka_khana',c:'Khana',g:['paratha','ghar'],e:'🫓',l:4020},
+ {t:'Cricket gali ka last over',u:'@gully_boys',c:'Josh',g:['cricket','gully'],e:'🏏',l:2760}
+].map((v,i)=>({...v,id:i,gr:G[i%G.length],liked:false,src:null,mine:false}));
+let mood='Sab',cur=0,nid=100,pending=null;
+const $=s=>document.querySelector(s);
+const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),1800)};
+const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fmt=n=>n>=1000?(n/1000).toFixed(1).replace('.0','')+'K':n;
+const list=()=>vids.filter(v=>mood==='Sab'||v.c===mood);
+function chips(){const c=$('#chips');c.innerHTML=MOODS.map(m=>`<button class="chip" aria-pressed="${m===mood}" data-m="${m}">${m}</button>`).join('');
+ c.onclick=e=>{const b=e.target.closest('.chip');if(!b)return;mood=b.dataset.m;chips();feed();grid($('#q').value)}}
+function scene(v){return v.src?`<div class="scene up"><video src="${v.src}" loop muted playsinline></video></div>`:`<div class="scene" style="background-image:${v.gr}"><span class="emo">${v.e}</span></div>`}
+function feed(){const r=$('#ribbon'),a=list();
+ r.innerHTML=a.length?a.map(v=>`<article class="clip" data-id="${v.id}">${scene(v)}<div class="bar"><i></i></div>
+  <div class="side"><button class="ib" data-a="like" aria-pressed="${v.liked}" aria-label="Pasand">♥</button><span class="cnt">${fmt(v.l)}</span><button class="ib" data-a="share" aria-label="Share">↗</button><button class="ib" data-a="sound" aria-label="Awaaz">🔇</button></div>
+  <div class="meta"><h3>${esc(v.t)}</h3><p>${esc(v.u)} · ${v.c}</p><span class="tag">${v.g.map(x=>'#'+esc(x)).join(' ')}</span></div></article>`).join(''):'<p class="empty" style="margin:40px auto">Is mood mein abhi koi video nahi. Pehla aap daalo!</p>';
+ r.scrollLeft=0;observe()}
+let io;function observe(){io&&io.disconnect();io=new IntersectionObserver(es=>es.forEach(e=>{const c=e.target,vd=c.querySelector('video');if(e.isIntersecting){c.classList.add('act');vd&&vd.play().catch(()=>{})}else{c.classList.remove('act');vd&&vd.pause()}}),{root:$('#ribbon'),threshold:.65});document.querySelectorAll('.clip').forEach(c=>io.observe(c))}
+$('#ribbon').onclick=e=>{const c=e.target.closest('.clip');if(!c)return;const v=vids.find(x=>x.id==c.dataset.id),b=e.target.closest('[data-a]'),vd=c.querySelector('video');
+ if(b){const a=b.dataset.a;
+  if(a==='like'){v.liked=!v.liked;v.l+=v.liked?1:-1;b.setAttribute('aria-pressed',v.liked);b.nextElementSibling.textContent=fmt(v.l)}
+  if(a==='share'){(navigator.clipboard?navigator.clipboard.writeText(location.href):Promise.reject()).then(()=>toast('Link copy ho gaya'),()=>toast('Link copy nahi hua'))}
+  if(a==='sound'){if(vd){vd.muted=!vd.muted;b.textContent=vd.muted?'🔇':'🔊'}else toast('Is demo clip mein awaaz nahi hai')}
+ }else if(vd){vd.paused?vd.play():vd.pause()}}
+function grid(q=''){q=q.trim().toLowerCase().replace(/^#/,'');
+ const a=list().filter(v=>!q||(v.t+' '+v.u+' '+v.c+' '+v.g.join(' ')).toLowerCase().includes(q));
+ $('#grid').innerHTML=a.map(v=>`<button class="tile" data-id="${v.id}">${scene(v).replace('<video','<video preload="metadata"')}<span>${esc(v.t)}</span></button>`).join('');
+ $('#empty').hidden=a.length>0}
+$('#grid').onclick=e=>{const t=e.target.closest('.tile');if(!t)return;mood='Sab';chips();feed();show('feed');const i=vids.findIndex(v=>v.id==t.dataset.id);const c=document.querySelector(`.clip[data-id="${vids[i].id}"]`);c&&c.scrollIntoView({inline:'center',block:'nearest'})}
+$('#q').oninput=e=>grid(e.target.value);$('#go').onclick=()=>grid($('#q').value);
+function mine(){const a=vids.filter(v=>v.mine);$('#mempty').hidden=a.length>0;$('#mine').innerHTML=a.map(v=>`<button class="tile" data-id="${v.id}">${scene(v)}<span>${esc(v.t)}</span></button>`).join('')}
+$('#mine').onclick=$('#grid').onclick;
+function show(n){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id==='v-'+n));document.querySelectorAll('.nb').forEach(b=>b.setAttribute('aria-selected',b.dataset.v===n));$('#chips').style.display=(n==='feed'||n==='khoj')?'flex':'none';if(n==='khoj'){grid($('#q').value)}if(n==='me')mine();document.querySelectorAll('video').forEach(v=>{if(n!=='feed')v.pause()});if(n==='feed')observe()}
+document.querySelector('nav').onclick=e=>{const b=e.target.closest('.nb');b&&show(b.dataset.v)};
+// upload
+$('#cat').innerHTML=MOODS.slice(1).map(m=>`<option>${m}</option>`).join('');
+$('#file').onchange=e=>{const f=e.target.files[0],m=$('#msg');pending=null;$('#post').disabled=true;if(!f)return;
+ if(!f.type.startsWith('video/')){m.textContent='Sirf video file chuno.';return}
+ const url=URL.createObjectURL(f),t=document.createElement('video');t.preload='metadata';
+ t.onloadedmetadata=()=>{if(t.duration>60.5){m.textContent='Video 60 second se chhota hona chahiye ('+Math.round(t.duration)+' sec hai).';URL.revokeObjectURL(url);return}
+  pending=url;$('#fname').textContent=f.name;m.textContent='';$('#post').disabled=false;if(!$('#title').value)$('#title').value=f.name.replace(/\.[^.]+$/,'')};
+ t.onerror=()=>{m.textContent='Ye video khul nahi paya. Doosra format try karo.'};t.src=url};
+$('#post').onclick=()=>{const t=$('#title').value.trim();if(!pending||!t){$('#msg').textContent='Title likho aur video chuno.';return}
+ vids.unshift({id:nid++,t,u:'@aap',c:$('#cat').value,g:$('#tags').value.split(/[\s,#]+/).filter(Boolean).slice(0,5),e:'🎬',l:0,gr:G[0],liked:false,src:pending,mine:true});
+ pending=null;$('#file').value='';$('#title').value='';$('#tags').value='';$('#fname').textContent='Video chuno';$('#post').disabled=true;mood='Sab';chips();feed();trend();show('feed');toast('Post ho gaya!')};
+$('#theme').onclick=()=>{const r=document.documentElement,d=r.dataset.theme?r.dataset.theme==='dark':!matchMedia('(prefers-color-scheme:light)').matches;r.dataset.theme=d?'light':'dark'};
+function trend(){const m={};vids.forEach(v=>v.g.forEach(t=>m[t]=(m[t]||0)+v.l+1));const top=Object.keys(m).sort((a,b)=>m[b]-m[a]).slice(0,10);
+ $('#trend').innerHTML=top.map(t=>`<button class="chip" data-t="${esc(t)}">#${esc(t)}</button>`).join('')}
+$('#trend').onclick=e=>{const b=e.target.closest('[data-t]');if(!b)return;$('#q').value=b.dataset.t;show('khoj')};
+const step=d=>{const r=$('#ribbon'),c=r.querySelector('.clip');if(c)r.scrollBy({left:d*(c.offsetWidth+(parseFloat(getComputedStyle(r).columnGap)||12)),behavior:'smooth'})};
+$('#prev').onclick=()=>step(-1);$('#next').onclick=()=>step(1);
+document.addEventListener('keydown',e=>{if(!$('#v-feed').classList.contains('on')||/INPUT|SELECT|TEXTAREA/.test(e.target.tagName))return;if(e.key==='ArrowRight')step(1);if(e.key==='ArrowLeft')step(-1)});
+chips();feed();trend();$('#chips').style.display='flex';
+</script>
+</body>
+</html>

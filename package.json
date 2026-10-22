@@ -1,0 +1,15 @@
+{
+  "name": "invidora",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Invidora – देखो. दिखाओ. छा जाओ. Short video sharing platform.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "backup": "node scripts/backup.js",
+    "restore": "node scripts/restore.js"
+  },
+  "engines": {
+    "node": ">=22.13"
+  }
+}

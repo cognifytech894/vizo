@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <defs>
+    <linearGradient id="vz-bg" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#3A12A8"/><stop offset=".5" stop-color="#12062F"/><stop offset="1" stop-color="#3C0A3E"/></linearGradient>
+    <radialGradient id="vz-tl" cx="0" cy="0" r="55" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#E23BF5" stop-opacity=".9"/><stop offset="1" stop-color="#E23BF5" stop-opacity="0"/></radialGradient>
+    <radialGradient id="vz-br" cx="100" cy="100" r="55" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FF8A2A" stop-opacity=".9"/><stop offset="1" stop-color="#FF2E8A" stop-opacity="0"/></radialGradient>
+    <linearGradient id="vz-play" x1="42" y1="36" x2="56" y2="66" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FFB31A"/><stop offset="1" stop-color="#FF2E8A"/></linearGradient>
+  </defs>
+  <rect width="100" height="100" rx="24" fill="url(#vz-bg)"/>
+  <rect width="100" height="100" rx="24" fill="url(#vz-tl)"/>
+  <rect width="100" height="100" rx="24" fill="url(#vz-br)"/>
+  <circle cx="50" cy="50" r="27" fill="none" stroke="#fff" stroke-width="12"/>
+  <path d="M44 38.5L63 50L44 61.5Z" fill="url(#vz-play)" stroke="url(#vz-play)" stroke-width="7" stroke-linejoin="round"/>
+</svg>

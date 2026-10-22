@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+<title>Vizo Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap">
+<style>
+:root{color-scheme:dark;--bg:#0E0E13;--surface:#15151C;--surface-2:#1C1C25;--surface-3:#262631;--line:rgba(255,255,255,.08);--line-2:rgba(255,255,255,.15);--text:#F4F4F6;--text-2:#B4B4C2;--text-3:#8E8E9E;--danger-solid:#D6334F;
+ --grad:linear-gradient(135deg,#FF8A2A 0%,#F0338F 40%,#C23BF0 70%,#6A1BFF 100%);--focus:#C084FC;--danger:#FF5470;--danger-soft:rgba(255,84,112,.12);--ok:#2BD07B;--ok-soft:rgba(43,208,123,.14);--shadow-2:0 16px 40px rgba(0,0,0,.5);
+ --font:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;--font-d:'Poppins','Inter',system-ui,sans-serif}
+@media (prefers-color-scheme:light){:root{color-scheme:light;--bg:#FFFFFF;--surface:#F6F6F9;--surface-2:#FFFFFF;--surface-3:#EDEDF2;--line:rgba(20,20,32,.08);--line-2:rgba(20,20,32,.15);--text:#15151C;--text-2:#575768;--text-3:#666676;--danger-solid:#C8243D;--focus:#8B2BE2;--danger:#C8243D;--danger-soft:rgba(200,36,61,.08);--ok:#0B7041;--ok-soft:rgba(11,112,65,.1);--shadow-2:0 18px 44px rgba(20,20,40,.14)}}
+*,*::before,*::after{box-sizing:border-box;margin:0}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--text);font:400 15px/1.45 var(--font);min-height:100vh;-webkit-font-smoothing:antialiased}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.skip{position:fixed;top:10px;left:10px;z-index:50;padding:10px 18px;border-radius:999px;background:var(--text);color:var(--bg);font:600 14px/1.2 var(--font);text-decoration:none;transform:translateY(-160%);transition:transform .15s}
+.skip:focus{transform:none}
+#main:focus{outline:none}
+h1,h2{font-family:var(--font-d);font-weight:600;letter-spacing:-.01em;line-height:1.2}
+.ico{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}}
+@keyframes shimmer{from{background-position:150% 0}to{background-position:-50% 0}}
+.top{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:12px;height:64px;padding:0 20px;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;font:700 20px var(--font-d)}
+.brand img{width:28px;height:28px}
+.brand span{font:600 12px var(--font);color:var(--text-2);padding:3px 8px;border-radius:999px;background:var(--surface-3)}
+main{max-width:920px;margin:0 auto;padding:28px 20px 60px;display:grid;gap:20px}
+.sub{color:var(--text-2);font-size:14px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 16px;border-radius:999px;border:1px solid transparent;font:600 14px/1 var(--font);cursor:pointer;position:relative;white-space:nowrap;transition:transform .15s,background-color .2s,box-shadow .2s,opacity .2s}
+.btn:active:not(:disabled){transform:scale(.97)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-primary{background:var(--grad);color:#fff;box-shadow:0 6px 18px rgba(240,51,143,.3)}
+.btn-secondary{background:var(--surface-3);color:var(--text)}
+.btn-ghost{background:transparent;border-color:var(--line-2);color:var(--text)}
+.btn-ghost:hover,.btn-secondary:hover{background:color-mix(in srgb,var(--surface-3) 82%,var(--text) 18%)}
+.btn-danger{background:var(--danger-solid);color:#fff}
+.btn-danger:hover{background:color-mix(in srgb,var(--danger-solid) 88%,#000)}
+.btn.is-loading{color:transparent!important;pointer-events:none}
+.btn.is-loading .ico{opacity:0}
+.btn.is-loading::after{content:"";position:absolute;width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;animation:spin .7s linear infinite}
+.btn-secondary.is-loading::after,.btn-ghost.is-loading::after{border-color:var(--line-2);border-top-color:var(--text)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:22px}
+.login{max-width:440px;display:grid;gap:14px;margin:40px auto 0}
+.login h1{font-size:24px}
+.field{display:grid;gap:6px}
+.lbl{font:600 13px var(--font);color:var(--text-2)}
+.input{height:44px;width:100%;padding:0 14px;border-radius:14px;border:1px solid color-mix(in srgb,var(--text) 45%,transparent);background:var(--surface-2);color:var(--text)}
+.input:focus{outline:none;border-color:var(--focus);box-shadow:0 0 0 3px color-mix(in srgb,var(--focus) 22%,transparent)}
+.input[aria-invalid="true"]{border-color:var(--danger)}
+.err{font-size:13px;color:var(--danger);font-weight:500}
+.err:empty{display:none}
+.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.summary div{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px}
+.summary b{display:block;font:600 26px/1.1 var(--font-d);font-variant-numeric:tabular-nums}
+.summary span{font-size:13px;color:var(--text-3)}
+.head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.head h1{font-size:24px}
+.list{display:grid;gap:14px}
+.item{display:grid;grid-template-columns:116px minmax(0,1fr);gap:18px;padding:16px;background:var(--surface);border:1px solid var(--line);border-radius:22px;animation:rise .25s ease;transition:opacity .3s,transform .3s}
+.item.out{opacity:0;transform:translateX(16px)}
+.media{width:116px;aspect-ratio:9/16;border-radius:14px;overflow:hidden;background:#000;display:grid;place-items:center;font-size:44px}
+.media video,.media img{width:100%;height:100%;object-fit:cover}
+.item h2{font-size:18px;word-break:break-word}
+.meta{color:var(--text-3);font-size:13px;margin-top:4px}
+.pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.pill{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;border-radius:999px;font:600 12px var(--font);background:var(--surface-3);color:var(--text-2)}
+.pill.hidden-st{background:var(--danger-soft);color:var(--danger)}
+.pill.vis-st{background:var(--ok-soft);color:var(--ok)}
+.pill .ico{width:14px;height:14px}
+.pill b{font-weight:700;color:var(--text)}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.note{font-size:12px;color:var(--text-3);margin-top:8px}
+.citem{display:block}
+.citem blockquote{margin:0;padding:10px 14px;border-left:3px solid var(--line-2);background:var(--surface-2);border-radius:0 12px 12px 0;white-space:pre-wrap;overflow-wrap:anywhere}
+.empty{display:grid;justify-items:center;text-align:center;gap:6px;padding:56px 24px;color:var(--text-2)}
+.empty .ei{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;background:var(--surface-3);margin-bottom:8px}
+.empty .ei .ico{width:28px;height:28px}
+.empty b{font:600 18px var(--font-d);color:var(--text)}
+.skel{background:linear-gradient(100deg,var(--surface-3) 30%,color-mix(in srgb,var(--surface-3) 70%,var(--text) 10%) 50%,var(--surface-3) 70%);background-size:300% 100%;animation:shimmer 1.4s linear infinite;border-radius:12px}
+.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,10px);display:flex;align-items:center;gap:8px;padding:11px 18px;border-radius:999px;background:var(--text);color:var(--bg);font:500 14px var(--font);box-shadow:var(--shadow-2);opacity:0;pointer-events:none;transition:opacity .2s,transform .25s;z-index:20;max-width:calc(100% - 32px)}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.toast.err{background:var(--danger);color:#fff}
+@media (max-width:560px){.item{grid-template-columns:84px minmax(0,1fr);gap:14px}.media{width:84px}.actions .btn{flex:1}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main" id="skip">Skip to main content</a>
+<header class="top"><div class="brand"><img src="/icon.svg" alt="">vizo<span>Admin</span></div><button class="btn btn-ghost" id="logout" type="button" hidden>Lock</button></header>
+<main id="main" tabindex="-1">
+  <form class="card login" id="login" novalidate>
+    <div><h1>Moderation</h1><p class="sub" style="margin-top:4px">Enter the admin key to review reported videos. The key is printed when the server starts and stored in <code>data/admin-key.txt</code>.</p></div>
+    <div class="field"><label class="lbl" for="key">Admin key</label><input class="input" id="key" type="password" autocomplete="off" aria-describedby="key-e"><p class="err" id="key-e" role="alert"></p></div>
+    <button class="btn btn-primary" id="open" type="submit">Open dashboard</button>
+  </form>
+  <section id="dash" hidden aria-live="polite">
+    <div class="head"><div><h1>Reported videos</h1><p class="sub">Reports never hide a video by themselves. Reported videos stay in the feed until you hide or delete them.</p></div><button class="btn btn-secondary" id="refresh" type="button">Refresh</button></div>
+    <div class="summary" id="summary" style="margin-top:18px"></div>
+    <div class="list" id="list" style="margin-top:18px"></div>
+    <div class="head" style="margin-top:36px"><div><h1>Reported comments</h1><p class="sub">Reports never delete a comment by themselves. Keep clears the reports; Delete removes the comment.</p></div></div>
+    <div class="list" id="clist" style="margin-top:18px"></div>
+  </section>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const I={eyeoff:'<path d="M3 3l18 18M10.6 6.1A9.6 9.6 0 0 1 12 6c6 0 9.5 6 9.5 6a16 16 0 0 1-2.9 3.5M6.6 7.6C4 9.3 2.5 12 2.5 12S6 18 12 18a9.4 9.4 0 0 0 4.3-1"/>',eye:'<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.8"/>',check:'<path d="M5 12.5l4.5 4.5L19 7.5"/>',trash:'<path d="M4 7h16M9.5 7V4.5h5V7M6.5 7l1 12.5h9l1-12.5"/>',alert:'<circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/>',shield:'<path d="M12 3l7.5 3v6c0 4.5-3.2 7.8-7.5 9-4.3-1.2-7.5-4.5-7.5-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/>'};
+const ic=n=>`<svg class="ico" viewBox="0 0 24 24" aria-hidden="true">${I[n]}</svg>`;
+const ago=ts=>{const s=(Date.now()-ts)/1e3;return s<60?'just now':s<3600?Math.floor(s/60)+' min ago':s<86400?Math.floor(s/3600)+' h ago':Math.floor(s/86400)+' d ago'};
+let tt;const toast=(m,type='')=>{const t=$('#toast');t.className='toast '+type;t.textContent=m;requestAnimationFrame(()=>t.classList.add('on'));clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),2600)};
+const loading=(b,on)=>{b.classList.toggle('is-loading',on);b.disabled=on};
+let key='';try{key=sessionStorage.getItem('inv_admin')||''}catch(e){}
+async function api(p,method='GET'){let r;try{r=await fetch(p,{method,headers:{'X-Admin-Key':key}})}catch(e){throw new Error('Network problem. Is the server running?')}
+ const d=await r.json().catch(()=>({}));if(!r.ok)throw Object.assign(new Error(d.error||'Server error'),{status:r.status});return d}
+function showLogin(msg=''){$('#login').hidden=false;$('#dash').hidden=true;$('#logout').hidden=true;$('#key-e').textContent=msg;$('#key').setAttribute('aria-invalid',msg?'true':'false');$('#key').focus()}
+function summary(rows){const hidden=rows.filter(r=>r.hidden).length,total=rows.reduce((s,r)=>s+r.reports,0);
+ $('#summary').innerHTML=`<div><b>${rows.filter(r=>r.reports).length}</b><span>Reported videos</span></div>${rows.some(r=>r.pending)?`<div><b>${rows.filter(r=>r.pending).length}</b><span>Waiting for review</span></div>`:''}<div><b>${hidden}</b><span>Hidden from feed</span></div><div><b>${total}</b><span>Total reports</span></div>`}
+function empty(){$('#list').innerHTML=`<div class="empty card"><span class="ei">${ic('shield')}</span><b>All clear</b><p>No reported videos right now.</p></div>`}
+let rows=[];
+async function load(btn){if(btn)loading(btn,true);else $('#list').innerHTML='<div class="skel" style="height:200px;border-radius:22px"></div><div class="skel" style="height:200px;border-radius:22px"></div>';
+ try{rows=await api('/api/admin/reports');$('#login').hidden=true;$('#dash').hidden=false;$('#logout').hidden=false;summary(rows);
+  loadComments();
+  if(!rows.length){empty();return}
+  $('#list').innerHTML=rows.map(r=>{const reasons=Object.entries(r.reasons).sort((a,b)=>b[1]-a[1]);return `<article class="item" data-id="${r.id}">
+   <div class="media">${r.src?`<video src="${esc(r.src)}"${r.thumb?` poster="${esc(r.thumb)}"`:''} controls muted playsinline preload="metadata"></video>`:esc(r.emoji)}</div>
+   <div><h2>${esc(r.title)}</h2><p class="meta">by @${esc(r.name||'unknown')} · ${r.reports?`${r.reports} report${r.reports>1?'s':''} · last ${ago(r.last)}`:`no reports · uploaded ${ago(r.last)}`}</p>
+   <div class="pills">${r.pending?`<span class="pill hidden-st pend-st">${ic('alert')}Waiting for safety review</span>`:''}${r.hidden?`<span class="pill hidden-st">${ic('eyeoff')}Hidden from feed</span>`:`<span class="pill vis-st">${ic('eye')}Visible in feed</span>`}${reasons.map(([k,n])=>`<span class="pill">${esc(k)} <b>${n}</b></span>`).join('')}</div>
+   <div class="actions"><button class="btn btn-secondary" type="button" data-do="keep" aria-label="Keep video: ${esc(r.title)}">${ic('check')}Keep video</button><button class="btn btn-ghost" type="button" data-do="hide" aria-pressed="${r.hidden}" aria-label="${r.hidden?'Show':'Hide'} video: ${esc(r.title)}">${ic(r.hidden?'eye':'eyeoff')}${r.hidden?'Show in feed':'Hide from feed'}</button><button class="btn btn-danger" type="button" data-do="delete" aria-label="Delete video: ${esc(r.title)}">${ic('trash')}Delete video</button></div>
+   <p class="note">${r.pending?`New upload, not public yet. Uploader’s browser safety check: ${r.scan==='passed'?'passed (a hint only; watch it yourself)':'did not run'}. Keep or Show approves it and puts it in the feed. Delete removes it for everyone.`:'Keep clears the reports and shows the video. Hide takes it out of the feed while you decide. Delete removes it for everyone.'}</p></div></article>`}).join('')}
+ catch(e){if(e.status===401){try{sessionStorage.removeItem('inv_admin')}catch(_){}key='';showLogin('That admin key is not correct.')}
+  else{$('#dash').hidden=false;$('#login').hidden=true;$('#list').innerHTML=`<div class="empty card"><span class="ei">${ic('alert')}</span><b>Couldn’t load reports</b><p>${esc(e.message)}</p><button class="btn btn-secondary" type="button" id="retry" style="margin-top:12px">Try again</button></div>`;$('#retry').onclick=()=>load()}}
+ finally{if(btn)loading(btn,false)}}
+// Reported comments queue
+let crows=[];
+async function loadComments(){const L=$('#clist');
+ try{crows=await api('/api/admin/comment-reports');
+  L.innerHTML=crows.length?crows.map(r=>{const reasons=Object.entries(r.reasons).sort((a,b)=>b[1]-a[1]);return `<article class="item citem" data-cid="${r.id}">
+   <blockquote>${esc(r.text)}</blockquote><p class="meta">by @${esc(r.name||'unknown')} on “${esc(r.title)}” · ${r.reports} report${r.reports>1?'s':''} · last ${ago(r.last)}</p>
+   <div class="pills">${reasons.map(([k,n])=>`<span class="pill">${esc(k)} <b>${n}</b></span>`).join('')}</div>
+   <div class="actions"><button class="btn btn-secondary" type="button" data-cdo="keep" aria-label="Keep comment by @${esc(r.name||'unknown')}">${ic('check')}Keep comment</button><button class="btn btn-danger" type="button" data-cdo="delete" aria-label="Delete comment by @${esc(r.name||'unknown')}">${ic('trash')}Delete comment</button></div></article>`}).join('')
+  :`<div class="empty card"><span class="ei">${ic('shield')}</span><b>No reported comments</b></div>`}
+ catch(e){L.innerHTML=`<div class="empty card"><span class="ei">${ic('alert')}</span><b>Couldn’t load reported comments</b><p>${esc(e.message)}</p></div>`}}
+$('#clist').onclick=async e=>{const b=e.target.closest('[data-cdo]');if(!b)return;const item=b.closest('.citem'),id=item.dataset.cid,del=b.dataset.cdo==='delete';
+ if(!confirm(del?'Delete this comment for everyone?':'Keep this comment and clear its reports?'))return;
+ item.querySelectorAll('[data-cdo]').forEach(x=>x.disabled=true);loading(b,true);
+ try{await api(del?`/api/admin/comments/${id}`:`/api/admin/comments/${id}/dismiss`,del?'DELETE':'POST');const next=item.nextElementSibling||item.previousElementSibling;
+  item.remove();crows=crows.filter(r=>String(r.id)!==id);if(!crows.length)loadComments();const f=next&&next.isConnected&&next.querySelector('[data-cdo]');(f||$('#refresh')).focus();toast(del?'Comment deleted':'Comment kept — reports cleared','ok')}
+ catch(err){loading(b,false);item.querySelectorAll('[data-cdo]').forEach(x=>x.disabled=false);toast(err.message,'err');if(err.status===401)showLogin('Your admin key is no longer valid.')}};
+$('#login').onsubmit=e=>{e.preventDefault();const k=$('#key').value.trim();if(!k){showLogin('Enter the admin key.');return}
+ key=k;try{sessionStorage.setItem('inv_admin',key)}catch(_){}load($('#open'))};
+$('#refresh').onclick=()=>load($('#refresh'));
+$('#logout').onclick=()=>{key='';try{sessionStorage.removeItem('inv_admin')}catch(_){}$('#key').value='';showLogin();toast('Dashboard locked')};
+$('#list').onclick=async e=>{const b=e.target.closest('[data-do]');if(!b)return;const item=b.closest('.item'),id=item.dataset.id,del=b.dataset.do==='delete';
+ // Hide / show: stays in the list, only its status changes
+ if(b.dataset.do==='hide'){const r=rows.find(x=>String(x.id)===id),want=!r.hidden;loading(b,true);
+  try{const d=await fetch(`/api/admin/videos/${id}/hide`,{method:'POST',headers:{'X-Admin-Key':key,'Content-Type':'application/json'},body:JSON.stringify({hidden:want})});if(!d.ok)throw Object.assign(new Error((await d.json().catch(()=>({}))).error||'Server error'),{status:d.status});
+   r.hidden=want;if(!want){r.pending=false;const pp=item.querySelector('.pend-st');pp&&pp.remove()}summary(rows);const st=item.querySelector('.hidden-st:not(.pend-st),.vis-st');st.className='pill '+(want?'hidden-st':'vis-st');st.innerHTML=want?ic('eyeoff')+'Hidden from feed':ic('eye')+'Visible in feed';
+   b.setAttribute('aria-pressed',want);b.setAttribute('aria-label',(want?'Show':'Hide')+' video: '+item.querySelector('h2').textContent);b.innerHTML=ic(want?'eye':'eyeoff')+(want?'Show in feed':'Hide from feed');toast(want?'Video hidden from the feed':'Video is visible again','ok')}
+  catch(err){toast(err.message,'err');if(err.status===401)showLogin('Your admin key is no longer valid.')}
+  finally{loading(b,false);b.focus()}return}
+ if(!confirm(del?'Delete this video for everyone? This cannot be undone.':'Keep this video and clear its reports?'))return;
+ item.querySelectorAll('[data-do]').forEach(x=>x.disabled=true);loading(b,true);
+ try{await api(del?`/api/admin/videos/${id}`:`/api/admin/videos/${id}/dismiss`,del?'DELETE':'POST');
+  // keyboard focus moves to the next report (or Refresh) instead of being lost with the removed card
+  const next=item.nextElementSibling||item.previousElementSibling;
+  item.classList.add('out');setTimeout(()=>{item.remove();rows=rows.filter(r=>String(r.id)!==id);summary(rows);if(!rows.length)empty();const f=next&&next.isConnected&&next.querySelector('[data-do]');(f||$('#refresh')).focus()},300);
+  toast(del?'Video deleted':'Video kept — reports cleared','ok')}
+ catch(err){loading(b,false);item.querySelectorAll('[data-do]').forEach(x=>x.disabled=false);toast(err.message,'err');if(err.status===401)showLogin('Your admin key is no longer valid.')}};
+$('#skip').onclick=e=>{e.preventDefault();$('#main').focus()};
+if(key)load();else showLogin();
+</script>
+</body>
+</html>
